@@ -1,0 +1,276 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <!-- Settings Service -->
+        <service id="EffectConnect\Marketplaces\Service\SettingsService" class="EffectConnect\Marketplaces\Service\SettingsService">
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService" />
+        </service>
+
+        <!-- SDK -->
+        <service id="EffectConnect\PHPSdk\Core" class="EffectConnect\PHPSdk\Core">
+            <factory service="EffectConnect\Marketplaces\Factory\SdkFactory" method="initializeSdkBySalesChannel" />
+        </service>
+
+        <!-- SDK Factory -->
+        <service id="EffectConnect\Marketplaces\Factory\SdkFactory" class="EffectConnect\Marketplaces\Factory\SdkFactory">
+            <argument type="service" id="EffectConnect\Marketplaces\Service\SettingsService" />
+        </service>
+
+        <!-- Logger -->
+        <service id="Monolog\Logger" class="Monolog\Logger">
+            <factory service="EffectConnect\Marketplaces\Factory\LoggerFactory" method="createLogger" />
+        </service>
+
+        <!-- Logger Factory -->
+        <service id="EffectConnect\Marketplaces\Factory\LoggerFactory" class="EffectConnect\Marketplaces\Factory\LoggerFactory" />
+
+        <!-- Sales Channel Service -->
+        <service id="EffectConnect\Marketplaces\Service\SalesChannelService" class="EffectConnect\Marketplaces\Service\SalesChannelService">
+            <argument type="service" id="sales_channel.repository" />
+            <argument type="service" id="Shopware\Core\System\SalesChannel\Context\SalesChannelContextFactory" />
+        </service>
+
+        <!-- Languages Service -->
+        <service id="EffectConnect\Marketplaces\Service\LanguagesService" class="EffectConnect\Marketplaces\Service\LanguagesService">
+            <argument type="service" id="EffectConnect\Marketplaces\Service\SalesChannelService" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\SettingsService" />
+            <argument type="service" id="language.repository" />
+        </service>
+
+        <!-- Api Interaction Service -->
+        <service id="EffectConnect\Marketplaces\Service\Api\InteractionService" class="EffectConnect\Marketplaces\Service\Api\InteractionService">
+            <argument type="service" id="EffectConnect\Marketplaces\Factory\SdkFactory" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\SettingsService" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\SalesChannelService" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\Api\CredentialService" />
+        </service>
+
+        <!-- Api Credentials Service -->
+        <service id="EffectConnect\Marketplaces\Service\Api\CredentialService" class="EffectConnect\Marketplaces\Service\Api\CredentialService">
+            <argument type="service" id="EffectConnect\Marketplaces\Factory\SdkFactory" />
+        </service>
+
+        <!-- Api Catalog Export Service -->
+        <service id="EffectConnect\Marketplaces\Service\Api\CatalogExportService" class="EffectConnect\Marketplaces\Service\Api\CatalogExportService">
+            <argument type="service" id="EffectConnect\Marketplaces\Service\Api\InteractionService" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\Transformer\CatalogTransformerService" />
+            <argument type="service" id="EffectConnect\Marketplaces\Factory\LoggerFactory" />
+        </service>
+
+        <!-- Api Offer Export Service -->
+        <service id="EffectConnect\Marketplaces\Service\Api\OfferExportService" class="EffectConnect\Marketplaces\Service\Api\OfferExportService">
+            <argument type="service" id="EffectConnect\Marketplaces\Service\Api\InteractionService" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\Transformer\OfferTransformerService" />
+            <argument type="service" id="EffectConnect\Marketplaces\Factory\LoggerFactory" />
+        </service>
+
+        <!-- Api Order Import Service -->
+        <service id="EffectConnect\Marketplaces\Service\Api\OrderImportService" class="EffectConnect\Marketplaces\Service\Api\OrderImportService">
+            <argument type="service" id="EffectConnect\Marketplaces\Service\Api\InteractionService" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\Transformer\OrderTransformerService" />
+            <argument type="service" id="EffectConnect\Marketplaces\Factory\LoggerFactory" />
+        </service>
+
+        <!-- Api Order Update Service -->
+        <service id="EffectConnect\Marketplaces\Service\Api\OrderUpdateService" class="EffectConnect\Marketplaces\Service\Api\OrderUpdateService">
+            <argument type="service" id="EffectConnect\Marketplaces\Service\Api\InteractionService" />
+            <argument type="service" id="EffectConnect\Marketplaces\Factory\LoggerFactory" />
+        </service>
+
+        <!-- Api Shipping Export Service -->
+        <service id="EffectConnect\Marketplaces\Service\Api\ShippingExportService" class="EffectConnect\Marketplaces\Service\Api\ShippingExportService">
+            <argument type="service" id="EffectConnect\Marketplaces\Service\Api\InteractionService" />
+            <argument type="service" id="EffectConnect\Marketplaces\Factory\LoggerFactory" />
+        </service>
+
+        <!-- Catalog Transformer Service -->
+        <service id="EffectConnect\Marketplaces\Service\Transformer\CatalogTransformerService" class="EffectConnect\Marketplaces\Service\Transformer\CatalogTransformerService">
+            <argument type="service" id="EffectConnect\Marketplaces\Factory\SdkFactory" />
+            <argument type="service" id="sales_channel.product.repository" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\SalesChannelService" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\Transformer\CategoryTransformerService" />
+            <argument type="service" id="Shopware\Core\Content\Media\File\FileLoader" />
+            <argument type="service" id="EffectConnect\Marketplaces\Factory\LoggerFactory" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\SettingsService" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\LanguagesService"/>
+        </service>
+
+        <!-- Category Transformer Service -->
+        <service id="EffectConnect\Marketplaces\Service\Transformer\CategoryTransformerService" class="EffectConnect\Marketplaces\Service\Transformer\CategoryTransformerService">
+            <argument type="service" id="sales_channel.category.repository" />
+            <argument type="service" id="EffectConnect\Marketplaces\Factory\LoggerFactory" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\LanguagesService"/>
+        </service>
+
+        <!-- Offer Transformer Service -->
+        <service id="EffectConnect\Marketplaces\Service\Transformer\OfferTransformerService" class="EffectConnect\Marketplaces\Service\Transformer\OfferTransformerService">
+            <argument type="service" id="EffectConnect\Marketplaces\Factory\SdkFactory" />
+            <argument type="service" id="sales_channel.product.repository" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\SalesChannelService" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\Transformer\CategoryTransformerService" />
+            <argument type="service" id="Shopware\Core\Content\Media\File\FileLoader" />
+            <argument type="service" id="EffectConnect\Marketplaces\Factory\LoggerFactory" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\SettingsService" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\LanguagesService"/>
+        </service>
+
+        <!-- Order Transformer Service -->
+        <service id="EffectConnect\Marketplaces\Service\Transformer\OrderTransformerService" class="EffectConnect\Marketplaces\Service\Transformer\OrderTransformerService">
+            <argument type="service" id="order.repository" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\SalesChannelService" />
+            <argument type="service" id="Shopware\Core\System\StateMachine\StateMachineRegistry" />
+            <argument type="service" id="currency.repository" />
+            <argument type="service" id="payment_method.repository" />
+            <argument type="service" id="shipping_method.repository" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\Transformer\CustomerTransformerService" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\Transformer\OrderLineTransformerService" />
+            <argument type="service" id="Shopware\Core\System\NumberRange\ValueGenerator\NumberRangeValueGeneratorInterface"/>
+            <argument type="service" id="EffectConnect\Marketplaces\Service\Api\OrderUpdateService"/>
+            <argument type="service" id="Shopware\Core\Checkout\Cart\Price\QuantityPriceCalculator"/>
+            <argument type="service" id="Shopware\Core\Checkout\Cart\Price\AmountCalculator"/>
+            <argument type="service" id="EffectConnect\Marketplaces\Factory\LoggerFactory" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\SettingsService" />
+            <argument type="service" id="order_transaction.repository" />
+        </service>
+
+        <!-- Customer Transformer Service -->
+        <service id="EffectConnect\Marketplaces\Service\Transformer\CustomerTransformerService" class="EffectConnect\Marketplaces\Service\Transformer\CustomerTransformerService">
+            <argument type="service" id="salutation.repository"/>
+            <argument type="service" id="country.repository"/>
+            <argument type="service" id="country_state.repository"/>
+        </service>
+
+        <!-- Order Line Transformer Service -->
+        <service id="EffectConnect\Marketplaces\Service\Transformer\OrderLineTransformerService" class="EffectConnect\Marketplaces\Service\Transformer\OrderLineTransformerService">
+            <argument type="service" id="product.repository" />
+            <argument type="service" id="Shopware\Core\Checkout\Cart\Price\QuantityPriceCalculator"/>
+            <argument type="service" id="service_container" />
+        </service>
+
+        <!-- Console Command - Check API Credentials -->
+        <service id="EffectConnect\Marketplaces\Command\CheckApiCredentials">
+            <tag name="console.command" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\SettingsService" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\Api\CredentialService" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\SalesChannelService" />
+        </service>
+
+        <!-- Console Command - Export Catalog -->
+        <service id="EffectConnect\Marketplaces\Command\ExportCatalog">
+            <tag name="console.command" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\Api\CatalogExportService" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\SalesChannelService" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\SettingsService" />
+            <argument type="service" id="EffectConnect\Marketplaces\Factory\LoggerFactory" />
+        </service>
+
+        <!-- Console Command - Export Offers -->
+        <service id="EffectConnect\Marketplaces\Command\ExportOffers">
+            <tag name="console.command" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\Api\OfferExportService" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\SalesChannelService" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\SettingsService" />
+            <argument type="service" id="EffectConnect\Marketplaces\Factory\LoggerFactory" />
+        </service>
+
+        <!-- Console Command - Import Orders -->
+        <service id="EffectConnect\Marketplaces\Command\ImportOrders">
+            <tag name="console.command" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\Api\OrderImportService" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\SalesChannelService" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\SettingsService" />
+            <argument type="service" id="EffectConnect\Marketplaces\Factory\LoggerFactory" />
+        </service>
+
+        <!-- Console Command - Clean Log -->
+        <service id="EffectConnect\Marketplaces\Command\CleanLog">
+            <tag name="console.command" />
+        </service>
+
+        <!-- Console Command - Clean Exports -->
+        <service id="EffectConnect\Marketplaces\Command\CleanExports">
+            <tag name="console.command" />
+        </service>
+
+        <!-- Order Shipped Subscriber -->
+        <service id="EffectConnect\Marketplaces\Subscriber\OrderShippedSubscriber" class="EffectConnect\Marketplaces\Subscriber\OrderShippedSubscriber">
+            <argument type="service" id="order_delivery.repository" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\Api\ShippingExportService" />
+            <argument type="service" id="EffectConnect\Marketplaces\Factory\LoggerFactory" />
+            <tag name="kernel.event_subscriber" />
+        </service>
+
+        <!-- Export Catalog Scheduled Task -->
+        <service id="EffectConnect\Marketplaces\ScheduledTask\CatalogExportTask">
+            <tag name="shopware.scheduled.task" />
+        </service>
+
+        <!-- Export Offers Scheduled Task -->
+        <service id="EffectConnect\Marketplaces\ScheduledTask\OfferExportTask">
+            <tag name="shopware.scheduled.task" />
+        </service>
+
+        <!-- Import Orders Scheduled Task -->
+        <service id="EffectConnect\Marketplaces\ScheduledTask\OrderImportTask">
+            <tag name="shopware.scheduled.task" />
+        </service>
+
+        <!-- Clean Log Scheduled Task -->
+        <service id="EffectConnect\Marketplaces\ScheduledTask\CleanLogTask">
+            <tag name="shopware.scheduled.task" />
+        </service>
+
+        <!-- Clean Exports Scheduled Task -->
+        <service id="EffectConnect\Marketplaces\ScheduledTask\CleanExportsTask">
+            <tag name="shopware.scheduled.task" />
+        </service>
+
+        <!-- Export Catalog Scheduled Task Handler -->
+        <service id="EffectConnect\Marketplaces\ScheduledTask\Handler\CatalogExportTaskHandler">
+            <argument type="service" id="scheduled_task.repository" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\SalesChannelService" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\SettingsService" />
+            <argument type="service" id="EffectConnect\Marketplaces\Factory\LoggerFactory" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\Api\CatalogExportService" />
+            <tag name="messenger.message_handler" />
+        </service>
+
+        <!-- Export Offers Scheduled Task Handler -->
+        <service id="EffectConnect\Marketplaces\ScheduledTask\Handler\OfferExportTaskHandler">
+            <argument type="service" id="scheduled_task.repository" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\SalesChannelService" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\SettingsService" />
+            <argument type="service" id="EffectConnect\Marketplaces\Factory\LoggerFactory" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\Api\OfferExportService" />
+            <tag name="messenger.message_handler" />
+        </service>
+
+        <!-- Import Orders Scheduled Task Handler -->
+        <service id="EffectConnect\Marketplaces\ScheduledTask\Handler\OrderImportTaskHandler">
+            <argument type="service" id="scheduled_task.repository" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\SalesChannelService" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\SettingsService" />
+            <argument type="service" id="EffectConnect\Marketplaces\Factory\LoggerFactory" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\Api\OrderImportService" />
+            <tag name="messenger.message_handler" />
+        </service>
+
+        <!-- Clean Log Scheduled Task Handler -->
+        <service id="EffectConnect\Marketplaces\ScheduledTask\Handler\CleanLogTaskHandler">
+            <argument type="service" id="scheduled_task.repository" />
+            <tag name="messenger.message_handler" />
+        </service>
+
+        <!-- Clean Exports Scheduled Task Handler -->
+        <service id="EffectConnect\Marketplaces\ScheduledTask\Handler\CleanExportsTaskHandler">
+            <argument type="service" id="scheduled_task.repository" />
+            <tag name="messenger.message_handler" />
+        </service>
+
+        <!-- EffectConnect Payment Method -->
+        <service id="EffectConnect\Marketplaces\Handler\EffectConnectPayment">
+            <argument type="service" id="Shopware\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionStateHandler" />
+            <tag name="shopware.payment.method.sync" />
+        </service>
+    </services>
+</container>

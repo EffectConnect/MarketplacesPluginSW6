@@ -1,0 +1,85 @@
+{
+    "name": "effectconnect/marketplaces-plugin-sw6",
+    "description": "EffectConnect Marketplaces Shopware 6 plugin",
+    "type": "shopware-platform-plugin",
+    "license": "proprietary",
+    "version": "1.2.1",
+    "authors": [
+        {
+            "name": "Koek&Peer",
+            "email": "info@koekenpeer.nl",
+            "homepage": "https://www.koekenpeer.nl/"
+        },
+        {
+            "name": "EffectConnect",
+            "email": "info@effectconnect.com",
+            "homepage": "https://www.effectconnect.com/"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "ext-curl": "*",
+        "ext-dom": "*",
+        "ext-json": "*",
+        "ext-intl": "*",
+        "ext-libxml": "*",
+        "php": "~7.1.3||~7.2||~7.3",
+        "shopware/core": "6.2.*||6.3.*||6.4.*",
+        "shopware/administration": "6.2.*||6.3.*||6.4.*",
+        "shopware/storefront": "6.2.*||6.3.*||6.4.*",
+        "monolog/monolog": "^1.1|^2.0",
+        "effectconnect/php-sdk": "^3.2.6",
+        "myclabs/php-enum": "^1.7"
+    },
+    "extra": {
+        "shopware-plugin-class": "EffectConnect\\Marketplaces\\EffectConnectMarketplaces",
+        "plugin-icon": "src/Resources/config/plugin.png",
+        "copyright": "Koek&Peer",
+        "label": {
+            "nl-NL": "EffectConnect Marketplaces",
+            "nl-BE": "EffectConnect Marketplaces",
+            "en-GB": "EffectConnect Marketplaces",
+            "en-US": "EffectConnect Marketplaces",
+            "de-DE": "EffectConnect Marketplaces"
+        },
+        "description": {
+            "nl-NL": "EffectConnect Marketplaces Shopware 6 plugin",
+            "nl-BE": "EffectConnect Marketplaces Shopware 6 plugin",
+            "en-GB": "EffectConnect Marketplaces Shopware 6 plugin",
+            "en-US": "EffectConnect Marketplaces Shopware 6 plugin",
+            "de-DE": "EffectConnect Marketplaces Shopware 6 plugin"
+        },
+        "manufacturerLink": {
+            "nl-NL": "https://www.effectconnect.com/nl/effectconnect-marketplaces",
+            "nl-BE": "https://www.effectconnect.com/nl/effectconnect-marketplaces",
+            "en-GB": "https://www.effectconnect.com/en/effectconnect-marketplaces",
+            "en-US": "https://www.effectconnect.com/en/effectconnect-marketplaces",
+            "de-DE": "https://www.effectconnect.com/en/effectconnect-marketplaces"
+        },
+        "supportLink": {
+            "nl-NL": "https://www.effectconnect.com/nl/support",
+            "nl-BE": "https://www.effectconnect.com/nl/support",
+            "en-GB": "https://www.effectconnect.com/en/support",
+            "en-US": "https://www.effectconnect.com/en/support",
+            "de-DE": "https://www.effectconnect.com/en/support"
+        }
+    },
+    "autoload": {
+        "files": [
+            "vendor/autoload.php"
+        ],
+        "psr-4": {
+            "EffectConnect\\Marketplaces\\": "src/",
+            "EffectConnect\\PHPSdk\\": "vendor/effectconnect/php-sdk/EffectConnectSDK/",
+            "MyCLabs\\Enum\\": "vendor/myclabs/php-enum/src/"
+        }
+    },
+    "suggest": {
+        "shopware/storefront": "Require '*'.",
+        "shopware/administration": "Require '*'."
+    },
+    "conflict": {
+        "shopware/storefront": "<6,>=7",
+        "shopware/administration": "<6,>=7"
+    }
+}

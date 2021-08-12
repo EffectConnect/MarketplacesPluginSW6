@@ -1,0 +1,71 @@
+Version 1.2.1 - 2021-08-11
+- Improve the README contents.
+
+Version 1.2.0 - 2021-06-29
+- Add compatibility for Shopware 6.4.
+
+Version 1.1.10 - 2021-06-15
+- Add the channel order number as an order tag.
+- Add custom fields for orders.
+- Replace the EffectConnect logo with the new EffectConnect logo.
+
+Version 1.1.9 - 2021-05-18
+- Add salutations used for mapping purposes.
+- Fix for creating a salutation.
+
+Version 1.1.8 - 2021-05-12
+- Limit number of images (max. 10).
+
+Version 1.1.7 - 2021-05-10
+- Extra long time-out when obtaining orders.
+
+Version 1.1.6 - 2021-05-06
+- Prevent more then 2 decimals for prices in the catelog and offer export.
+
+Version 1.1.5 - 2021-05-05
+- Fix missing translation issue.
+
+Version 1.1.4 - 2021-04-12
+- Add UpdatedAt value to the order transactions.
+
+Version 1.1.3 - 2021-04-02
+- Add price (net/gross) and list price (net/gross) as attribute.
+
+Version 1.1.2 - 2021-04-01
+- Use translated name for delivery time when default name is not available.
+- Use translated name for brand when default name is not available.
+- Add manufacturer as attribute.
+- Add manufacturer number as attribute.
+
+Version 1.1.1 - 2021-03-18
+- Add female salutation.
+- Add orderline fees to the imported order.
+- Force UTF-8 encoding.
+
+Version 1.1.0 - 2020-12-23
+- Improve the way languages and translations are obtained.
+- Added clean export data functionality (including command).
+
+Version 1.0.5 - 2020-12-17
+- Fix exporting stock below zero for product options.
+
+Version 1.0.4 - 2020-12-10
+- Check if the log is writable.
+- Fix wrong use of SDK while adding multiple status filters.
+- Prevent importing the same order multiple times.
+
+Version 1.0.3 - 2020-11-24
+- Prevent exporting stock when the stock is below 0.
+- Fix empty translatable values.
+- Fix empty child categories.
+- Fix for inheriting configuration settings from a higher level.
+- Add support for fallback languages.
+
+Version 1.0.2 - 2020-11-18
+- Fix issue when products don't have a category.
+
+Version 1.0.1 - 2020-11-05
+- Fix issue while exporting product categories.
+
+Version 1.0.0 - 2020-11-05
+- Initial version
