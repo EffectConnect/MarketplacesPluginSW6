@@ -12,7 +12,7 @@ use function key;
  * Class XmlHelper
  * @package EffectConnect\Marketplaces\Helper
  */
-class XmlHelper
+final class XmlHelper
 {
     /**
      * @var DOMDocument

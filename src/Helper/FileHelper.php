@@ -2,6 +2,7 @@
 
 namespace EffectConnect\Marketplaces\Helper;
 
+use Exception;
 use DOMException;
 use EffectConnect\Marketplaces\Exception\FileCreationFailedException;
 
@@ -14,17 +15,17 @@ class FileHelper
     /**
      * Export File Location Direction Type
      */
-    public const DIRECTION_TYPE_EXPORT = 'export';
+    public const DIRECTION_TYPE_EXPORT  = 'export';
 
     /**
      * The directory where the XML needs to be generated (first string is the direction type and second string the content type).
      */
-    protected const DIRECTORY_FORMAT        = __DIR__ . '/../../data/%s/%s/';
+    protected const DIRECTORY_FORMAT    = __DIR__ . '/../../data/%s/%s/';
 
     /**
      * The filename for the generated XML (first string is the content type, second string is the sales channel ID and third string the current timestamp).
      */
-    protected const FILENAME_FORMAT  = '%s_%s_%s.xml';
+    protected const FILENAME_FORMAT     = '%s_%s_%s.xml';
 
     /**
      * Check if the file exists, if not create one.
@@ -38,18 +39,26 @@ class FileHelper
     {
         $fileLocation = $directory . $filename;
 
-        if (!file_exists($directory)) {
-            if (!@mkdir($directory, 0777, true)) {
-                $error = error_get_last();
-                throw new FileCreationFailedException($directory, $error['message'] ?? '-');
+        try {
+            if (!file_exists($directory)) {
+                if (!mkdir($directory, 0777, true)) {
+                    $error = error_get_last();
+                    throw new FileCreationFailedException($directory, $error['message'] ?? '-');
+                }
             }
+        } catch (Exception $e) {
+            throw new FileCreationFailedException($directory, $e->getMessage() ?? '-');
         }
 
-        if (!file_exists($fileLocation)) {
-            if (!@touch($fileLocation)) {
-                $error = error_get_last();
-                throw new FileCreationFailedException($fileLocation, $error['message'] ?? '-');
+        try {
+            if (!file_exists($fileLocation)) {
+                if (!touch($fileLocation)) {
+                    $error = error_get_last();
+                    throw new FileCreationFailedException($fileLocation, $error['message'] ?? '-');
+                }
             }
+        } catch (Exception $e) {
+            throw new FileCreationFailedException($fileLocation, $e->getMessage() ?? '-');
         }
 
         if (!is_writable($fileLocation)) {
