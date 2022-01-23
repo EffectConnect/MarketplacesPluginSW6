@@ -34,9 +34,9 @@ class AttributesHelper
      * @param Entity $object
      * @param string $property
      */
-    public function setTranslatedXmlValues(array &$valuesArray, $object, string $property)
+    public function setTranslatedXmlValues(array &$valuesArray, $object, string $property, $parent = null)
     {
-        $translations = $this->_languages->getTranslations($object, $property);
+        $translations = $this->_languages->getTranslations($object, $property, $parent);
 
         foreach ($translations as $languageCode => $translatedValue) {
             $this->addXmlValue($valuesArray, $translatedValue, $languageCode);

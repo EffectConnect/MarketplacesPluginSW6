@@ -68,18 +68,20 @@ class LanguagesCollection
 
     /**
      * Get the translations for a certain object's property.
+     * The parent will be used property inheritance (optional).
      *
      * @param Entity $object
      * @param string $property
+     * @param Entity $parent
      * @return array
      */
-    public function getTranslations($object, string $property): array
+    public function getTranslations($object, string $property, $parent = null): array
     {
         $translations = [];
 
         foreach ($this->_languages as $language) {
             try {
-                $value = $this->getTranslation($object, $property, $language);
+                $value = $this->getTranslation($object, $property, $language, true, $parent);
             } catch (Exception $e) {
                 $value = null;
             }
@@ -94,14 +96,16 @@ class LanguagesCollection
 
     /**
      * Get the translations for a certain object's property in a specific language.
+     * The parent will be used property inheritance (optional).
      *
      * @param Entity $object
      * @param string $property
      * @param Language $language
      * @param bool $useFallbackLanguages
+     * @param Entity $parent
      * @return mixed
      */
-    public function getTranslation($object, string $property, Language $language, bool $useFallbackLanguages = true)
+    public function getTranslation($object, string $property, Language $language, bool $useFallbackLanguages = true, $parent = null)
     {
         if (is_null($object)) {
             return null;
@@ -116,6 +120,10 @@ class LanguagesCollection
                     return $value;
                 }
             }
+        }
+
+        if ($parent instanceof Entity) {
+            return $this->getTranslation($parent, $property, $language, $useFallbackLanguages);
         }
 
         if ($language->hasInheritFrom()) {

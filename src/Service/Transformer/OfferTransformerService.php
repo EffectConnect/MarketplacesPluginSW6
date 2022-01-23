@@ -57,7 +57,7 @@ class OfferTransformerService extends CatalogTransformerService
     /**
      * @inheritDoc
      */
-    protected function getProductOptionArray(ProductEntity $product): array
+    protected function getProductOptionArray(ProductEntity $product, ProductEntity $parent = null): array
     {
         $productOptionArray                             = [];
         $productOptionArray['identifier']               = [ '_cdata' => strval($product->getId())];

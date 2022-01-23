@@ -388,7 +388,7 @@ class CatalogTransformerService
 
         foreach ($children as $child) {
             if ($child->getActive()) {
-                $childArray = $this->getProductOptionArray($child);
+                $childArray = $this->getProductOptionArray($child, $product);
 
                 if (!empty($childArray['identifier']['_cdata'])) {
                     $childrenArray[] = $childArray;
@@ -431,11 +431,13 @@ class CatalogTransformerService
 
     /**
      * Get a product option in an array format with the EffectConnect Marketplaces SDK expected values.
+     * The parent will be used property inheritance (optional).
      *
      * @param ProductEntity $product
+     * @param ProductEntity $parent
      * @return array
      */
-    protected function getProductOptionArray(ProductEntity $product): array
+    protected function getProductOptionArray(ProductEntity $product, ProductEntity $parent = null): array
     {
         $defaultLanguageCodes                           = [];
         $productOptionArray                             = [];
@@ -472,8 +474,8 @@ class CatalogTransformerService
             unset($productOptionArray['priceOriginal']);
         }
 
-        $this->_attributesHelper->setTranslatedXmlValues($productOptionArray['titles']['title'], $product, 'name');
-        $this->_attributesHelper->setTranslatedXmlValues($productOptionArray['descriptions']['description'], $product, 'description');
+        $this->_attributesHelper->setTranslatedXmlValues($productOptionArray['titles']['title'], $product, 'name', $parent);
+        $this->_attributesHelper->setTranslatedXmlValues($productOptionArray['descriptions']['description'], $product, 'description', $parent);
 
         $productOptionArray['attributes']['attribute']  = $this->getProductAttributes($product);
 
