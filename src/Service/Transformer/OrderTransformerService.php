@@ -458,7 +458,17 @@ class OrderTransformerService
             'affiliateCode'     => $order->getChannelInfo()->getType(),
             'campaignCode'      => null,
             'customerComment'   => null,
-            'paymentMethodId'   => $paymentMethod->getId()
+            'paymentMethodId'   => $paymentMethod->getId(),
+            'item_rounding'     => [
+                'decimals'          => 2,
+                'interval'          => 0.01,
+                'roundForNet'       => true,
+            ],
+            'total_rounding'    => [
+                'decimals'          => 2,
+                'interval'          => 0.01,
+                'roundForNet'       => true,
+            ]
         ];
 
         foreach ($order->getTags() as $tag) {
