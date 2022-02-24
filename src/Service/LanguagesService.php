@@ -230,7 +230,7 @@ class LanguagesService
      * @param string $id
      * @return LanguageEntity|null
      */
-    protected function getLanguageById(string $id): ?LanguageEntity
+    public function getLanguageById(string $id): ?LanguageEntity
     {
         if (is_null($this->_systemLanguages)) {
             $this->_systemLanguages = $this->getSystemLanguages();

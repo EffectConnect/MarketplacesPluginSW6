@@ -91,7 +91,8 @@ class SalesChannelService
             'languages',
             'languages.locale',
             'languages.parent',
-            'languages.parent.locale'
+            'languages.parent.locale',
+            'domains'
         ];
 
         $criteria->addAssociations($associations);

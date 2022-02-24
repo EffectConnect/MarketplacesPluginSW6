@@ -93,6 +93,7 @@
             <argument type="service" id="EffectConnect\Marketplaces\Factory\LoggerFactory" />
             <argument type="service" id="EffectConnect\Marketplaces\Service\SettingsService" />
             <argument type="service" id="EffectConnect\Marketplaces\Service\LanguagesService"/>
+            <argument type="service" id="Shopware\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface"/>
         </service>
 
         <!-- Category Transformer Service -->

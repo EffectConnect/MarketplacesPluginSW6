@@ -29,6 +29,7 @@ use Shopware\Core\Content\Product\Aggregate\ProductMedia\ProductMediaEntity;
 use Shopware\Core\Content\Product\ProductCollection;
 use Shopware\Core\Content\Product\ProductEntity;
 use Shopware\Core\Content\Rule\Aggregate\RuleCondition\RuleConditionEntity;
+use Shopware\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Dbal\Common\SalesChannelRepositoryIterator;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\System\SalesChannel\Entity\SalesChannelRepositoryInterface;
@@ -103,6 +104,11 @@ class CatalogTransformerService
     protected $_languagesService;
 
     /**
+     * @var SeoUrlPlaceholderHandlerInterface
+     */
+    protected $_seoUrlService;
+
+    /**
      * @var string
      */
     private $_fileLocation;
@@ -162,7 +168,8 @@ class CatalogTransformerService
         FileLoader $fileLoader,
         LoggerFactory $loggerFactory,
         SettingsService $settingsService,
-        LanguagesService $languagesService
+        LanguagesService $languagesService,
+        SeoUrlPlaceholderHandlerInterface $seoUrlService
     ) {
         $this->_sdkFactory                  = $sdkFactory;
         $this->_productRepository           = $productRepository;
@@ -172,6 +179,7 @@ class CatalogTransformerService
         $this->_loggerFactory               = $loggerFactory;
         $this->_settingsService             = $settingsService;
         $this->_languagesService            = $languagesService;
+        $this->_seoUrlService               = $seoUrlService;
     }
 
     /**
@@ -284,6 +292,8 @@ class CatalogTransformerService
             'seoUrls.language.locale',
             'seoUrls.language.parent',
             'seoUrls.language.parent.locale',
+            'seoUrls.language.seoUrlTranslations',
+            'seoUrls.url',
             'tags',
             'media',
             'options',
@@ -683,27 +693,12 @@ class CatalogTransformerService
         }
 
         foreach ($domains as $languageId => $domain) {
-            foreach ($product->getSeoUrls() ?? [] as $url) {
-                if (
-                    $languageId                         === $url->getLanguageId() &&
-                    ($url->getIsCanonical() ?? false)   === true &&
-                    $url->getSalesChannelId() ?? ''     === $this->_salesChannel->getId()
-                ) {
-                    $languageCode = $this->_languagesService->getLanguageCode($url->getLanguage());
-
-                    if (is_null($languageCode)) {
-                        continue;
-                    }
-
-                    foreach ($urls as $checkUrl) {
-                        if ($checkUrl['_attributes']['language'] === $languageCode) {
-                            continue 2;
-                        }
-                    }
-
-                    $this->_attributesHelper->addXmlValue($urls, $domains[$url->getLanguageId()] . '/' . $url->getSeoPathInfo(), $languageCode);
-                }
-            }
+            $languageCode = $this->_languagesService->getLanguageCode($this->_languagesService->getLanguageById($languageId));
+            $urlFormat = $this->_seoUrlService->generate('frontend.detail.page', [
+                'productId' => $product->getId()
+            ]);
+            $url = $this->_seoUrlService->replace($urlFormat, $domain, $this->_salesChannelContext);
+            $this->_attributesHelper->addXmlValue($urls, $url, $languageCode);
         }
 
         return $urls;
