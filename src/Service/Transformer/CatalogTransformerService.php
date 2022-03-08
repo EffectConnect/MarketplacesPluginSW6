@@ -159,6 +159,7 @@ class CatalogTransformerService
      * @param LoggerFactory $loggerFactory
      * @param SettingsService $settingsService
      * @param LanguagesService $languagesService
+     * @param SeoUrlPlaceholderHandlerInterface $seoUrlService
      */
     public function __construct(
         SdkFactory $sdkFactory,
