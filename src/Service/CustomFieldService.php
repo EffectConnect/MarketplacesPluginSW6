@@ -40,6 +40,7 @@ class CustomFieldService
     public const CUSTOM_FIELD_KEY_ORDER_CHANNEL_SUBTYPE                         = 'channelSubtype';
     public const CUSTOM_FIELD_KEY_ORDER_CHANNEL_TITLE                           = 'channelTitle';
     public const CUSTOM_FIELD_KEY_ORDER_COMMISSION_FEE                          = 'commissionFee';
+    public const CUSTOM_FIELD_KEY_ORDER_FULFILMENT_TYPE                         = 'fulfilmentType';
 
     // Custom fields for order line items.
     public const CUSTOM_FIELD_KEY_ORDER_LINE_ITEM_EFFECTCONNECT_LINE_ID         = 'effectConnectLineId';
@@ -307,7 +308,16 @@ class CustomFieldService
                 'en-US' => 'Commission Fee',
                 'nl-NL' => 'Commissie',
                 'de-DE' => 'Provisionsgebühr',
-        ]);
+            ]);
+
+        // FulfilmentType
+        $customFieldsConfigs[] = (new CustomFieldConfig(static::CUSTOM_FIELD_KEY_ORDER_FULFILMENT_TYPE, CustomFieldTypes::TEXT, static::CUSTOM_FIELDSET_KEY_EFFECTCONNECT_MARKETPLACES_ORDER))
+            ->setPosition(80)
+            ->setTranslatedLabel([
+                'en-US' => 'Fulfilment type',
+                'nl-NL' => 'Fulfilmenttype',
+                'de-DE' => 'Erfüllungstyp',
+            ]);
 
         return $customFieldsConfigs;
     }

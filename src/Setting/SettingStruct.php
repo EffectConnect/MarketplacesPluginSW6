@@ -108,6 +108,26 @@ class SettingStruct extends Struct
     protected $logExpiration;
 
     /**
+     * @var bool
+     */
+    protected $importExternallyFulfilledOrders = false;
+
+    /**
+     * @var string
+     */
+    protected $externalShippingStatus;
+
+    /**
+     * @var string
+     */
+    protected $externalPaymentStatus;
+
+    /**
+     * @var string
+     */
+    protected $externalOrderStatus;
+
+    /**
      * @return string
      */
     public function getName(): string
@@ -420,4 +440,77 @@ class SettingStruct extends Struct
     {
         return !is_null($property) ? $property : $default;
     }
+
+    /**
+     * @return bool
+     */
+    public function isImportExternallyFulfilledOrders(): bool
+    {
+        return $this->importExternallyFulfilledOrders;
+    }
+
+    /**
+     * @param bool $importExternallyFulfilledOrders
+     * @return SettingStruct
+     */
+    public function setImportExternallyFulfilledOrders(bool $importExternallyFulfilledOrders): SettingStruct
+    {
+        $this->importExternallyFulfilledOrders = $importExternallyFulfilledOrders;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getExternalShippingStatus(): string
+    {
+        return $this->externalShippingStatus;
+    }
+
+    /**
+     * @param string $externalShippingStatus
+     * @return SettingStruct
+     */
+    public function setExternalShippingStatus(string $externalShippingStatus): SettingStruct
+    {
+        $this->externalShippingStatus = $externalShippingStatus;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getExternalPaymentStatus(): string
+    {
+        return $this->externalPaymentStatus;
+    }
+
+    /**
+     * @param string $externalPaymentStatus
+     * @return SettingStruct
+     */
+    public function setExternalPaymentStatus(string $externalPaymentStatus): SettingStruct
+    {
+        $this->externalPaymentStatus = $externalPaymentStatus;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getExternalOrderStatus(): string
+    {
+        return $this->externalOrderStatus;
+    }
+
+    /**
+     * @param string $externalOrderStatus
+     * @return SettingStruct
+     */
+    public function setExternalOrderStatus(string $externalOrderStatus): SettingStruct
+    {
+        $this->externalOrderStatus = $externalOrderStatus;
+        return $this;
+    }
+
 }

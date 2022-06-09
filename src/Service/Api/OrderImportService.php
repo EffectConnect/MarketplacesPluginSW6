@@ -5,7 +5,9 @@ namespace EffectConnect\Marketplaces\Service\Api;
 use EffectConnect\Marketplaces\Exception\OrderImportFailedException;
 use EffectConnect\Marketplaces\Factory\LoggerFactory;
 use EffectConnect\Marketplaces\Interfaces\LoggerProcess;
+use EffectConnect\Marketplaces\Service\SettingsService;
 use EffectConnect\Marketplaces\Service\Transformer\OrderTransformerService;
+use EffectConnect\Marketplaces\Setting\SettingStruct;
 use EffectConnect\PHPSdk\Core;
 use EffectConnect\Marketplaces\Exception\ApiCallFailedException;
 use EffectConnect\PHPSdk\Core\Exception\InvalidPropertyValueException;
@@ -62,10 +64,11 @@ class OrderImportService extends AbstractOrderService
      * Import all open orders.
      *
      * @param SalesChannelEntity $salesChannel
+     * @param bool $externallyFulfilledOrders
      * @return void
      * @throws OrderImportFailedException
      */
-    public function importOrders(SalesChannelEntity $salesChannel)
+    public function importOrders(SalesChannelEntity $salesChannel, bool $externallyFulfilledOrders)
     {
         $this->_logger->info('Import orders for sales channel started.', [
             'process'       => static::LOGGER_PROCESS,
@@ -76,8 +79,7 @@ class OrderImportService extends AbstractOrderService
         ]);
 
         try {
-            $core = $this->_interactionService
-                ->getInitializedSdk($salesChannel->getId());
+            $core = $this->_interactionService->getInitializedSdk($salesChannel->getId());
         } catch (Exception $e) {
             $this->_logger->error('Failed to initialize SDK (or connect to the API).', [
                 'process'       => static::LOGGER_PROCESS,
@@ -99,32 +101,10 @@ class OrderImportService extends AbstractOrderService
             throw new OrderImportFailedException($salesChannel->getId());
         }
 
-        try {
-            $orders = $this->orderListReadCall($core);
-        } catch (Exception $e) {
-            $this->_logger->error('Order List Read API call failed.', [
-                'process'       => static::LOGGER_PROCESS,
-                'message'       => $e->getMessage(),
-                'sales_channel' => [
-                    'id'    => $salesChannel->getId(),
-                    'name'  => $salesChannel->getName(),
-                ]
-            ]);
-
-            $this->_logger->info('Import orders for sales channel ended.', [
-                'process'       => static::LOGGER_PROCESS,
-                'sales_channel' => [
-                    'id'    => $salesChannel->getId(),
-                    'name'  => $salesChannel->getName(),
-                ]
-            ]);
-
-            throw new OrderImportFailedException($salesChannel->getId());
-        }
+        $orders = $this->getAllOrders($core, $salesChannel, $externallyFulfilledOrders);
 
         try {
-            $this->_orderTransformerService
-                ->createOrdersForSalesChannel($salesChannel, $orders);
+            $this->_orderTransformerService->createOrdersForSalesChannel($salesChannel, $orders);
         } catch (Exception $e) {
             $this->_logger->error('Failed to create order (or finding the sales channel).', [
                 'process'       => static::LOGGER_PROCESS,
@@ -155,21 +135,47 @@ class OrderImportService extends AbstractOrderService
         ]);
     }
 
+    protected function getAllOrders(Core $core, SalesChannelEntity $salesChannel, bool $externallyFulfilled): array
+    {
+        try {
+            return $this->orderListReadCall($core, $externallyFulfilled);
+        } catch (Exception $e) {
+            $this->_logger->error('Order List Read API call failed.', [
+                'process'       => static::LOGGER_PROCESS,
+                'message'       => $e->getMessage(),
+                'sales_channel' => [
+                    'id'    => $salesChannel->getId(),
+                    'name'  => $salesChannel->getName(),
+                ]
+            ]);
+
+            $this->_logger->info('Import orders for sales channel ended.', [
+                'process'       => static::LOGGER_PROCESS,
+                'sales_channel' => [
+                    'id'    => $salesChannel->getId(),
+                    'name'  => $salesChannel->getName(),
+                ]
+            ]);
+            throw new OrderImportFailedException($salesChannel->getId());
+        }
+    }
+
     /**
      * Create order list read call.
      *
      * @param Core $core
+     * @param bool $externallyFulfilled
      * @return Order[]
      * @throws ApiCallFailedException
      * @throws InvalidPropertyValueException
      * @throws MissingFilterValueException
      */
-    protected function orderListReadCall(Core $core): array
+    protected function orderListReadCall(Core $core, bool $externallyFulfilled): array
     {
         $orderListCall  = $core->OrderListCall();
         $orderList      = new OrderList();
 
-        $this->addFilters($orderList);
+        $this->addFilters($orderList, $externallyFulfilled);
 
         $apiCall = $orderListCall->read($orderList);
 
@@ -184,49 +190,52 @@ class OrderImportService extends AbstractOrderService
 
     /**
      * @param OrderList $orderList
-     * @throws MissingFilterValueException
+     * @param bool $externallyFulfilled
      * @throws InvalidPropertyValueException
+     * @throws MissingFilterValueException
      */
-    protected function addFilters(OrderList &$orderList)
+    protected function addFilters(OrderList &$orderList, bool $externallyFulfilled)
     {
-        $this->addStatusFilters($orderList);
-        $this->addExcludeTagFilters($orderList);
+        $this->addStatusFilters($orderList, $externallyFulfilled);
+        $this->addTagFilters($orderList, $externallyFulfilled);
     }
 
     /**
      * Add status filters.
      *
      * @param OrderList $orderList
-     * @throws MissingFilterValueException
+     * @param bool $externallyFulfilled
      * @throws InvalidPropertyValueException
+     * @throws MissingFilterValueException
      */
-    protected function addStatusFilters(OrderList &$orderList)
+    protected function addStatusFilters(OrderList &$orderList, bool $externallyFulfilled)
     {
-        $hasStatusFilter = new HasStatusFilter();
-
-        $hasStatusFilter->setFilterValue(static::STATUS_FILTERS);
-
-        $orderList->addFilter($hasStatusFilter);
+        $statusFilters = $externallyFulfilled ? self::EXTERNAL_STATUS_FILTERS : self::INTERNAL_STATUS_FILTERS;
+        $orderList->addFilter((new HasStatusFilter())->setFilterValue($statusFilters));
     }
 
     /**
      * Add exclude tag filters.
      *
      * @param OrderList $orderList
-     * @throws MissingFilterValueException
+     * @param bool $externallyFulfilled
      * @throws InvalidPropertyValueException
+     * @throws MissingFilterValueException
      */
-    protected function addExcludeTagFilters(OrderList &$orderList)
+    protected function addTagFilters(OrderList &$orderList, bool $externallyFulfilled)
     {
         $hasTagFilter = new HasTagFilter();
 
         foreach (static::EXCLUDE_TAG_FILTERS as $excludeTag) {
-            $tagFilterValue = new TagFilterValue();
+            $hasTagFilter->setFilterValue((new TagFilterValue())
+                ->setExclude(true)
+                ->setTagName($excludeTag));
+        }
 
-            $tagFilterValue->setTagName($excludeTag);
-            $tagFilterValue->setExclude(true);
-
-            $hasTagFilter->setFilterValue($tagFilterValue);
+        if ($externallyFulfilled) {
+            $hasTagFilter->setFilterValue((new TagFilterValue())
+                ->setExclude(false)
+                ->setTagName(self::ORDER_EXTERNAL_FULFILMENT_TAG));
         }
 
         $orderList->addFilter($hasTagFilter);
