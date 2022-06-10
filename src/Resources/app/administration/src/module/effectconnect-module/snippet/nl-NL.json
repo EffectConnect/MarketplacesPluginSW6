@@ -1,0 +1,8 @@
+{
+  "swag-example": {
+    "nested": {
+      "value": "example"
+    },
+    "foo": "bar"
+  }
+}

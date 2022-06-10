@@ -1,0 +1,14 @@
+{
+  "effectconnect": {
+    "log": {
+      "column": {
+        "filename": "Bestandsnaam",
+        "lastUpdated": "Laatst bewerkt",
+        "fullPath": "Fullpath"
+      },
+      "overview": {
+        "download": "Download"
+      }
+    }
+  }
+}

@@ -20,6 +20,7 @@
     "require": {
         "ext-curl": "*",
         "ext-dom": "*",
+        "ext-zip": "*",
         "ext-json": "*",
         "ext-intl": "*",
         "ext-libxml": "*",

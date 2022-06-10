@@ -1,0 +1,14 @@
+{
+  "effectconnect": {
+    "log": {
+      "column": {
+        "filename": "Filename",
+        "lastUpdated": "Last updated at",
+        "fullPath": "Filename"
+      },
+      "overview": {
+        "download": "Download"
+      }
+    }
+  }
+}

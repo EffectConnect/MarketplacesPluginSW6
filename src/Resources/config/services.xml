@@ -274,5 +274,11 @@
             <argument type="service" id="Shopware\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionStateHandler" />
             <tag name="shopware.payment.method.sync" />
         </service>
+
+        <service id="EffectConnect\Marketplaces\Controller\LogController" public="true">
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+        </service>
     </services>
 </container>
