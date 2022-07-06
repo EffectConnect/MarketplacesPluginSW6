@@ -30,14 +30,14 @@ class OfferTransformerService extends CatalogTransformerService
      * Build the offer XML for a specific sales channel.
      *
      * @param SalesChannelEntity $salesChannelEntity
+     * @param array|null $productIds
      * @return string
      * @throws FileCreationFailedException
-     * @throws NoProductsFoundException
      * @throws SalesChannelNotFoundException
      */
-    public function buildOfferXmlForSalesChannel(SalesChannelEntity $salesChannelEntity): string
+    public function buildOfferXmlForSalesChannel(SalesChannelEntity $salesChannelEntity, ?array $productIds = null): string
     {
-        return $this->buildCatalogXmlForSalesChannel($salesChannelEntity);
+        return $this->buildCatalogXmlForSalesChannel($salesChannelEntity, $productIds);
     }
 
     /**

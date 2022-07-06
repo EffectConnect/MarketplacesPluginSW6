@@ -47,4 +47,19 @@ class LoggerProcess
      * Other
      */
     public const OTHER              = 'other';
+
+    /**
+     * Offer Change Task
+     */
+    public const OFFER_CHANGE_TASK = 'offer_change_task';
+
+    /**
+     * Export Shipment Task
+     */
+    public const EXPORT_SHIPMENT_TASK = 'export_shipment_task';
+
+    /**
+     * Offer Change
+     */
+    const OFFER_CHANGE = 'offer_change';
 }

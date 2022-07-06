@@ -32,6 +32,8 @@ use Shopware\Core\Content\Rule\Aggregate\RuleCondition\RuleConditionEntity;
 use Shopware\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Dbal\Common\SalesChannelRepositoryIterator;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
 use Shopware\Core\System\SalesChannel\Entity\SalesChannelRepositoryInterface;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Core\System\SalesChannel\SalesChannelEntity;
@@ -183,65 +185,19 @@ class CatalogTransformerService
         $this->_seoUrlService               = $seoUrlService;
     }
 
-    /**
-     * Build the catalog XML for a specific sales channel.
-     *
-     * @param SalesChannelEntity $salesChannelEntity
-     * @return string
-     * @throws FileCreationFailedException
-     * @throws NoProductsFoundException
-     * @throws SalesChannelNotFoundException
-     */
-    public function buildCatalogXmlForSalesChannel(SalesChannelEntity $salesChannelEntity): string
-    {
-        $this->_salesChannel        = $salesChannelEntity;
-        $this->_logger              = $this->_loggerFactory::createLogger(static::LOGGER_PROCESS);
-        $this->_settings            = $this->_settingsService->getSettings($salesChannelEntity->getId());
-        $this->_languages           = $this->_languagesService->getLanguages($salesChannelEntity);
-        $this->_attributesHelper    = new AttributesHelper($this->_languages);
-        $productIterator            = $this->getProductIterator($this->_salesChannel);
-        $total                      = $productIterator->getTotal();
+    private function addProductResultToXml(EntitySearchResult $productResult) {
+        /**
+         * @var ProductEntity $product
+         */
+        foreach ($productResult->getEntities() as $product) {
+            if (is_null($product->getParentId()) && $product->getActive()) {
+                $productArray = $this->getProductArray($product);
 
-        if ($total <= 0) {
-            throw new NoProductsFoundException($this->_salesChannel->getId());
-        }
+                if (!empty($productArray['options']['option']) && !empty($productArray['identifier']['_cdata'])) {
+                    try {
+                        $this->_xmlHelper->append($productArray, 'product');
 
-        $this->_fileLocation        = FileHelper::generateFile(FileHelper::DIRECTION_TYPE_EXPORT, static::CONTENT_TYPE, $this->_salesChannel->getId());
-        $this->_xmlHelper           = FileHelper::getXmlHelperInstance($this->_fileLocation, static::XML_ROOT_ELEMENT);
-
-        while ($productResult = $productIterator->fetch()) {
-            /**
-             * @var ProductEntity $product
-             */
-            foreach ($productResult->getEntities() as $product) {
-                if (is_null($product->getParentId()) && $product->getActive()) {
-                    $productArray = $this->getProductArray($product);
-
-                    if (!empty($productArray['options']['option']) && !empty($productArray['identifier']['_cdata'])) {
-                        try {
-                            $this->_xmlHelper->append($productArray, 'product');
-
-                            $this->_logger->info('Added product to the export XML file.', [
-                                'process'       => static::LOGGER_PROCESS,
-                                'sales_channel' => [
-                                    'id'    => $this->_salesChannel->getId(),
-                                    'name'  => $this->_salesChannel->getName(),
-                                ],
-                                'product'       => $productArray['identifier']['_cdata']
-                            ]);
-                        } catch (DOMException $e) {
-                            $this->_logger->warning('Failed to convert product array to XML or appending it to the XML file.', [
-                                'process'       => static::LOGGER_PROCESS,
-                                'message'       => $e->getMessage(),
-                                'sales_channel' => [
-                                    'id'    => $this->_salesChannel->getId(),
-                                    'name'  => $this->_salesChannel->getName(),
-                                ],
-                                'product'       => $productArray['identifier']['_cdata']
-                            ]);
-                        }
-                    } elseif (empty($productArray['options']['option']) && !empty($productArray['identifier']['_cdata'])) {
-                        $this->_logger->notice('No (active) product options present.', [
+                        $this->_logger->info('Added product to the export XML file.', [
                             'process'       => static::LOGGER_PROCESS,
                             'sales_channel' => [
                                 'id'    => $this->_salesChannel->getId(),
@@ -249,22 +205,66 @@ class CatalogTransformerService
                             ],
                             'product'       => $productArray['identifier']['_cdata']
                         ]);
-                    } else {
-                        $this->_logger->notice('Product is not valid (no identifier).', [
+                    } catch (DOMException $e) {
+                        $this->_logger->warning('Failed to convert product array to XML or appending it to the XML file.', [
                             'process'       => static::LOGGER_PROCESS,
+                            'message'       => $e->getMessage(),
                             'sales_channel' => [
                                 'id'    => $this->_salesChannel->getId(),
                                 'name'  => $this->_salesChannel->getName(),
                             ],
-                            'product'       => $product->getId()
+                            'product'       => $productArray['identifier']['_cdata']
                         ]);
                     }
+                } elseif (empty($productArray['options']['option']) && !empty($productArray['identifier']['_cdata'])) {
+                    $this->_logger->notice('No (active) product options present.', [
+                        'process'       => static::LOGGER_PROCESS,
+                        'sales_channel' => [
+                            'id'    => $this->_salesChannel->getId(),
+                            'name'  => $this->_salesChannel->getName(),
+                        ],
+                        'product'       => $productArray['identifier']['_cdata']
+                    ]);
+                } else {
+                    $this->_logger->notice('Product is not valid (no identifier).', [
+                        'process'       => static::LOGGER_PROCESS,
+                        'sales_channel' => [
+                            'id'    => $this->_salesChannel->getId(),
+                            'name'  => $this->_salesChannel->getName(),
+                        ],
+                        'product'       => $product->getId()
+                    ]);
                 }
             }
         }
+    }
+
+    /**
+     * Build the catalog XML for a specific sales channel.
+     *
+     * @param SalesChannelEntity $salesChannelEntity
+     * @param array|null $productIds
+     * @return string
+     * @throws FileCreationFailedException
+     * @throws SalesChannelNotFoundException
+     */
+    public function buildCatalogXmlForSalesChannel(SalesChannelEntity $salesChannelEntity, ?array $productIds = null): string
+    {
+        $this->_salesChannel        = $salesChannelEntity;
+        $this->_logger              = $this->_loggerFactory::createLogger(static::LOGGER_PROCESS);
+        $this->_settings            = $this->_settingsService->getSettings($salesChannelEntity->getId());
+        $this->_languages           = $this->_languagesService->getLanguages($salesChannelEntity);
+        $this->_attributesHelper    = new AttributesHelper($this->_languages);
+        $productIterator            = $this->getProductIterator($this->_salesChannel, $productIds);
+
+        $this->_fileLocation        = FileHelper::generateFile(FileHelper::DIRECTION_TYPE_EXPORT, static::CONTENT_TYPE, $this->_salesChannel->getId());
+        $this->_xmlHelper           = FileHelper::getXmlHelperInstance($this->_fileLocation, static::XML_ROOT_ELEMENT);
+
+        while ($productResult = $productIterator->fetch()) {
+            $this->addProductResultToXml($productResult);
+        }
 
         $this->_xmlHelper->endTransaction();
-
         return realpath($this->_fileLocation);
     }
 
@@ -272,10 +272,11 @@ class CatalogTransformerService
      * Get the product iterator.
      *
      * @param SalesChannelEntity $salesChannelEntity
+     * @param array|null $productIds
      * @return SalesChannelRepositoryIterator
      * @throws SalesChannelNotFoundException
      */
-    protected function getProductIterator(SalesChannelEntity $salesChannelEntity): SalesChannelRepositoryIterator
+    protected function getProductIterator(SalesChannelEntity $salesChannelEntity, ?array $productIds): SalesChannelRepositoryIterator
     {
         $offset                     = 0;
         $criteria                   = new Criteria();
@@ -340,6 +341,10 @@ class CatalogTransformerService
 
         foreach ($associations as $association) {
             $criteria->addAssociation('children.' . $association);
+        }
+
+        if ($productIds !== null) {
+            $criteria->addFilter(new EqualsAnyFilter('product.id', $productIds));
         }
 
         return new SalesChannelRepositoryIterator($this->_productRepository, $this->_salesChannelContext, $criteria);

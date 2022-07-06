@@ -59,7 +59,7 @@ class OfferExportService extends AbstractApiService
      * @return void
      * @throws OfferExportFailedException
      */
-    public function exportOffers(SalesChannelEntity $salesChannel)
+    public function exportOffers(SalesChannelEntity $salesChannel, ?array $productIds = null)
     {
         $this->_logger->info('Export offers for sales channel started.', [
             'process'       => static::LOGGER_PROCESS,
@@ -94,8 +94,7 @@ class OfferExportService extends AbstractApiService
         }
 
         try {
-            $file = $this->_offerTransformerService
-                ->buildOfferXmlForSalesChannel($salesChannel);
+            $file = $this->_offerTransformerService->buildOfferXmlForSalesChannel($salesChannel, $productIds);
         } catch (Exception $e) {
             $this->_logger->error('Failed to build the offers XML (or finding the sales channel).', [
                 'process'       => static::LOGGER_PROCESS,
