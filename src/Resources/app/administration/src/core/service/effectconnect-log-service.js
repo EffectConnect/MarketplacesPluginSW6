@@ -22,11 +22,13 @@ class EffectConnectLogService extends EffectConnectApiService {
      */
     downloadLogFiles(filename) {
         let headers = this.getBasicHeaders();
-        headers['responseType'] = 'blob';
         let uri = this.getUri('downloadFiles', {filenames: filename});
 
+        let config = {
+            responseType: 'blob'
+        };
         return this.httpClient
-            .get(uri, {headers: headers})
+            .get(uri, {...config, headers})
             .then((response) => {
                 return ApiService.handleResponse(response);
             });
