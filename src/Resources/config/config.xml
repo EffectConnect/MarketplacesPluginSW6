@@ -374,5 +374,45 @@
             <placeholder lang="nl-NL">Kies een verzendmethode...</placeholder>
             <placeholder lang="de-DE">Wählen Sie eine Versandart...</placeholder>
         </component>
+        <input-field type="bool">
+            <name>createCustomer</name>
+            <label>Create customers</label>
+            <label lang="nl-NL">Maak klanten aan</label>
+            <helpText>Create customers on order import.</helpText>
+            <helpText lang="nl-NL">Maak klanten aan bij het importeren van orders.</helpText>
+            <defaultValue>false</defaultValue>
+        </input-field>
+        <component name="sw-entity-single-select">
+            <name>customerGroup</name>
+            <entity>customer_group</entity>
+            <label>Customer group</label>
+            <label lang="nl-NL">Klantgroep</label>
+            <helpText>Select the customer group for new customers.</helpText>
+            <helpText lang="nl-NL">Selecteer klantgroep voor nieuwe klanten.</helpText>
+            <placeholder>Choose a customer group...</placeholder>
+            <placeholder lang="nl-NL">Kies een klantgroep...</placeholder>
+        </component>
+        <input-field type="single-select">
+            <name>customerSourceType</name>
+            <label>Customer source type</label>
+            <label lang="nl-NL">Klantdata bron</label>
+            <helpText>Select the data where the customer data will be collected from.</helpText>
+            <helpText lang="nl-NL">Selecteer de data waar de klantgegevens uit gehaald moeten worden.</helpText>
+            <placeholder>Choose the customer data source...</placeholder>
+            <placeholder lang="nl-NL">Kies de klantdata bron...</placeholder>
+            <defaultValue>billing</defaultValue>
+            <options>
+                <option>
+                    <id>billing</id>
+                    <name>Billing</name>
+                    <name lang="nl-NL">Billing</name>
+                </option>
+                <option>
+                    <id>shipping</id>
+                    <name>Shipping</name>
+                    <name lang="nl-NL">Shipping</name>
+                </option>
+            </options>
+        </input-field>
     </card>
 </config>

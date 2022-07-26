@@ -140,6 +140,7 @@
             <argument type="service" id="salutation.repository"/>
             <argument type="service" id="country.repository"/>
             <argument type="service" id="country_state.repository"/>
+            <argument type="service" id="customer.repository"/>
         </service>
 
         <!-- Order Line Transformer Service -->
