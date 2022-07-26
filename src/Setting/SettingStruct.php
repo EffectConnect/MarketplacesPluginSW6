@@ -2,6 +2,7 @@
 
 namespace EffectConnect\Marketplaces\Setting;
 
+use EffectConnect\Marketplaces\Enum\CustomerSourceType;
 use Shopware\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionStates;
 use Shopware\Core\Checkout\Order\OrderStates;
 use Shopware\Core\Framework\Struct\Struct;
@@ -106,6 +107,21 @@ class SettingStruct extends Struct
      * @var int
      */
     protected $logExpiration;
+
+    /**
+     * @var string
+     */
+    protected $customerGroup;
+
+    /**
+     * @var bool
+     */
+    protected $createCustomer;
+
+    /**
+     * @var string
+     */
+    protected $customerSourceType;
 
     /**
      * @return string
@@ -412,6 +428,61 @@ class SettingStruct extends Struct
     }
 
     /**
+     * @param ?string $customerGroup
+     * @return self
+     */
+    public function setCustomerGroup(?string $customerGroup): self
+    {
+        $this->customerGroup = $customerGroup;
+
+        return $this;
+    }
+    /**
+     * @return ?string
+     */
+    public function getCustomerGroup(): string
+    {
+        return $this->customerGroup;
+    }
+
+    /**
+     * @param bool $createCustomer
+     * @return self
+     */
+    public function setCreateCustomer(bool $createCustomer): self
+    {
+        $this->createCustomer = $createCustomer;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCreateCustomer(): bool
+    {
+        return $this->getValueWithDefault($this->createCustomer, false);
+    }
+
+    /**
+     * @param string $customerSourceType
+     * @return self
+     */
+    public function setCustomerSourceType(string $customerSourceType): self
+    {
+        $this->customerSourceType = $customerSourceType;
+
+        return $this;
+    }
+    /**
+     * @return string
+     */
+    public function getCustomerSourceType(): string
+    {
+        return (string)$this->getValueWithDefault($this->customerSourceType, CustomerSourceType::BILLING);
+    }
+
+    /**
      * @param $property
      * @param $default
      * @return mixed
@@ -420,4 +491,5 @@ class SettingStruct extends Struct
     {
         return !is_null($property) ? $property : $default;
     }
+
 }
