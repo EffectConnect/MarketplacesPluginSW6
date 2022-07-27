@@ -354,6 +354,10 @@ class OrderTransformerService
      * @return BillingAddress|ShippingAddress
      */
     private function getCustomerSource(Order $order) {
+        if (!$this->_settings->isCreateCustomer()) {
+            return $order->getBillingAddress();
+        }
+
         switch ($this->_settings->getCustomerSourceType()) {
             case CustomerSourceType::SHIPPING:
                 return $order->getShippingAddress();
@@ -384,9 +388,10 @@ class OrderTransformerService
         $orderLineIndex             = 1;
         $orderLines                 = [];
         $currency                   = $this->getCurrency($order->getCurrency());
+        $customerSourceAddress      = $this->getCustomerSource($order);
         $billingAddress             = $this->_customerTransformerService->transformOrderAddress($billingAddressId, $order->getBillingAddress(), $this->_salesChannelContext);
         $shippingAddress            = $this->_customerTransformerService->transformOrderAddress($shippingAddressId, $order->getShippingAddress(), $this->_salesChannelContext);
-        $orderCustomer              = $this->_customerTransformerService->transformOrderCustomer($order->getBillingAddress(), $this->_salesChannelContext);
+        $orderCustomer              = $this->_customerTransformerService->transformOrderCustomer($customerSourceAddress, $this->_salesChannelContext);
         $paymentMethod              = $this->getPaymentMethod();
         $shippingMethod             = $this->getShippingMethod();
         $tags                       = [
@@ -398,15 +403,14 @@ class OrderTransformerService
         ];
 
         if ($this->_settings->isCreateCustomer()) {
-            $source = $this->getCustomerSource($order);
-            $customer = $this->_customerTransformerService->getCustomer($source->getEmail());
+            $customer = $this->_customerTransformerService->getCustomer($customerSourceAddress->getEmail());
             if ($customer === null) {
                 $createContext = new CustomerCreateContext();
                 $createContext->salesChannelContext = $this->_salesChannelContext;
                 $createContext->paymentMethod = $paymentMethod;
                 $createContext->shippingAddressData = $shippingAddress;
                 $createContext->billingAddressData = $billingAddress;
-                $createContext->customerSource = $source;
+                $createContext->customerSource = $customerSourceAddress;
                 $createContext->customerGroup = $this->_settings->getCustomerGroup();
                 $customer = $this->_customerTransformerService->createCustomer($createContext);
             }
