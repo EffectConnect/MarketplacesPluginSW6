@@ -1,0 +1,163 @@
+{% block connection_edit %}
+    <sw-page class="connection-edit">
+        <template #smart-bar-actions>
+            <sw-button @click="save()" :disabled="busySaving || !loaded" variant="primary" >
+                {{ $tc('ec.global.save') }}
+            </sw-button>
+        </template>
+        <template #smart-bar-back>
+            <router-link class="smart-bar__back-btn" :to="{ name: 'effectconnect.connection.overview' }">
+                <sw-icon name="default-arrow-head-left" small></sw-icon>
+            </router-link>
+        </template>
+        <template slot="content">
+            <sw-loader v-if="busySaving"></sw-loader>
+            <sw-alert variant="error" appearance="system" :showIcon="true" :closable="false" v-if="error">
+                {{ error }}
+            </sw-alert>
+            <sw-alert variant="success" appearance="system" :showIcon="true" :closable="true" v-if="showSuccess">
+                {{ $tc('ec.global.successSaved') }}
+            </sw-alert>
+            <div v-if="loaded">
+                <br><br>
+                <sw-card :title="tc('general')">
+                    <sw-inherit-wrapper :helpText="tc('salesChannelHelpText')" :label="tc('salesChannelLabel')">
+                        <template #content>
+                            <sw-single-select
+                                    :placeholder="tc('salesChannelPlaceholder')"
+                                    labelProperty="name"
+                                    valueProperty="id"
+                                    :disabled="!newItem"
+                                    :options="availableSalesChannels"
+                                    v-model="connection.salesChannelId">
+                                required
+                            </sw-single-select>
+                        </template>
+                    </sw-inherit-wrapper>
+                    <sw-inherit-wrapper :helpText="tc('nameHelpText')" :label="tc('nameLabel')">
+                        <template #content>
+                            <sw-field type="input" v-model="connection.name" :placeholder="tc('namePlaceholder')" required></sw-field>
+                        </template>
+                    </sw-inherit-wrapper>
+                </sw-card>
+                <sw-card :title="tc('api')">
+                    <sw-inherit-wrapper :helpText="tc('publicKeyHelpText')" :label="tc('publicKeyLabel')">
+                        <template #content>
+                            <sw-field type="input" :placeholder="tc('publicKeyPlaceholder')" v-model="connection.publicKey"></sw-field>
+                        </template>
+                    </sw-inherit-wrapper>
+                    <sw-inherit-wrapper :helpText="tc('secretKeyHelpText')" :label="tc('secretKeyLabel')">
+                        <template #content>
+                            <sw-field type="password" :placeholder="tc('secretKeyPlaceholder')" v-model="connection.secretKey"></sw-field>
+                        </template>
+                    </sw-inherit-wrapper>
+                </sw-card>
+                <sw-card :title="tc('catalogExport')">
+                    <sw-inherit-wrapper :helpText="tc('scheduleHelpText')" :label="tc('scheduleLabel')">
+                        <template #content>
+                            <sw-single-select
+                                    :placeholder="tc('schedulePlaceholder')"
+                                    :disabled="true"
+                                    :options="schedules.catalog"
+                                    v-model="connection.catalogExportSchedule">
+                            </sw-single-select>
+                        </template>
+                    </sw-inherit-wrapper>
+                    <sw-switch-field bordered v-model="connection.addLeadingZeroToEan"
+                                     :label="tc('addLeadingZeroToEanLabel')"
+                                     :helpText="tc('addLeadingZeroToEanHelpText')">
+                    </sw-switch-field>
+                    <sw-switch-field bordered v-model="connection.useSpecialPrice"
+                                     :label="tc('useSpecialPriceLabel')"
+                                     :helpText="tc('useSpecialPriceHelpText')">
+                    </sw-switch-field>
+                    <sw-switch-field bordered v-model="connection.useFallbackTranslations"
+                                     :label="tc('useFallbackTranslationsLabel')"
+                                     :helpText="tc('useFallbackTranslationsHelpText')">
+                    </sw-switch-field>
+                    <sw-switch-field bordered v-model="connection.useSalesChannelDefaultLanguageAsFirstFallbackLanguage"
+                                     :label="tc('useSalesChannelDefaultLanguageAsFirstFallbackLanguageLabel')"
+                                     :helpText="tc('useSalesChannelDefaultLanguageAsFirstFallbackLanguageHelpText')">
+                    </sw-switch-field>
+                    <sw-switch-field bordered v-model="connection.useSystemLanguages"
+                                     :label="tc('useSystemLanguagesLabel')"
+                                     :helpText="tc('useSystemLanguagesHelpText')">
+                    </sw-switch-field>
+                </sw-card>
+                <sw-card :title="tc('offerExport')">
+                    <sw-inherit-wrapper :helpText="tc('scheduleHelpText')" :label="tc('scheduleLabel')">
+                        <template #content>
+                            <sw-single-select
+                                    :placeholder="tc('schedulePlaceholder')"
+                                    :disabled="true"
+                                    :options="schedules.offer"
+                                    v-model="connection.offerExportSchedule">
+                            </sw-single-select>
+                        </template>
+                    </sw-inherit-wrapper>
+                    <sw-inherit-wrapper :helpText="tc('stockTypeHelpText')" :label="tc('stockTypeLabel')">
+                        <template #content>
+                            <sw-single-select
+                                    :placeholder="tc('stockTypePlaceholder')"
+                                    :options="stockTypes"
+                                    v-model="connection.stockType">
+                            </sw-single-select>
+                        </template>
+                    </sw-inherit-wrapper>
+                </sw-card>
+                <sw-card :title="tc('orderImport')">
+                    <sw-inherit-wrapper :helpText="tc('scheduleHelpText')" :label="tc('scheduleLabel')">
+                        <template #content>
+                            <sw-single-select
+                                    :placeholder="tc('schedulePlaceholder')"
+                                    :disabled="true"
+                                    :options="schedules.order"
+                                    v-model="connection.orderImportSchedule">
+                            </sw-single-select>
+                        </template>
+                    </sw-inherit-wrapper>
+                    <sw-inherit-wrapper :helpText="tc('paymentStatusHelpText')" :label="tc('paymentStatusLabel')">
+                        <template #content>
+                            <sw-single-select
+                                    :placeholder="tc('paymentStatusPlaceholder')"
+                                    :options="paymentStatuses"
+                                    v-model="connection.paymentStatus">
+                            </sw-single-select>
+                        </template>
+                    </sw-inherit-wrapper>
+                    <sw-inherit-wrapper :helpText="tc('orderStatusHelpText')" :label="tc('orderStatusLabel')">
+                        <template #content>
+                            <sw-single-select
+                                    :placeholder="tc('orderStatusPlaceholder')"
+                                    :options="orderStatuses"
+                                    v-model="connection.orderStatus">
+                            </sw-single-select>
+                        </template>
+                    </sw-inherit-wrapper>
+                    <sw-inherit-wrapper :helpText="tc('paymentMethodHelpText')" :label="tc('paymentMethodLabel')">
+                        <template #content>
+                            <sw-entity-single-select
+                                    :placeHolder="tc('paymentMethodPlaceholder')"
+                                    labelProperty="name"
+                                    valueProperty="id"
+                                    entity="payment_method"
+                                    v-model="connection.paymentMethod">
+                            </sw-entity-single-select>
+                        </template>
+                    </sw-inherit-wrapper>
+                    <sw-inherit-wrapper :helpText="tc('shippingMethodHelpText')" :label="tc('shippingMethodLabel')">
+                        <template #content>
+                            <sw-entity-single-select
+                                    :placeHolder="tc('shippingMethodPlaceholder')"
+                                    labelProperty="name"
+                                    valueProperty="id"
+                                    entity="shipping_method"
+                                    v-model="connection.shippingMethod">
+                            </sw-entity-single-select>
+                        </template>
+                    </sw-inherit-wrapper>
+                </sw-card>
+            </div>
+        </template>
+    </sw-page>
+{% endblock %}

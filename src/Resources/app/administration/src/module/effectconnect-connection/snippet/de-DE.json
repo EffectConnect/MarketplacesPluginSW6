@@ -1,0 +1,79 @@
+{
+    "ec": {
+        "connection": {
+            "overview": {
+                "deleteConnection": "L\u00f6schen",
+                "textConfirmDelete": "Sind Sie sicher, dass Sie diese Verbindung l\u00f6schen m\u00f6chten?",
+                "textDeleteInfo": "Diese Aktion kann nicht r\u00fcckg\u00e4ngig gemacht werden."
+            },
+            "edit": {
+                "general": "Allgemein",
+                "api": "API",
+                "catalogExport": "Katalogexport",
+                "offerExport": "Export anbieten",
+                "orderImport": "Auftragimport",
+                "noSalesChannelsAvailable": "Keine Verkaufskan\u00e4le verf\u00fcgbar",
+                "salesChannelHelpText": "Welcher Verkaufskanal zu verwenden?",
+                "salesChannelLabel": "Verkaufskanal",
+                "salesChannelPlaceholder": "W\u00e4hlen Sie einen Verkaufskanal aus",
+                "nameHelpText": "Nur als interne Referenz verwendet",
+                "nameLabel": "Name",
+                "namePlaceholder": "W\u00e4hlen Sie einen internen Namen ...",
+                "publicKeyHelpText": "Finden Sie Ihren \u00f6ffentlichen Schl\u00fcssel im Abschnitt API -Schl\u00fcsselmanagement in Effektconnect.",
+                "publicKeyLabel": "\u00d6ffentlicher Schl\u00fcssel",
+                "publicKeyPlaceholder": "F\u00fcllen Sie den \u00f6ffentlichen Schl\u00fcssel aus ...",
+                "secretKeyHelpText": "Finden Sie Ihren geheimen Schl\u00fcssel im Abschnitt API -Schl\u00fcsselverwaltungsabschnitt.",
+                "secretKeyLabel": "Geheimer Schl\u00fcssel",
+                "secretKeyPlaceholder": "F\u00fcllen Sie den geheimen Schl\u00fcssel aus ...",
+                "scheduleHelpText": "Bestimmt, ob und wann der Prozess ausgef\u00fchrt wird.",
+                "scheduleLabel": "Zeitlicher Ablauf",
+                "schedulePlaceholder": "W\u00e4hlen Sie einen benutzerdefinierten Zeitplan ...",
+                "schedules": {
+                    "86400": "Alle 24 Stunden",
+                    "64800": "Alle 18 Stunden",
+                    "43200": "Alle 12 Stunden",
+                    "21600": "Alle 6 Stunden",
+                    "3600": "Jede Stunde",
+                    "1800": "Alle 30 Minuten",
+                    "900": "Alle 15 Minuten",
+                    "300": "Alle 5 Minuten",
+                    "0": "Deaktiviert"
+                },
+                "addLeadingZeroToEanLabel": "F\u00fcgen Sie EAN",
+                "addLeadingZeroToEanHelpText": "W\u00e4hlen Sie, ob das Plugin einem EAN, der aus 12 Zeichen besteht, automatisch eine f\u00fchrende Null hinzuf\u00fcgen.",
+                "useSpecialPriceLabel": "Sonderpreis verwenden",
+                "useSpecialPriceHelpText": "W\u00e4hlen Sie, ob das Sonderpreisattribut beim Exportieren des Katalogs in EffectConnect verwendet werden soll.Der urspr\u00fcngliche Preis wird genauso gut exportiert, in diesem Fall jedoch als urspr\u00fcngliches Preisattribut.",
+                "useFallbackTranslationsLabel": "Verwenden Sie Fallback -\u00dcbersetzungen",
+                "useFallbackTranslationsHelpText": "W\u00e4hlen Sie, ob die Standardsprache verwendet werden sollte, wenn ein \u00fcbersetzbarer Wert in einer der anderen Sprachen beim Exportieren des Katalogs in Effektconnect nicht festgelegt wird.",
+                "useSalesChannelDefaultLanguageAsFirstFallbackLanguageLabel": "Verwenden Sie Vertriebskanal Standardsprache als erste Fallback -Sprache",
+                "useSalesChannelDefaultLanguageAsFirstFallbackLanguageHelpText": "Standardm\u00e4\u00dfig wird die Standardsprache der Systemsprachen als Fallback -Sprache verwendet.Wenn es aktiviert ist, wird die Standardsprache der Vertriebskanal zuerst als Fallback -Sprache verwendet.",
+                "useSystemLanguagesLabel": "Verwenden Sie Systemsprachen",
+                "useSystemLanguagesHelpText": "Standardm\u00e4\u00dfig werden die definierten Sprachen im Verkaufskanal verwendet.Wenn es aktiviert ist, werden die Systemsprachen beim Exportieren des Katalogs in EffectConnect verwendet.",
+                "stockTypeHelpText": "Bestimmt, welchen Bestand beim Erstellen der Exporte verwendet werden soll.",
+                "stockTypeLabel": "Aktientyp",
+                "stockTypes": {
+                    "physicalStock": "Physischer Bestand",
+                    "salableStock": "Verkaufsf\u00e4higer Aktien"
+                },
+                "paymentStatusLabel": "Zahlungsstatus",
+                "paymentStatusHelpText": "W\u00e4hlen Sie den Zahlungsstatus f\u00fcr importierte Bestellungen aus.",
+                "paymentStatuses": {
+                    "paid": "Bezahlt",
+                    "open": "Offen"
+                },
+                "orderStatusLabel": "Bestellstatus",
+                "orderStatusHelpText": "W\u00e4hlen Sie den Bestellstatus f\u00fcr importierte Bestellungen aus.",
+                "orderStatuses": {
+                    "open": "Offen",
+                    "in_progress": "Im Gange"
+                },
+                "paymentMethodHelpText": "W\u00e4hlen Sie die Zahlungsmethode f\u00fcr importierte Bestellungen aus.",
+                "paymentMethodLabel": "Zahlungsmethode",
+                "paymentMethodPlaceholder": "W\u00e4hlen Sie eine Bezahlungsart...",
+                "shippingMethodHelpText": "W\u00e4hlen Sie die Sendungsmethode f\u00fcr importierte Bestellungen aus.",
+                "shippingMethodLabel": "Versandart",
+                "shippingMethodPlaceholder": "W\u00e4hlen Sie eine Versandmethode ..."
+            }
+        }
+    }
+}

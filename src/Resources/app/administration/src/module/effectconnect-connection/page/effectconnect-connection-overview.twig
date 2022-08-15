@@ -1,0 +1,41 @@
+{% block connection_overview %}
+    <sw-page class="connection-overview-list">
+        <template #smart-bar-actions>
+            <sw-button variant="success" :router-link="{ name: 'effectconnect.connection.create'}">
+                {{ $tc('ec.global.create') }}
+            </sw-button>
+        </template>
+        <template slot="content">
+            <sw-alert variant="error" appearance="system" :showIcon="true" :closable="false" v-if="error">
+                {{ error }}
+            </sw-alert>
+            <div>
+                <sw-data-grid :dataSource="connections" :columns="columns" :showSelection="false">
+                    <template #actions="{ item }">
+                        <sw-context-menu-item :router-link="{ name: 'effectconnect.connection.edit', params: { id: item.id } }">
+                            {{ $tc('ec.global.edit') }}
+                        </sw-context-menu-item>
+                        <sw-context-menu-item variant="danger" @click="showDeleteModal(item)">
+                            {{ tc('deleteConnection') }}
+                        </sw-context-menu-item>
+                    </template>
+                </sw-data-grid>
+            </div>
+            <sw-modal v-if="showModal" @modal-close="closeModal()">
+                {% block ec_detail_settings_options_delete_modal_confirmtext %}
+                    <p>{{ tc('textConfirmDelete') }}</p>
+                    <p><strong>{{ selectedItem.name }}</strong></p>
+                    <p>{{ tc('textDeleteInfo') }}</p>
+                {% endblock %}
+                <template #modal-footer>
+                    <sw-button size="small" @click="closeDeleteModal">
+                        {{ $tc('ec.global.cancel') }}
+                    </sw-button>
+                    <sw-button size="small" variant="danger" @click="deleteItem(selectedItem.id)">
+                        {{ $tc('ec.global.delete') }}
+                    </sw-button>
+                </template>
+            </sw-modal>
+        </template>
+    </sw-page>
+{% endblock %}

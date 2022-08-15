@@ -1,0 +1,81 @@
+{
+  "ec": {
+    "connection": {
+      "overview": {
+        "deleteConnection": "Delete",
+        "textConfirmDelete": "Are you sure you want to delete this connection?",
+        "textDeleteInfo": "This action cannot be reversed."
+      },
+      "edit": {
+        "general": "General",
+        "api": "API",
+        "catalogExport": "Catalog export",
+        "offerExport": "Offer export",
+        "orderImport": "Order import",
+
+        "noSalesChannelsAvailable": "No sales channels available",
+
+        "salesChannelHelpText": "Which sales channel to be used",
+        "salesChannelLabel": "Sales channel",
+        "salesChannelPlaceholder": "Select a sales channel",
+        "nameHelpText": "Used for internal reference only",
+        "nameLabel": "Name",
+        "namePlaceholder": "Choose an internal name...",
+        "publicKeyHelpText": "Find your public key in the API Key Management section in EffectConnect.",
+        "publicKeyLabel": "Public key",
+        "publicKeyPlaceholder": "Fill in the public key...",
+        "secretKeyHelpText": "Find your secret key in the API Key Management section in EffectConnect.",
+        "secretKeyLabel": "Secret key",
+        "secretKeyPlaceholder": "Fill in the secret key...",
+        "scheduleHelpText": "Determines if and when the process will run.",
+        "scheduleLabel": "Schedule",
+        "schedulePlaceholder": "Choose a custom schedule...",
+        "schedules": {
+          "86400": "Every 24 hours",
+          "64800": "Every 18 hours",
+          "43200": "Every 12 hours",
+          "21600": "Every 6 hours",
+          "3600": "Every hour",
+          "1800": "Every 30 minutes",
+          "900": "Every 15 minutes",
+          "300": "Every 5 minutes",
+          "0": "Disabled"
+        },
+        "addLeadingZeroToEanLabel":  "Add leading zero to EAN",
+        "addLeadingZeroToEanHelpText": "Select whether the plugin should automatically add a leading zero to an EAN that consists of 12 characters.",
+        "useSpecialPriceLabel":  "Use special price",
+        "useSpecialPriceHelpText": "Select whether the special price attribute should be used when exporting the catalog to EffectConnect. The original price will just as well be exported, but in that case as original price attribute.",
+        "useFallbackTranslationsLabel":  "Use fallback translations",
+        "useFallbackTranslationsHelpText": "Select whether the default language should be used when a translatable value is not set in one of the other languages when exporting the catalog to EffectConnect.",
+        "useSalesChannelDefaultLanguageAsFirstFallbackLanguageLabel":  "Use sales channel default language as first fallback language",
+        "useSalesChannelDefaultLanguageAsFirstFallbackLanguageHelpText": "By default the default language of the system languages is used as fallback language. When enabled, the sales channel default language will be used as fallback language first.",
+        "useSystemLanguagesLabel":  "Use system languages",
+        "useSystemLanguagesHelpText": "By default the defined languages in the sales channel will be used. When enabled, the system languages will be used when exporting the catalog to EffectConnect.",
+        "stockTypeHelpText":  "Determines which stock to use when building the exports.",
+        "stockTypeLabel": "Stock type",
+        "stockTypes": {
+          "physicalStock": "Physical stock",
+          "salableStock": "Saleable stock"
+        },
+        "paymentStatusLabel":  "Payment status",
+        "paymentStatusHelpText":  "Select the payment status for imported orders.",
+        "paymentStatuses": {
+          "paid": "Paid",
+          "open": "Open"
+        },
+        "orderStatusLabel":  "Order status",
+        "orderStatusHelpText":  "Select the order status for imported orders.",
+        "orderStatuses": {
+          "open": "Open",
+          "in_progress": "In progress"
+        },
+        "paymentMethodHelpText": "Select the payment method for imported orders.",
+        "paymentMethodLabel":"Payment method",
+        "paymentMethodPlaceholder": "Choose a payment method...",
+        "shippingMethodHelpText":"Select the shipment method for imported orders.",
+        "shippingMethodLabel": "Shipment method",
+        "shippingMethodPlaceholder":"Choose a shipment method..."
+      }
+    }
+  }
+}

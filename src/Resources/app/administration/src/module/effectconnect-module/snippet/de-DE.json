@@ -1,0 +1,12 @@
+{
+    "ec": {
+        "global": {
+            "save": "Speichern",
+            "cancel": "Absagen",
+            "edit": "Bearbeiten",
+            "delete": "L\u00f6schen",
+            "create": "Schaffen",
+            "successSaved": "Erfolgreich gespeichert"
+        }
+    }
+}
