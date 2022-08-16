@@ -12,11 +12,8 @@
         </template>
         <template slot="content">
             <sw-loader v-if="busySaving"></sw-loader>
-            <sw-alert variant="error" appearance="system" :showIcon="true" :closable="false" v-if="error">
-                {{ error }}
-            </sw-alert>
-            <sw-alert variant="success" appearance="system" :showIcon="true" :closable="true" v-if="showSuccess">
-                {{ $tc('ec.global.successSaved') }}
+            <sw-alert v-for="toast in toasts" :variant="toast.type" appearance="system" :showIcon="true" :closable="false">
+                {{ toast.message }}
             </sw-alert>
             <div v-if="loaded">
                 <br><br>

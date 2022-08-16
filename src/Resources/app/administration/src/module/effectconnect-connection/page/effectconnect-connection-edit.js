@@ -1,13 +1,25 @@
 import template from './effectconnect-connection-edit.twig';
 
+class Toast {
+    constructor(message, type) {
+        this.message = message;
+        this.type = type;
+    }
+    static error(message) {
+        return new this(message, 'error');
+    }
+    static success(message) {
+        return new this(message, 'success');
+    }
+}
+
 Shopware.Component.register('effectconnect-connection-edit', {
     inject: ['EffectConnectConnectionService'],
 
     data() {
         return {
+            toasts: [],
             loaded: false,
-            error: null,
-            showSuccess: false,
             busySaving:false,
             id: this.$route.params.id,
             newItem: false,
@@ -52,10 +64,10 @@ Shopware.Component.register('effectconnect-connection-edit', {
                     });
                     window.location.reload();
                 } else {
-                    this.showSuccess = true;
-                    setTimeout(() => this.showSuccess=false, 1500);
+                    this.showToast(Toast.success(this.$tc('ec.global.successSaved')), 1500);
                 }
-            }).catch((e) => this.handleError(e)).finally(() => this.busySaving = false);
+            }).catch((e) => this.handleError(e))
+                .finally(() => this.busySaving = false);
         },
         initConnection(salesChannelData) {
             if (this.id) {
@@ -68,7 +80,7 @@ Shopware.Component.register('effectconnect-connection-edit', {
                 this.newItem = true;
                 this.availableSalesChannels = salesChannelData.available;
                 if (this.availableSalesChannels.length === 0) {
-                    this.error = this.tc('noSalesChannelsAvailable');
+                    this.showToast(Toast.error(this.tc('noSalesChannelsAvailable')))
                     return;
                 }
                 this.EffectConnectConnectionService.getDefaultSettings().then((defaultSettingsData) => {
@@ -77,9 +89,14 @@ Shopware.Component.register('effectconnect-connection-edit', {
                 }).catch((e) => this.handleError(e));
             }
         },
+        showToast(toast, timeout = null) {
+            this.toasts.push(toast);
+            if (timeout) {
+                setTimeout(() => this.toasts.splice(this.toasts.indexOf(toast), 1), timeout);
+            }
+        },
         handleError(error) {
-            this.error = error;
-            setTimeout(() => this.error=null, 3000);
+            this.showToast(Toast.error(error), 3000)
         },
         tc(key) {
             return this.$tc('ec.connection.edit.' + key);
