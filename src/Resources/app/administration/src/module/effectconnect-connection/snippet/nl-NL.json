@@ -39,8 +39,8 @@
           "300": "Elke 5 minuten",
           "0": "Uitgeschakeld"
         },
-        "addLeadingZeroToEanLabel": "Voeg nul toe aan EAN",
-        "addLeadingZeroToEanHelpText": "Selecteer of de plugin automatisch een nul moet toevoegen aan een EAN die uit 12 tekens bestaat.",
+        "addLeadingZeroToEanLabel": "Voeg voorloopnul toe aan EAN",
+        "addLeadingZeroToEanHelpText": "Selecteer of de plugin automatisch een voorloopnul moet toevoegen aan een EAN die uit 12 tekens bestaat.",
         "useSpecialPriceLabel": "Gebruik een speciale prijs",
         "useSpecialPriceHelpText": "Selecteer of het speciale prijskenmerk moet worden gebruikt bij het exporteren van de catalogus naar effectconnect. De oorspronkelijke prijs zal net zo goed worden geëxporteerd, maar in dat geval als oorspronkelijke prijskenmerk.",
         "useFallbackTranslationsLabel": "Gebruik Fallback-vertalingen",

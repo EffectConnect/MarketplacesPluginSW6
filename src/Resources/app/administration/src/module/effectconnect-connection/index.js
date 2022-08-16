@@ -41,7 +41,6 @@ Shopware.Module.register('effectconnect-connection', {
                 parentRoute: 'effectconnect-connection.overview'
             }
         }
-
     },
 
     navigation: [{
