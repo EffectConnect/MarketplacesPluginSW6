@@ -58,6 +58,9 @@ class SettingMigrationService
         if (count($settingsValues) === 0) {
             return;
         }
+        if (empty($settingsValues['name'])) {
+            $settingsValues['name'] = ' - ';
+        }
         $connection = new ConnectionEntity();
         $connection->setSalesChannelId($salesChannelId);
         $connection->assign($settingsValues);
