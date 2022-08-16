@@ -50,7 +50,6 @@ class ConnectionController extends AbstractController
 
         $connections = [];
         foreach($this->connectionService->getAll(['id','name','salesChannelId']) as $rawConnection) {
-
             $connection = new StdClass();
             $connection->id = $rawConnection->getId();
             $connection->name = $rawConnection->getName() ?: '-';
@@ -109,7 +108,7 @@ class ConnectionController extends AbstractController
         $salesChannelsInUse = array_map(function($c) {return $c->getSalesChannelId();},$this->connectionService->getAll(['salesChannelId']));
         $allSalesChannels = $this->salesChannelService->getSalesChannels();
 
-        $toData = function($s) {return ['id' => $s->getId(), 'name' => $s->getName()];};
+        $toData = function($s) {return ['value' => $s->getId(), 'label' => $s->getName()];};
 
         $availableSalesChannels = [];
         foreach($allSalesChannels as $salesChannel) {

@@ -25,18 +25,15 @@
                         <template #content>
                             <sw-single-select
                                     :placeholder="tc('salesChannelPlaceholder')"
-                                    labelProperty="name"
-                                    valueProperty="id"
                                     :disabled="!newItem"
                                     :options="availableSalesChannels"
                                     v-model="connection.salesChannelId">
-                                required
                             </sw-single-select>
                         </template>
                     </sw-inherit-wrapper>
                     <sw-inherit-wrapper :helpText="tc('nameHelpText')" :label="tc('nameLabel')">
                         <template #content>
-                            <sw-field type="input" v-model="connection.name" :placeholder="tc('namePlaceholder')" required></sw-field>
+                            <sw-field type="input" v-model="connection.name" :placeholder="tc('namePlaceholder')"></sw-field>
                         </template>
                     </sw-inherit-wrapper>
                 </sw-card>

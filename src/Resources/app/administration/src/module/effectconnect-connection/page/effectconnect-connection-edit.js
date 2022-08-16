@@ -61,7 +61,7 @@ Shopware.Component.register('effectconnect-connection-edit', {
             if (this.id) {
                 this.EffectConnectConnectionService.get(this.id).then((connectionData) => {
                     this.connection = connectionData.connection;
-                    this.availableSalesChannels = salesChannelData.all.filter(x => x.id === this.connection.salesChannelId);
+                    this.availableSalesChannels = salesChannelData.all.filter(x => x.value === this.connection.salesChannelId);
                     this.loaded = true;
                 }).catch((e) => this.handleError(e));
             } else {
@@ -73,8 +73,6 @@ Shopware.Component.register('effectconnect-connection-edit', {
                 }
                 this.EffectConnectConnectionService.getDefaultSettings().then((defaultSettingsData) => {
                     this.connection = defaultSettingsData.data;
-                    this.connection.salesChannelId = null;
-                    this.connection.name = null;
                     this.loaded = true;
                 }).catch((e) => this.handleError(e));
             }
