@@ -6,7 +6,8 @@
             "edit": "Bearbeiten",
             "delete": "L\u00f6schen",
             "create": "Schaffen",
-            "successSaved": "Erfolgreich gespeichert"
+            "successSaved": "Erfolgreich gespeichert",
+            "trigger": "Abzug"
         }
     }
 }

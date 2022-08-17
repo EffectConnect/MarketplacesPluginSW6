@@ -6,7 +6,8 @@
       "edit": "Edit",
       "delete": "Delete",
       "create": "Create",
-      "successSaved": "Successfully saved"
+      "successSaved": "Successfully saved",
+      "trigger": "Trigger"
     }
   }
 }

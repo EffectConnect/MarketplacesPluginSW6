@@ -9,8 +9,12 @@ use EffectConnect\Marketplaces\Service\Api\CatalogExportService;
 use EffectConnect\Marketplaces\Service\SalesChannelService;
 use EffectConnect\Marketplaces\Service\SettingsService;
 use Exception;
+use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
-use Shopware\Core\System\SalesChannel\SalesChannelEntity;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Shopware\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskDefinition;
+use Shopware\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskEntity;
+use Throwable;
 
 /**
  * Class CatalogExportTaskHandler
@@ -59,19 +63,53 @@ class CatalogExportTaskHandler extends AbstractTaskHandler
         return [ CatalogExportTask::class ];
     }
 
+    public function run(): void {}
+
     /**
-     * @inheritDoc
+     * @param CatalogExportTask $task
+     * @throws Throwable
      */
-    public function run(): void
+    public function handle($task): void
+    {
+        $taskId = $task->getTaskId();
+
+        if ($taskId === null) {
+            $this->_run($task);
+            return;
+        }
+
+        /** @var ScheduledTaskEntity|null $taskEntity */
+        $taskEntity = $this->scheduledTaskRepository
+            ->search(new Criteria([$taskId]), Context::createDefaultContext())
+            ->get($taskId);
+
+        if ($taskEntity === null || $taskEntity->getStatus() !== ScheduledTaskDefinition::STATUS_QUEUED) {
+            return;
+        }
+
+        $this->markTaskRunning($task);
+
+        try {
+            $this->_run($task);
+        } catch (Throwable $e) {
+            $this->markTaskFailed($task);
+            throw $e;
+        }
+
+        $this->rescheduleTask($task, $taskEntity);
+    }
+
+    public function _run(CatalogExportTask $task): void
     {
         $this->_logger->info('Executing catalog export task handler started.', [
             'process'       => static::LOGGER_PROCESS
         ]);
 
-        /**
-         * @var SalesChannelEntity $salesChannel
-         */
         foreach ($this->_salesChannelService->getSalesChannels() as $salesChannel) {
+            if ($task->getSalesChannelId() !== null && $task->getSalesChannelId() !== $salesChannel->getId()) {
+                continue;
+            }
+
             $settings = $this->_settingsService->getSettings($salesChannel->getId());
 
             try {
@@ -97,8 +135,7 @@ class CatalogExportTaskHandler extends AbstractTaskHandler
                 ]);
             }
         }
-
-        $this->_logger->info('Executing catalog export task handler started.', [
+        $this->_logger->info('Executing catalog export task handler finished.', [
             'process'       => static::LOGGER_PROCESS
         ]);
     }

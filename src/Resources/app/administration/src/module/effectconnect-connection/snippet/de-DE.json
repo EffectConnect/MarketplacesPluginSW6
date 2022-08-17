@@ -72,7 +72,9 @@
                 "paymentMethodPlaceholder": "W\u00e4hlen Sie eine Bezahlungsart...",
                 "shippingMethodHelpText": "W\u00e4hlen Sie die Sendungsmethode f\u00fcr importierte Bestellungen aus.",
                 "shippingMethodLabel": "Versandart",
-                "shippingMethodPlaceholder": "W\u00e4hlen Sie eine Versandmethode ..."
+                "shippingMethodPlaceholder": "W\u00e4hlen Sie eine Versandmethode ...",
+                "triggerCatalogExportHelpText": "L\u00f6st einen Katalogexport aus.",
+                "triggerCatalogExportLabel": "Ausl\u00f6ser Katalogexport"
             }
         }
     }

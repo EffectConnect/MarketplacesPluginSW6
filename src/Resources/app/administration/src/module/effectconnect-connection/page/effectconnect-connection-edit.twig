@@ -12,7 +12,7 @@
         </template>
         <template slot="content">
             <sw-loader v-if="busySaving"></sw-loader>
-            <sw-alert v-for="toast in toasts" :variant="toast.type" appearance="system" :showIcon="true" :closable="false">
+            <sw-alert v-for="toast in toasts" :variant="toast.type" appearance="notification" :showIcon="true" :closable="false">
                 {{ toast.message }}
             </sw-alert>
             <div v-if="loaded">
@@ -77,6 +77,10 @@
                                      :label="tc('useSystemLanguagesLabel')"
                                      :helpText="tc('useSystemLanguagesHelpText')">
                     </sw-switch-field>
+                    <sw-button :disabled="newItem" @click="triggerCatalogExport()" size="small">
+                        <sw-icon name="default-object-rocket" small></sw-icon>
+                        Trigger
+                    </sw-button>
                 </sw-card>
                 <sw-card :title="tc('offerExport')">
                     <sw-inherit-wrapper :helpText="tc('scheduleHelpText')" :label="tc('scheduleLabel')">

@@ -14,7 +14,7 @@ class Toast {
 }
 
 Shopware.Component.register('effectconnect-connection-edit', {
-    inject: ['EffectConnectConnectionService'],
+    inject: ['EffectConnectConnectionService', 'EffectConnectTaskService'],
 
     data() {
         return {
@@ -94,6 +94,9 @@ Shopware.Component.register('effectconnect-connection-edit', {
             if (timeout) {
                 setTimeout(() => this.toasts.splice(this.toasts.indexOf(toast), 1), timeout);
             }
+        },
+        triggerCatalogExport() {
+            this.EffectConnectTaskService.trigger(this.connection.salesChannelId, 'catalog');
         },
         handleError(error) {
             this.showToast(Toast.error(error), 3000)

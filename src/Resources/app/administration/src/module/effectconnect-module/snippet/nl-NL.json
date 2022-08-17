@@ -6,7 +6,8 @@
             "edit": "Bewerk",
             "delete": "Verwijderen",
             "create": "Cre\u00ebren",
-            "successSaved": "Succesvol opgeslagen"
+            "successSaved": "Succesvol opgeslagen",
+            "trigger": "Uitvoeren"
         }
     }
 }

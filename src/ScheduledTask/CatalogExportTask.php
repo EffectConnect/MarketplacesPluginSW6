@@ -8,6 +8,8 @@ namespace EffectConnect\Marketplaces\ScheduledTask;
  */
 class CatalogExportTask extends AbstractTask
 {
+    private ?string $salesChannelId;
+
     /**
      * @inheritDoc
      */
@@ -36,5 +38,23 @@ class CatalogExportTask extends AbstractTask
     public static function getDefaultInterval(): int
     {
         return static::DEFAULT_INTERVAL;
+    }
+
+    /**
+     * @param string|null $salesChannelId
+     * @return CatalogExportTask
+     */
+    public function setSalesChannelId(?string $salesChannelId): CatalogExportTask
+    {
+        $this->salesChannelId = $salesChannelId;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getSalesChannelId(): ?string
+    {
+        return $this->salesChannelId;
     }
 }
