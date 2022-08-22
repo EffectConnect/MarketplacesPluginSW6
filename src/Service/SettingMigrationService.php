@@ -10,9 +10,9 @@ class SettingMigrationService
     private const FLAG_DIR =  __DIR__ . '/../../data';
     private const MIGRATION_FILE_PATH = self::FLAG_DIR . '/settings_migrated';
 
-    protected SystemConfigService $systemConfigService;
-    protected ConnectionService $connectionService;
-    protected SalesChannelService $salesChannelService;
+    protected $systemConfigService;
+    protected $connectionService;
+    protected $salesChannelService;
 
     /**
      * SettingsService constructor.
@@ -53,6 +53,9 @@ class SettingMigrationService
         $configData = $configData[SettingsService::CONFIG_DOMAIN][SettingsService::CONFIG_GROUP] ?? [];
         $settingsValues = [];
         foreach ($configData as $key => $value) {
+            if (in_array($key, ['offerExportSchedule', 'orderImportSchedule', 'catalogExportSchedule'])) {
+                $value = (int)$value;
+            }
             $settingsValues[$key] = $value;
         }
         if (count($settingsValues) === 0) {

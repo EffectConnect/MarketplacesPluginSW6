@@ -21,9 +21,9 @@ use Shopware\Core\Framework\Routing\Annotation\Acl;
  */
 class ConnectionController extends AbstractController
 {
-    protected ConnectionService $connectionService;
-    protected SettingMigrationService $settingMigrationService;
-    protected SalesChannelService $salesChannelService;
+    protected $connectionService;
+    protected $settingMigrationService;
+    protected $salesChannelService;
 
     public function __construct(ConnectionService $connectionService, SettingMigrationService $settingMigrationService, SalesChannelService $salesChannelService)
     {

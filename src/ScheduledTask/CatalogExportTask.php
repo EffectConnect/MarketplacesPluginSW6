@@ -8,7 +8,7 @@ namespace EffectConnect\Marketplaces\ScheduledTask;
  */
 class CatalogExportTask extends AbstractTask
 {
-    private ?string $salesChannelId;
+    private $salesChannelId;
 
     /**
      * @inheritDoc

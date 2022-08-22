@@ -49,7 +49,8 @@ CREATE TABLE IF NOT EXISTS `ec_connection` (
     DEFAULT CHARSET = utf8mb4
     COLLATE = utf8mb4_unicode_ci;
 SQL;
-        $connection->executeStatement($sql);
+        // use executeUpdate for shopware 6.3 compatibility.
+        $connection->executeUpdate($sql);
     }
 
     /**
@@ -58,7 +59,7 @@ SQL;
      */
     public function updateDestructive(Connection $connection): void
     {
-        $connection->executeStatement("DROP TABLE `ec_connection`");
+        $connection->executeUpdate("DROP TABLE `ec_connection`");
         $this->update($connection);
     }
 }

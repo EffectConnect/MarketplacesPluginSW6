@@ -17,7 +17,7 @@ use Shopware\Core\Framework\Uuid\Uuid;
  */
 class ConnectionService
 {
-    protected EntityRepositoryInterface $connectionRepository;
+    protected $connectionRepository;
 
     /**
      * ConnectionService constructor.

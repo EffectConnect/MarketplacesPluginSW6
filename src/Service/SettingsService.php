@@ -23,9 +23,9 @@ class SettingsService
      */
     public const CONFIG_GROUP = 'config';
 
-    protected SystemConfigService $systemConfigService;
-    protected ConnectionService $connectionService;
-    protected SettingMigrationService $settingMigrationService;
+    protected $systemConfigService;
+    protected $connectionService;
+    protected $settingMigrationService;
 
     /**
      * SettingsService constructor.

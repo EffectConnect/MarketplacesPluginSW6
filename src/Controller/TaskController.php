@@ -17,7 +17,7 @@ use Shopware\Core\Framework\Routing\Annotation\Acl;
  */
 class TaskController extends AbstractController
 {
-    protected MonitoringBusDecorator $messageBus;
+    protected $messageBus;
 
     public function __construct(MonitoringBusDecorator $messageBus)
     {
