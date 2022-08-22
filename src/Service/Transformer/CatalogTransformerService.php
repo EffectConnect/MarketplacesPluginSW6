@@ -293,7 +293,6 @@ class CatalogTransformerService
             'seoUrls.language.locale',
             'seoUrls.language.parent',
             'seoUrls.language.parent.locale',
-            'seoUrls.language.seoUrlTranslations',
             'seoUrls.url',
             'tags',
             'media',
