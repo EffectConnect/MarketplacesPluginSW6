@@ -3,11 +3,13 @@
 namespace EffectConnect\Marketplaces\ScheduledTask\Handler;
 
 use EffectConnect\Marketplaces\Factory\LoggerFactory;
+use EffectConnect\Marketplaces\ScheduledTask\AbstractTask;
 use EffectConnect\Marketplaces\Service\SalesChannelService;
 use EffectConnect\Marketplaces\Service\SettingsService;
 use Monolog\Logger;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskHandler;
+use Throwable;
 
 /**
  * Class AbstractTaskHandler
@@ -36,6 +38,11 @@ abstract class AbstractTaskHandler extends ScheduledTaskHandler
     protected $_logger;
 
     /**
+     * @var AbstractTask
+     */
+    protected $_task;
+
+    /**
      * AbstractTaskHandler constructor.
      *
      * @param EntityRepositoryInterface $scheduledTaskRepository
@@ -55,4 +62,14 @@ abstract class AbstractTaskHandler extends ScheduledTaskHandler
         $this->_settingsService     = $settingsService;
         $this->_loggerFactory       = $loggerFactory;
     }
+
+    /**
+     * @throws Throwable
+     */
+    public function handle($task): void
+    {
+        $this->_task = $task;
+        parent::handle($task);
+    }
+
 }

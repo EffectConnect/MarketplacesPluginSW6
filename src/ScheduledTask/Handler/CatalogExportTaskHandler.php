@@ -63,44 +63,9 @@ class CatalogExportTaskHandler extends AbstractTaskHandler
         return [ CatalogExportTask::class ];
     }
 
-    public function run(): void {}
-
-    /**
-     * @param CatalogExportTask $task
-     * @throws Throwable
-     */
-    public function handle($task): void
+    public function run(): void
     {
-        $taskId = $task->getTaskId();
-
-        if ($taskId === null) {
-            $this->_run($task);
-            return;
-        }
-
-        /** @var ScheduledTaskEntity|null $taskEntity */
-        $taskEntity = $this->scheduledTaskRepository
-            ->search(new Criteria([$taskId]), Context::createDefaultContext())
-            ->get($taskId);
-
-        if ($taskEntity === null || $taskEntity->getStatus() !== ScheduledTaskDefinition::STATUS_QUEUED) {
-            return;
-        }
-
-        $this->markTaskRunning($task);
-
-        try {
-            $this->_run($task);
-        } catch (Throwable $e) {
-            $this->markTaskFailed($task);
-            throw $e;
-        }
-
-        $this->rescheduleTask($task, $taskEntity);
-    }
-
-    public function _run(CatalogExportTask $task): void
-    {
+        $task = $this->_task;
         $this->_logger->info('Executing catalog export task handler started.', [
             'process'       => static::LOGGER_PROCESS
         ]);
