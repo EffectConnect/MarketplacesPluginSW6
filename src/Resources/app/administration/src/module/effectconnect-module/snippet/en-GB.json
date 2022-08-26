@@ -7,7 +7,23 @@
       "delete": "Delete",
       "create": "Create",
       "successSaved": "Successfully saved",
-      "trigger": "Trigger"
+      "trigger": "Trigger",
+      "confirm": "Confirm",
+      "modules": {
+        "main": {
+          "label": "EffectConnect"
+        },
+        "log": {
+          "label":  "Logs",
+          "title": "EffectConnect Marketplaces - Logs",
+          "description": "Logs"
+        },
+        "connection": {
+          "label":  "Connections",
+          "title": "EffectConnect Marketplaces - Connections",
+          "description": "Connections"
+        }
+      }
     }
   }
 }

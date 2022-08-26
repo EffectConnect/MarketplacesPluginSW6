@@ -7,7 +7,23 @@
             "delete": "Verwijderen",
             "create": "Cre\u00ebren",
             "successSaved": "Succesvol opgeslagen",
-            "trigger": "Uitvoeren"
+            "trigger": "Uitvoeren",
+            "confirm": "Bevestigen",
+            "modules": {
+                "main": {
+                    "label": "Effectconnect"
+                },
+                "log": {
+                    "label": "Logs",
+                    "title": "EffectConnect Marketplaces - Logs",
+                    "description": "Logs"
+                },
+                "connection": {
+                    "label": "Verbindingen",
+                    "title": "EffectConnect Marketplaces - verbindingen",
+                    "description": "Verbindingen"
+                }
+            }
         }
     }
 }

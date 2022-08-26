@@ -1,5 +1,19 @@
+import {versionIsBefore} from '../../helper/functions';
 import nlNL from './snippet/nl-NL';
 import enGB from './snippet/en-GB';
+
+let nav = {
+    id: 'effectconnect-module',
+    label: 'EffectConnect',
+    color: '#ff3d58',
+    icon: 'default-shopping-paper-bag-product',
+    parent: 'sw-extension',
+    position: 100
+};
+
+if (versionIsBefore(6.4)) {
+    delete nav.parent;
+}
 
 Shopware.Module.register('effectconnect-module', {
     type: 'plugin',
@@ -24,12 +38,5 @@ Shopware.Module.register('effectconnect-module', {
         }
     },
 
-    navigation: [{
-        id: 'effectconnect-module',
-        label: 'EffectConnect',
-        color: '#ff3d58',
-        icon: 'default-shopping-paper-bag-product',
-        parent: 'sw-extension',
-        position: 100
-    }]
+    navigation: [nav]
 });

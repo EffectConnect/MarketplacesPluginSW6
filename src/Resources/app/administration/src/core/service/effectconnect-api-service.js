@@ -1,13 +1,19 @@
 const ApiService = Shopware.Classes.ApiService;
 
-class EffectConnectApiService extends ApiService {
+export default class EffectConnectApiService extends ApiService {
+    /**
+     * @constructor
+     * @param {AxiosInstance} httpClient
+     * @param loginService
+     * @param category
+     */
     constructor(httpClient, loginService, category) {
-        super(httpClient, loginService, 'effectconnect/action');
+        super(httpClient, loginService, 'ec/action');
         this.category = category;
     }
 
     _getBaseUri() {
-        return 'effectconnect/action' + (this.category ? '/' + this.category : '');
+        return 'ec/action' + (this.category ? '/' + this.category : '');
     }
 
     getUri(endpoint, queryParams) {
@@ -42,5 +48,3 @@ class EffectConnectApiService extends ApiService {
     }
 
 }
-
-export default EffectConnectApiService;

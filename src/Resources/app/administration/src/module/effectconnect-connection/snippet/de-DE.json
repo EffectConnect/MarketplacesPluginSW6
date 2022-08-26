@@ -29,15 +29,15 @@
                 "scheduleLabel": "Zeitlicher Ablauf",
                 "schedulePlaceholder": "W\u00e4hlen Sie einen benutzerdefinierten Zeitplan ...",
                 "schedules": {
-                    "86400": "Alle 24 Stunden",
-                    "64800": "Alle 18 Stunden",
-                    "43200": "Alle 12 Stunden",
-                    "21600": "Alle 6 Stunden",
-                    "3600": "Jede Stunde",
-                    "1800": "Alle 30 Minuten",
-                    "900": "Alle 15 Minuten",
-                    "300": "Alle 5 Minuten",
-                    "0": "Deaktiviert"
+                    "86400": "alle 24 Stunden",
+                    "64800": "alle 18 Stunden",
+                    "43200": "alle 12 Stunden",
+                    "21600": "alle 6 Stunden",
+                    "3600": "jede Stunde",
+                    "1800": "alle 30 Minuten",
+                    "900": "alle 15 Minuten",
+                    "300": "alle 5 Minuten",
+                    "0": "deaktiviert"
                 },
                 "addLeadingZeroToEanLabel": "F\u00fcgen Sie EAN",
                 "addLeadingZeroToEanHelpText": "W\u00e4hlen Sie, ob das Plugin einem EAN, der aus 12 Zeichen besteht, automatisch eine f\u00fchrende Null hinzuf\u00fcgen.",
@@ -74,7 +74,12 @@
                 "shippingMethodLabel": "Versandart",
                 "shippingMethodPlaceholder": "W\u00e4hlen Sie eine Versandmethode ...",
                 "triggerCatalogExportHelpText": "L\u00f6st einen Katalogexport aus.",
-                "triggerCatalogExportLabel": "Ausl\u00f6ser Katalogexport"
+                "triggerCatalogExportLabel": "Ausl\u00f6ser Katalogexport",
+                "scheduleInformationText": "Dieser Prozess ist festgelegt wie: <strong> {current} </strong>.Um dies anzupassen, f\u00fcgen Sie entweder eine benutzerdefinierte Aufgabe hinzu oder erstellen Sie einen benutzerdefinierten cron.",
+                "taskTriggered": "Aufgabe erfolgreich ausgel\u00f6st.",
+                "apiCredentialsOK": "Anmeldeinformationen g\u00fcltig",
+                "apiCredentialsNOK": "Anmeldeinformationen sind nicht g\u00fcltig",
+                "triggerCatalogExport": "Ausl\u00f6ser Katalogexport"
             }
         }
     }

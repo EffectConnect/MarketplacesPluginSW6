@@ -8,9 +8,9 @@ use Shopware\Core\Framework\Routing\Annotation\Acl;
 
 /**
  * @RouteScope(scopes={"api"})
- * @Route("api/ec/action/task")
+ * @Route("api/v2/ec/action/connection")
  * @Acl({"sales_channel.viewer"})
  */
-class TaskController extends AbstractTaskController
+class LegacyConnectionController extends AbstractConnectionController
 {
 }

@@ -1,6 +1,6 @@
 import EffectConnectApiService from "../service/effectconnect-api-service";
 
-class EffectConnectTaskService extends EffectConnectApiService {
+export default class EffectConnectTaskService extends EffectConnectApiService {
     constructor(httpClient, loginService) {
         super(httpClient, loginService, 'task');
     }
@@ -12,5 +12,3 @@ class EffectConnectTaskService extends EffectConnectApiService {
         return this.postCall('trigger/'+salesChannelId+'/'+type);
     }
 }
-
-export default EffectConnectTaskService;

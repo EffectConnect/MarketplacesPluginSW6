@@ -29,15 +29,15 @@
                 "scheduleLabel": "Schedule",
                 "schedulePlaceholder": "Kies een aangepaste schedule ...",
                 "schedules": {
-                    "86400": "Om de 24 uur",
-                    "64800": "Om de 18 uur",
-                    "43200": "Elke 12 uur",
-                    "21600": "Elke 6 uur",
-                    "3600": "Elk uur",
-                    "1800": "Elke 30 minuten",
-                    "900": "Elke 15 minuten",
-                    "300": "Elke 5 minuten",
-                    "0": "Uitgeschakeld"
+                    "86400": "elke 24 uur",
+                    "64800": "elke 18 uur",
+                    "43200": "elke 12 uur",
+                    "21600": "elke 6 uur",
+                    "3600": "elk uur",
+                    "1800": "elke 30 minuten",
+                    "900": "elke 15 minuten",
+                    "300": "elke 5 minuten",
+                    "0": "uitgeschakeld"
                 },
                 "addLeadingZeroToEanLabel": "Voeg voorloopnul toe aan EAN",
                 "addLeadingZeroToEanHelpText": "Selecteer of de plugin automatisch een voorloopnul moet toevoegen aan een EAN die uit 12 tekens bestaat.",
@@ -68,13 +68,18 @@
                     "in_progress": "Bezig"
                 },
                 "paymentMethodHelpText": "Selecteer de betaalmethode voor ge\u00c3\u00afmporteerde bestellingen.",
-                "paymentMethodLabel": "Betalingswijze",
+                "paymentMethodLabel": "Betalingsmethode",
                 "paymentMethodPlaceholder": "Kies een betaal methode...",
                 "shippingMethodHelpText": "Selecteer de verzendmethode voor ge\u00c3\u00afmporteerde bestellingen.",
-                "shippingMethodLabel": "Verzendwijze",
+                "shippingMethodLabel": "Verzendmethode",
                 "shippingMethodPlaceholder": "Kies een verzendmethode ...",
                 "triggerCatalogExportHelpText": "Activeert een export van een catalogus.",
-                "triggerCatalogExportLabel": "Trigger catalogus exporteren"
+                "triggerCatalogExportLabel": "Trigger catalogus exporteren",
+                "scheduleInformationText": "Dit proces staat ingesteld op <strong>{current}</strong>.",
+                "taskTriggered": "Taak met succes geactiveerd.",
+                "apiCredentialsOK": "Referenties geldig",
+                "apiCredentialsNOK": "Referenties zijn niet geldig",
+                "triggerCatalogExport": "Trigger catalogus exporteren"
             }
         }
     }

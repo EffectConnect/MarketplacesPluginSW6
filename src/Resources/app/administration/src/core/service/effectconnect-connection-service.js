@@ -1,6 +1,6 @@
 import EffectConnectApiService from "../service/effectconnect-api-service";
 
-class EffectConnectConnectionService extends EffectConnectApiService {
+export default class EffectConnectConnectionService extends EffectConnectApiService {
     constructor(httpClient, loginService) {
         super(httpClient, loginService, 'connection');
     }
@@ -29,6 +29,13 @@ class EffectConnectConnectionService extends EffectConnectApiService {
     /**
      * @returns {Promise|Object}
      */
+    getOptions() {
+        return this.getCall('getOptions');
+    }
+
+    /**
+     * @returns {Promise|Object}
+     */
     getDefaultSettings() {
         return this.getCall('getDefaultSettings');
     }
@@ -46,6 +53,11 @@ class EffectConnectConnectionService extends EffectConnectApiService {
     save(connection) {
         return this.postCall('save', {connection: connection});
     }
-}
 
-export default EffectConnectConnectionService;
+    /**
+     * @returns {Promise|Object}
+     */
+    testApiCredentials(publicKey, secretKey) {
+        return this.postCall('testApiCredentials', {publicKey: publicKey, secretKey: secretKey});
+    }
+}

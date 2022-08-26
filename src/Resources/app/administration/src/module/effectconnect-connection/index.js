@@ -7,8 +7,8 @@ import './page/effectconnect-connection-edit';
 Shopware.Module.register('effectconnect-connection', {
     type: 'plugin',
     name: 'effectconnect-connection',
-    title: 'Connection',
-    description: 'EffectConnect connection',
+    title: 'ec.global.modules.connection.title',
+    description: 'ec.global.modules.connection.description',
     version: '1.0.0',
     targetVersion: '1.0.0',
     color: '#9AA8B5',
@@ -45,10 +45,9 @@ Shopware.Module.register('effectconnect-connection', {
 
     navigation: [{
         id: 'effectconnect-connection',
-        label: 'Connections',
+        label: 'ec.global.modules.connection.label',
         color: '#ff3d58',
         path: 'effectconnect.connection.overview',
-        icon: 'default-shopping-paper-bag-product',
         parent: 'effectconnect-module',
         position: 100
     }]

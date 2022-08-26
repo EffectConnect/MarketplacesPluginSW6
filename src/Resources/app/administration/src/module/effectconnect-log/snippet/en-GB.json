@@ -1,0 +1,12 @@
+{
+  "ec": {
+    "log": {
+      "overview": {
+        "filename": "Filename",
+        "lastUpdated": "Last updated at",
+        "fullPath": "Filename",
+        "download": "Download"
+      }
+    }
+  }
+}

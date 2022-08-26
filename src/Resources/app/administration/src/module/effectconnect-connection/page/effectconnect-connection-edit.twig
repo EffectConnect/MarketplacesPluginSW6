@@ -12,9 +12,6 @@
         </template>
         <template slot="content">
             <sw-loader v-if="busySaving"></sw-loader>
-            <sw-alert v-for="toast in toasts" :variant="toast.type" appearance="notification" :showIcon="true" :closable="false">
-                {{ toast.message }}
-            </sw-alert>
             <div v-if="loaded">
                 <br><br>
                 <sw-card :title="tc('general')">
@@ -45,18 +42,16 @@
                             <sw-field type="password" :placeholder="tc('secretKeyPlaceholder')" v-model="connection.secretKey"></sw-field>
                         </template>
                     </sw-inherit-wrapper>
+                    <sw-button :disabled="!connection.secretKey || !connection.publicKey" @click="testApiCredentials()" size="small">
+                        <sw-icon name="default-object-rocket" small></sw-icon>
+                        {{ tc('testCredentials') }}
+                    </sw-button>
                 </sw-card>
                 <sw-card :title="tc('catalogExport')">
-                    <sw-inherit-wrapper :helpText="tc('scheduleHelpText')" :label="tc('scheduleLabel')">
-                        <template #content>
-                            <sw-single-select
-                                    :placeholder="tc('schedulePlaceholder')"
-                                    :disabled="true"
-                                    :options="schedules.catalog"
-                                    v-model="connection.catalogExportSchedule">
-                            </sw-single-select>
-                        </template>
-                    </sw-inherit-wrapper>
+                    <sw-label>
+                        <div v-html="$tc('ec.connection.edit.scheduleInformationText', 0, {current: tc('schedules.' + connection.catalogExportSchedule)})"></div>
+                    </sw-label>
+                    <br>
                     <sw-switch-field bordered v-model="connection.addLeadingZeroToEan"
                                      :label="tc('addLeadingZeroToEanLabel')"
                                      :helpText="tc('addLeadingZeroToEanHelpText')">
@@ -79,20 +74,14 @@
                     </sw-switch-field>
                     <sw-button :disabled="newItem" @click="triggerCatalogExport()" size="small">
                         <sw-icon name="default-object-rocket" small></sw-icon>
-                        Trigger
+                        {{ tc('triggerCatalogExport') }}
                     </sw-button>
                 </sw-card>
                 <sw-card :title="tc('offerExport')">
-                    <sw-inherit-wrapper :helpText="tc('scheduleHelpText')" :label="tc('scheduleLabel')">
-                        <template #content>
-                            <sw-single-select
-                                    :placeholder="tc('schedulePlaceholder')"
-                                    :disabled="true"
-                                    :options="schedules.offer"
-                                    v-model="connection.offerExportSchedule">
-                            </sw-single-select>
-                        </template>
-                    </sw-inherit-wrapper>
+                    <sw-label>
+                        <div v-html="$tc('ec.connection.edit.scheduleInformationText', 0, {current: tc('schedules.' + connection.offerExportSchedule)})"></div>
+                    </sw-label>
+                    <br>
                     <sw-inherit-wrapper :helpText="tc('stockTypeHelpText')" :label="tc('stockTypeLabel')">
                         <template #content>
                             <sw-single-select
@@ -104,13 +93,16 @@
                     </sw-inherit-wrapper>
                 </sw-card>
                 <sw-card :title="tc('orderImport')">
-                    <sw-inherit-wrapper :helpText="tc('scheduleHelpText')" :label="tc('scheduleLabel')">
+                    <sw-label>
+                        <div v-html="$tc('ec.connection.edit.scheduleInformationText', 0, {current: tc('schedules.' + connection.orderImportSchedule)})"></div>
+                    </sw-label>
+                    <br>
+                    <sw-inherit-wrapper :helpText="tc('orderStatusHelpText')" :label="tc('orderStatusLabel')">
                         <template #content>
                             <sw-single-select
-                                    :placeholder="tc('schedulePlaceholder')"
-                                    :disabled="true"
-                                    :options="schedules.order"
-                                    v-model="connection.orderImportSchedule">
+                                    :placeholder="tc('orderStatusPlaceholder')"
+                                    :options="orderStatuses"
+                                    v-model="connection.orderStatus">
                             </sw-single-select>
                         </template>
                     </sw-inherit-wrapper>
@@ -120,15 +112,6 @@
                                     :placeholder="tc('paymentStatusPlaceholder')"
                                     :options="paymentStatuses"
                                     v-model="connection.paymentStatus">
-                            </sw-single-select>
-                        </template>
-                    </sw-inherit-wrapper>
-                    <sw-inherit-wrapper :helpText="tc('orderStatusHelpText')" :label="tc('orderStatusLabel')">
-                        <template #content>
-                            <sw-single-select
-                                    :placeholder="tc('orderStatusPlaceholder')"
-                                    :options="orderStatuses"
-                                    v-model="connection.orderStatus">
                             </sw-single-select>
                         </template>
                     </sw-inherit-wrapper>
@@ -156,6 +139,17 @@
                     </sw-inherit-wrapper>
                 </sw-card>
             </div>
+            <sw-modal v-if="modal != null" @modal-close="modal.onCancel()">
+                <p>{{ modal.text }}</p>
+                <template #modal-footer>
+                    <sw-button size="small" @click="modal.onCancel()">
+                        {{ $tc('ec.global.cancel') }}
+                    </sw-button>
+                    <sw-button size="small" variant="danger" @click="modal.onConfirm()">
+                        {{ $tc('ec.global.confirm') }}
+                    </sw-button>
+                </template>
+            </sw-modal>
         </template>
     </sw-page>
 {% endblock %}

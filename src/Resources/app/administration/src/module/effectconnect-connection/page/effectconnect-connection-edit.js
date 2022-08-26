@@ -1,15 +1,12 @@
 import template from './effectconnect-connection-edit.twig';
 
-class Toast {
-    constructor(message, type) {
-        this.message = message;
-        this.type = type;
-    }
-    static error(message) {
-        return new this(message, 'error');
-    }
-    static success(message) {
-        return new this(message, 'success');
+const { Mixin } = Shopware;
+
+class Modal {
+    constructor(text, onConfirm, onCancel) {
+        this.text = text;
+        this.onConfirm = onConfirm;
+        this.onCancel = onCancel;
     }
 }
 
@@ -19,6 +16,7 @@ Shopware.Component.register('effectconnect-connection-edit', {
     data() {
         return {
             toasts: [],
+            modal: null,
             loaded: false,
             busySaving:false,
             id: this.$route.params.id,
@@ -26,22 +24,31 @@ Shopware.Component.register('effectconnect-connection-edit', {
             salesChannels: [],
             availableSalesChannels: [],
             connection: null,
-            schedules: {
-                offer: this._toOptions('schedules', [86400, 3600, 1800, 900, 300, 0]),
-                catalog: this._toOptions('schedules', [86400, 64800, 43200, 21600, 3600, 0]),
-                order: this._toOptions('schedules', [86400, 3600, 1800, 900, 300, 0]),
-            },
-            stockTypes: this._toOptions('stockTypes', ['salableStock', 'physicalStock']),
-            paymentStatuses: this._toOptions('paymentStatuses', ['paid', 'open']),
-            orderStatuses: this._toOptions('orderStatuses', ['open', 'in_progress']),
+            schedules: [],
+            stockTypes: [],
+            paymentStatuses: [],
+            orderStatuses: [],
         };
     },
+
+    mixins: [
+        Mixin.getByName('notification'),
+    ],
 
     created() {
         this.loaded = false;
         this.EffectConnectConnectionService.getSalesChannelData()
             .then((salesChannelData) => {
-                this.initConnection(salesChannelData);
+                this.initConnection(salesChannelData).then(() => {
+                    this.EffectConnectConnectionService.getOptions().then((data) => {
+                        data = data.data;
+                        this.schedules = this._toOptions('schedules', data.schedules);
+                        this.stockTypes = this._toOptions('stockTypes', data.stockTypes);
+                        this.paymentStatuses = this._toOptions('paymentStatuses', data.payment);
+                        this.orderStatuses = this._toOptions('orderStatuses', data.order);
+                        this.loaded = true;
+                    })
+                });
             })
             .catch((e) => this.handleError(e));
     },
@@ -64,42 +71,51 @@ Shopware.Component.register('effectconnect-connection-edit', {
                     });
                     window.location.reload();
                 } else {
-                    this.showToast(Toast.success(this.$tc('ec.global.successSaved')), 1500);
+                    this.createNotificationSuccess({
+                        message: this.$tc('ec.global.successSaved')
+                    })
                 }
             }).catch((e) => this.handleError(e))
                 .finally(() => this.busySaving = false);
         },
         initConnection(salesChannelData) {
             if (this.id) {
-                this.EffectConnectConnectionService.get(this.id).then((connectionData) => {
+                return this.EffectConnectConnectionService.get(this.id).then((connectionData) => {
                     this.connection = connectionData.connection;
-                    this.availableSalesChannels = salesChannelData.all.filter(x => x.value === this.connection.salesChannelId);
-                    this.loaded = true;
+                    this.availableSalesChannels = salesChannelData.data.filter(x => x.value === this.connection.salesChannelId);
                 }).catch((e) => this.handleError(e));
             } else {
                 this.newItem = true;
-                this.availableSalesChannels = salesChannelData.available;
-                if (this.availableSalesChannels.length === 0) {
-                    this.showToast(Toast.error(this.tc('noSalesChannelsAvailable')))
-                    return;
-                }
-                this.EffectConnectConnectionService.getDefaultSettings().then((defaultSettingsData) => {
+                this.availableSalesChannels = salesChannelData.data;
+                return this.EffectConnectConnectionService.getDefaultSettings().then((defaultSettingsData) => {
                     this.connection = defaultSettingsData.data;
-                    this.loaded = true;
                 }).catch((e) => this.handleError(e));
             }
         },
-        showToast(toast, timeout = null) {
-            this.toasts.push(toast);
-            if (timeout) {
-                setTimeout(() => this.toasts.splice(this.toasts.indexOf(toast), 1), timeout);
-            }
-        },
         triggerCatalogExport() {
-            this.EffectConnectTaskService.trigger(this.connection.salesChannelId, 'catalog');
+            this.modal = new Modal('Are you sure you want to trigger this process?',
+                () => {
+                    this.createNotificationSuccess({message: this.tc('taskTriggered')});
+                    this.EffectConnectTaskService.trigger(this.connection.salesChannelId, 'catalog');
+                    this.modal = null;
+                },
+                () => {
+                    this.modal = null;
+                }
+            );
+        },
+        testApiCredentials() {
+            return this.EffectConnectConnectionService.testApiCredentials(this.connection.publicKey, this.connection.secretKey)
+                .then((data) => {
+                    if (data.valid) {
+                        this.createNotificationSuccess({message: this.tc('apiCredentialsOK')});
+                    } else {
+                        this.createNotificationError({message: this.tc('apiCredentialsNOK')});
+                    }
+            }).catch((e) => this.handleError(e));
         },
         handleError(error) {
-            this.showToast(Toast.error(error), 3000)
+            this.createNotificationError({message:error});
         },
         tc(key) {
             return this.$tc('ec.connection.edit.' + key);

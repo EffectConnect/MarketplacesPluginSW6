@@ -12,9 +12,9 @@
         "catalogExport": "Catalog export",
         "offerExport": "Offer export",
         "orderImport": "Order import",
-
+        "taskTriggered": "Task successfully triggered.",
         "noSalesChannelsAvailable": "No sales channels available",
-
+        "scheduleInformationText": "This process is set as: <strong>{current}</strong>.",
         "triggerCatalogExportHelpText": "Triggers a catalog export.",
         "triggerCatalogExportLabel": "Trigger catalog export",
         "salesChannelHelpText": "Which sales channel to be used",
@@ -33,15 +33,15 @@
         "scheduleLabel": "Schedule",
         "schedulePlaceholder": "Choose a custom schedule...",
         "schedules": {
-          "86400": "Every 24 hours",
-          "64800": "Every 18 hours",
-          "43200": "Every 12 hours",
-          "21600": "Every 6 hours",
-          "3600": "Every hour",
-          "1800": "Every 30 minutes",
-          "900": "Every 15 minutes",
-          "300": "Every 5 minutes",
-          "0": "Disabled"
+          "86400": "every 24 hours",
+          "64800": "every 18 hours",
+          "43200": "every 12 hours",
+          "21600": "every 6 hours",
+          "3600": "every hour",
+          "1800": "every 30 minutes",
+          "900": "every 15 minutes",
+          "300": "every 5 minutes",
+          "0": "disabled"
         },
         "addLeadingZeroToEanLabel":  "Add leading zero to EAN",
         "addLeadingZeroToEanHelpText": "Select whether the plugin should automatically add a leading zero to an EAN that consists of 12 characters.",
@@ -76,7 +76,10 @@
         "paymentMethodPlaceholder": "Choose a payment method...",
         "shippingMethodHelpText":"Select the shipment method for imported orders.",
         "shippingMethodLabel": "Shipment method",
-        "shippingMethodPlaceholder":"Choose a shipment method..."
+        "shippingMethodPlaceholder":"Choose a shipment method...",
+        "apiCredentialsOK": "Credentials valid",
+        "apiCredentialsNOK": "Credentials are not valid",
+        "triggerCatalogExport": "Trigger catalog export"
       }
     }
   }

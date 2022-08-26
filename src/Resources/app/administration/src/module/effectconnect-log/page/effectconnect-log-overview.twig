@@ -1,0 +1,20 @@
+{% block log_overview %}
+    <sw-page class="log-overview-list">
+        <template slot="smart-bar-actions">
+            <sw-button v-show="shouldDisplayDownloadButton()" variant="primary" @click="downloadSelectedLogFiles()">
+                {{ tc('download') }}
+            </sw-button>
+        </template>
+        <template slot="content">
+            <div>
+                <sw-data-grid ref="logGrid" :dataSource="files" :columns="columns" :itemIdentifierProperty="'fullPath'">
+                    <template #actions="{ item }">
+                        <sw-context-menu-item @click="downloadLogFile(item.fullPath)">
+                            {{ tc('download') }}
+                        </sw-context-menu-item>
+                    </template>
+                </sw-data-grid>
+            </div>
+        </template>
+    </sw-page>
+{% endblock %}
