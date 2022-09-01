@@ -428,10 +428,10 @@ class SettingStruct extends Struct
     }
 
     /**
-     * @param ?string $customerGroup
+     * @param string|null $customerGroup
      * @return self
      */
-    public function setCustomerGroup(?string $customerGroup): self
+    public function setCustomerGroup($customerGroup): self
     {
         $this->customerGroup = $customerGroup;
 
@@ -474,6 +474,7 @@ class SettingStruct extends Struct
 
         return $this;
     }
+
     /**
      * @return string
      */
