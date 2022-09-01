@@ -9,13 +9,16 @@ use Shopware\Core\System\SalesChannel\SalesChannelContext;
 
 class CustomerCreateContext
 {
-    public SalesChannelContext $salesChannelContext;
-    public PaymentMethodEntity $paymentMethod;
-    public array $billingAddressData;
-    public array $shippingAddressData;
-    public string $customerGroup;
-    /**
-     * @var BillingAddress|ShippingAddress
-     */
+    /** @var SalesChannelContext */
+    public $salesChannelContext;
+    /** @var PaymentMethodEntity */
+    public $paymentMethod;
+    /** @var array */
+    public $billingAddressData;
+    /** @var array */
+    public $shippingAddressData;
+    /** @var string */
+    public $customerGroup;
+    /** @var BillingAddress|ShippingAddress */
     public $customerSource;
 }

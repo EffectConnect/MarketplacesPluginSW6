@@ -125,7 +125,7 @@ class CustomerTransformerService
         $customerData['defaultBillingAddressId'] = $createContext->billingAddressData['id'];
         $customerData['defaultShippingAddressId'] = $createContext->shippingAddressData['id'];
         $customerData['customerNumber'] = 'EC_' . Uuid::randomHex();
-        $customerData['salesChannelId'] = $createContext->salesChannelContext->getSalesChannelId();
+        $customerData['salesChannelId'] = $createContext->salesChannelContext->getSalesChannel()->getId();
         $customerData['addresses'] = [$createContext->billingAddressData, $createContext->shippingAddressData];
         $customerData['id'] = $customerId;
         $this->_customerRepository->create([$customerData], Context::createDefaultContext());
