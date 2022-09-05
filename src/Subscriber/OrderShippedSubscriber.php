@@ -2,6 +2,7 @@
 
 namespace EffectConnect\Marketplaces\Subscriber;
 
+use EffectConnect\Marketplaces\Enum\FulfilmentType;
 use EffectConnect\Marketplaces\Exception\ShipmentExportFailedException;
 use EffectConnect\Marketplaces\Factory\LoggerFactory;
 use EffectConnect\Marketplaces\Interfaces\LoggerProcess;
