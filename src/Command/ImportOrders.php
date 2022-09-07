@@ -2,10 +2,12 @@
 
 namespace EffectConnect\Marketplaces\Command;
 
+use EffectConnect\Marketplaces\Enum\FulfilmentType;
 use EffectConnect\Marketplaces\Factory\LoggerFactory;
 use EffectConnect\Marketplaces\Interfaces\LoggerProcess;
 use EffectConnect\Marketplaces\Service\Api\OrderImportService;
 use EffectConnect\Marketplaces\Service\SettingsService;
+use EffectConnect\Marketplaces\Setting\SettingStruct;
 use Exception;
 use EffectConnect\Marketplaces\Service\SalesChannelService;
 use Shopware\Core\Framework\Context;
@@ -103,32 +105,9 @@ class ImportOrders extends AbstractInteractionCommand
          */
         foreach ($salesChannels as $salesChannel) {
             $settings = $this->_settingsService->getSettings($salesChannel->getId(), $context);
-
-            try {
-                $this->_orderImportService->importOrders($salesChannel);
-
-                $output->writeln($this->generateOutputMessage(true, $salesChannel, $settings->getName(), 'Order Import'));
-
-                $this->_logger->info('Executing order import command for sales channel succeeded.', [
-                    'process'       => static::LOGGER_PROCESS,
-                    'connection'    => $settings->getName(),
-                    'sales_channel' => [
-                        'id'    => $salesChannel->getId(),
-                        'name'  => $salesChannel->getName(),
-                    ]
-                ]);
-            } catch (Exception $e) {
-                $output->writeln($this->generateOutputMessage(false, $salesChannel, $settings->getName(), 'Order Import', $e->getMessage()));
-
-                $this->_logger->critical('Executing order import command for sales channel failed.', [
-                    'process'       => static::LOGGER_PROCESS,
-                    'message'       => $e->getMessage(),
-                    'connection'    => $settings->getName(),
-                    'sales_channel' => [
-                        'id'    => $salesChannel->getId(),
-                        'name'  => $salesChannel->getName(),
-                    ]
-                ]);
+            $this->importOrders($salesChannel, $settings, $output, false);
+            if ($settings->isImportExternallyFulfilledOrders()) {
+                $this->importOrders($salesChannel, $settings, $output, true);
             }
         }
 
@@ -138,4 +117,38 @@ class ImportOrders extends AbstractInteractionCommand
 
         return 1;
     }
+
+    private function importOrders(SalesChannelEntity $salesChannel, SettingStruct $settings, OutputInterface $output, bool $externallyFulfilled) {
+        $fulfilmentType = $externallyFulfilled ? FulfilmentType::EXTERNAL : FulfilmentType::INTERNAL;
+
+        try {
+            $this->_orderImportService->importOrders($salesChannel, $externallyFulfilled);
+
+            $output->writeln($this->generateOutputMessage(true, $salesChannel, $settings->getName(), 'Order Import'));
+
+            $this->_logger->info('Executing order import command for sales channel succeeded.', [
+                'process'       => static::LOGGER_PROCESS,
+                'connection'    => $settings->getName(),
+                'fulfilment_type' => $fulfilmentType,
+                'sales_channel' => [
+                    'id'    => $salesChannel->getId(),
+                    'name'  => $salesChannel->getName(),
+                ]
+            ]);
+        } catch (Exception $e) {
+            $output->writeln($this->generateOutputMessage(false, $salesChannel, $settings->getName(), 'Order Import', $e->getMessage()));
+
+            $this->_logger->critical('Executing order import command for sales channel failed.', [
+                'process'       => static::LOGGER_PROCESS,
+                'message'       => $e->getMessage(),
+                'connection'    => $settings->getName(),
+                'fulfilment_type' => $fulfilmentType,
+                'sales_channel' => [
+                    'id'    => $salesChannel->getId(),
+                    'name'  => $salesChannel->getName(),
+                ]
+            ]);
+        }
+    }
+
 }

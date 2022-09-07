@@ -4,6 +4,7 @@ namespace EffectConnect\Marketplaces\Service\Transformer;
 
 use DateTime;
 use EffectConnect\Marketplaces\Enum\CustomerSourceType;
+use EffectConnect\Marketplaces\Enum\FulfilmentType;
 use EffectConnect\Marketplaces\Exception\CountryNotFoundException;
 use EffectConnect\Marketplaces\Exception\CountryStateNotFoundException;
 use EffectConnect\Marketplaces\Exception\CreateCurrencyFailedException;
@@ -20,8 +21,10 @@ use EffectConnect\Marketplaces\Exception\UpdatingOrderNumberFailedException;
 use EffectConnect\Marketplaces\Factory\LoggerFactory;
 use EffectConnect\Marketplaces\Handler\EffectConnectPayment;
 use EffectConnect\Marketplaces\Handler\EffectConnectShipment;
+use EffectConnect\Marketplaces\Helper\StateHelper;
 use EffectConnect\Marketplaces\Interfaces\LoggerProcess;
 use EffectConnect\Marketplaces\Object\OrderImportResult;
+use EffectConnect\Marketplaces\Service\Api\AbstractOrderService;
 use EffectConnect\Marketplaces\Service\Api\OrderUpdateService;
 use EffectConnect\Marketplaces\Service\CustomFieldService;
 use EffectConnect\Marketplaces\Service\SalesChannelService;
@@ -351,6 +354,20 @@ class OrderTransformerService
 
     /**
      * @param Order $order
+     * @return bool
+     */
+    private function orderHasExternalFulfilmentTag(Order $order): bool
+    {
+        foreach($order->getTags() as $tag) {
+            if ($tag->getTag() === AbstractOrderService::ORDER_EXTERNAL_FULFILMENT_TAG) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @param Order $order
      * @return BillingAddress|ShippingAddress
      */
     private function getCustomerSource(Order $order) {
@@ -402,6 +419,11 @@ class OrderTransformerService
             [ 'name'    => $order->getIdentifiers()->getChannelNumber() ]
         ];
 
+        $externallyFulfilled = $this->orderHasExternalFulfilmentTag($order);
+        $stateMachine = $this->_stateMachineRegistry->getStateMachine(OrderStates::STATE_MACHINE, $this->_salesChannelContext->getContext());
+        $orderStatusTechnicalName = $externallyFulfilled ? $this->_settings->getExternalOrderStatus() : $this->_settings->getOrderStatus();
+        $stateId = StateHelper::getIdFromTechnicalName($stateMachine, $orderStatusTechnicalName);
+
         if ($this->_settings->isCreateCustomer()) {
             $customer = $this->_customerTransformerService->getCustomer($customerSourceAddress->getEmail());
             if ($customer === null) {
@@ -449,7 +471,7 @@ class OrderTransformerService
             $orderLines[] = $transactionLine;
         }
 
-        $delivery                   = $this->transformDelivery($order, $shippingMethod, $shippingAddressId, $orderLines);
+        $delivery                   = $this->transformDelivery($order, $shippingMethod, $shippingAddressId, $orderLines, $externallyFulfilled);
         $cartPrice                  = $this->getCartPrice($orderLines, $delivery['shippingCosts']);
 
         $customFields               = [
@@ -459,7 +481,8 @@ class OrderTransformerService
             CustomFieldService::CUSTOM_FIELD_KEY_ORDER_CHANNEL_TYPE               => $order->getChannelInfo()->getType(),
             CustomFieldService::CUSTOM_FIELD_KEY_ORDER_CHANNEL_SUBTYPE            => $order->getChannelInfo()->getSubtype(),
             CustomFieldService::CUSTOM_FIELD_KEY_ORDER_CHANNEL_TITLE              => $order->getChannelInfo()->getTitle(),
-            CustomFieldService::CUSTOM_FIELD_KEY_ORDER_COMMISSION_FEE             => $this->getTotalFee($order, OrderFee::FEE_TYPE_COMMISSION)
+            CustomFieldService::CUSTOM_FIELD_KEY_ORDER_COMMISSION_FEE             => $this->getTotalFee($order, OrderFee::FEE_TYPE_COMMISSION),
+            CustomFieldService::CUSTOM_FIELD_KEY_ORDER_FULFILMENT_TYPE            => $externallyFulfilled ? FulfilmentType::EXTERNAL : FulfilmentType::INTERNAL,
         ];
 
         $customFields[CustomFieldService::CUSTOM_FIELDSET_KEY_EFFECTCONNECT_MARKETPLACES]       = $customFields;
@@ -485,7 +508,7 @@ class OrderTransformerService
             ],
             'lineItems'         => $orderLines,
             'transactions'      => [
-                $this->transformTransaction($cartPrice, $paymentMethod)
+                $this->transformTransaction($cartPrice, $paymentMethod, $externallyFulfilled)
             ],
             'deepLinkCode'      => Random::getBase64UrlString(32),
             'stateId'           => $stateId,
@@ -526,10 +549,11 @@ class OrderTransformerService
      *
      * @param CartPrice $cartPrice
      * @param PaymentMethodEntity $paymentMethod
+     * @param bool $externallyfulfilled
      * @return array
      * @throws ObtainingStateFailedException
      */
-    public function transformTransaction(CartPrice $cartPrice, PaymentMethodEntity $paymentMethod): array
+    public function transformTransaction(CartPrice $cartPrice, PaymentMethodEntity $paymentMethod, bool $externallyfulfilled): array
     {
         try {
             $stateMachine = $this->_stateMachineRegistry->getStateMachine(OrderTransactionStates::STATE_MACHINE, $this->_salesChannelContext->getContext());
@@ -537,25 +561,8 @@ class OrderTransformerService
             throw new ObtainingStateFailedException(OrderTransactionStates::STATE_MACHINE);
         }
 
-        $initialState   = $stateMachine->getInitialState();
-
-        if (is_null($initialState)) {
-            throw new ObtainingStateFailedException(OrderTransactionStates::STATE_MACHINE);
-        }
-
-        $stateId        = $initialState->getId();
-
-        foreach ($stateMachine->getStates() as $state) {
-            if ($state->getTechnicalName() === OrderTransactionStates::STATE_PAID) {
-                $stateId = $state->getId();
-            }
-        }
-
-        foreach ($stateMachine->getStates() as $state) {
-            if ($state->getTechnicalName() === $this->_settings->getPaymentStatus()) {
-                $stateId = $state->getId();
-            }
-        }
+        $paymentStatusTechnicalName = $externallyfulfilled ? $this->_settings->getExternalPaymentStatus() : $this->_settings->getPaymentStatus();
+        $stateId = StateHelper::getIdFromTechnicalName($stateMachine, $paymentStatusTechnicalName, OrderTransactionStates::STATE_PAID);
 
         return [
             'paymentMethodId'   => $paymentMethod->getId(),
@@ -575,7 +582,7 @@ class OrderTransformerService
      * @throws CreatingDeliveryDateFailedException
      * @throws ObtainingStateFailedException
      */
-    public function transformDelivery(Order $order, ShippingMethodEntity $shippingMethod, string $shippingAddressId, array $orderLines): array
+    public function transformDelivery(Order $order, ShippingMethodEntity $shippingMethod, string $shippingAddressId, array $orderLines, bool $externallyFulfilled): array
     {
         try {
             $deliveryDate = new DeliveryDate(new DateTime('now'), (new DateTime('now'))->modify('+1 week'));
@@ -583,13 +590,9 @@ class OrderTransformerService
             throw new CreatingDeliveryDateFailedException();
         }
 
-        try {
-            $stateId = $this->_stateMachineRegistry
-                ->getInitialState(OrderDeliveryStates::STATE_MACHINE, $this->_salesChannelContext->getContext())
-                ->getId();
-        } catch (Exception $e) {
-            throw new ObtainingStateFailedException(OrderDeliveryStates::STATE_MACHINE);
-        }
+        $technicalName = $externallyFulfilled ? $this->_settings->getExternalShippingStatus() : null;
+        $stateMachine = $this->_stateMachineRegistry->getStateMachine(OrderDeliveryStates::STATE_MACHINE, $this->_salesChannelContext->getContext());
+        $stateId = StateHelper::getIdFromTechnicalName($stateMachine, $technicalName, $externallyFulfilled ? OrderDeliveryStates::STATE_SHIPPED : null);
 
         return [
             'shippingOrderAddressId'    => $shippingAddressId,
@@ -954,7 +957,7 @@ class OrderTransformerService
      */
     protected function getShippingMethod(): ShippingMethodEntity
     {
-        $shippingMethodId   = $this->_settings->getShippingMethod();
+        $shippingMethodId = $this->_settings->getShippingMethod();
 
         if (empty($shippingMethodId) || !Uuid::isValid($shippingMethodId)) {
             return $this->getEffectConnectShippingMethod();

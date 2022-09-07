@@ -2,12 +2,14 @@
 
 namespace EffectConnect\Marketplaces\ScheduledTask\Handler;
 
+use EffectConnect\Marketplaces\Enum\FulfilmentType;
 use EffectConnect\Marketplaces\Factory\LoggerFactory;
 use EffectConnect\Marketplaces\Interfaces\LoggerProcess;
 use EffectConnect\Marketplaces\ScheduledTask\OrderImportTask;
 use EffectConnect\Marketplaces\Service\Api\OrderImportService;
 use EffectConnect\Marketplaces\Service\SalesChannelService;
 use EffectConnect\Marketplaces\Service\SettingsService;
+use EffectConnect\Marketplaces\Setting\SettingStruct;
 use Exception;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\System\SalesChannel\SalesChannelEntity;
@@ -59,6 +61,35 @@ class OrderImportTaskHandler extends AbstractTaskHandler
         return [ OrderImportTask::class ];
     }
 
+    private function importOrders(SalesChannelEntity $salesChannel, SettingStruct $settings, bool $externallyFulfilled) {
+        $fulfilmentType = $externallyFulfilled ? FulfilmentType::EXTERNAL : FulfilmentType::INTERNAL;
+
+        try {
+            $this->_orderImportService->importOrders($salesChannel, $externallyFulfilled);
+
+            $this->_logger->info('Executing order import task handler for sales channel succeeded.', [
+                'process'       => static::LOGGER_PROCESS,
+                'fulfilment_type' => $fulfilmentType,
+                'connection'    => $settings->getName(),
+                'sales_channel' => [
+                    'id'    => $salesChannel->getId(),
+                    'name'  => $salesChannel->getName(),
+                ]
+            ]);
+        } catch (Exception $e) {
+            $this->_logger->critical('Executing order import task handler for sales channel failed.', [
+                'process'       => static::LOGGER_PROCESS,
+                'message'       => $e->getMessage(),
+                'fulfilment_type' => $fulfilmentType,
+                'connection'    => $settings->getName(),
+                'sales_channel' => [
+                    'id'    => $salesChannel->getId(),
+                    'name'  => $salesChannel->getName(),
+                ]
+            ]);
+        }
+    }
+
     /**
      * @inheritDoc
      */
@@ -73,28 +104,9 @@ class OrderImportTaskHandler extends AbstractTaskHandler
          */
         foreach ($this->_salesChannelService->getSalesChannels() as $salesChannel) {
             $settings = $this->_settingsService->getSettings($salesChannel->getId());
-
-            try {
-                $this->_orderImportService->importOrders($salesChannel);
-
-                $this->_logger->info('Executing order import task handler for sales channel succeeded.', [
-                    'process'       => static::LOGGER_PROCESS,
-                    'connection'    => $settings->getName(),
-                    'sales_channel' => [
-                        'id'    => $salesChannel->getId(),
-                        'name'  => $salesChannel->getName(),
-                    ]
-                ]);
-            } catch (Exception $e) {
-                $this->_logger->critical('Executing order import task handler for sales channel failed.', [
-                    'process'       => static::LOGGER_PROCESS,
-                    'message'       => $e->getMessage(),
-                    'connection'    => $settings->getName(),
-                    'sales_channel' => [
-                        'id'    => $salesChannel->getId(),
-                        'name'  => $salesChannel->getName(),
-                    ]
-                ]);
+            $this->importOrders($salesChannel, $settings, false);
+            if ($settings->isImportExternallyFulfilledOrders()) {
+                $this->importOrders($salesChannel, $settings, true);
             }
         }
 

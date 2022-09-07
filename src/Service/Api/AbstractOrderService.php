@@ -21,10 +21,22 @@ abstract class AbstractOrderService extends AbstractApiService
     const ORDER_IMPORT_SUCCEEDED_TAG    = 'order_import_succeeded';
 
     /**
-     * Status filters.
+     * External fulfilment tag.
      */
-    const STATUS_FILTERS                = [
+    const ORDER_EXTERNAL_FULFILMENT_TAG    = 'external_fulfilment';
+
+    /**
+     * Internal status filters
+     */
+    const INTERNAL_STATUS_FILTERS = [
         HasStatusFilter::STATUS_PAID
+    ];
+
+    /**
+     * External status filters
+     */
+    const EXTERNAL_STATUS_FILTERS = [
+        HasStatusFilter::STATUS_COMPLETED
     ];
 
     /**

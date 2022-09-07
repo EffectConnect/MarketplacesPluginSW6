@@ -414,5 +414,100 @@
                 </option>
             </options>
         </input-field>
+        <input-field type="bool">
+            <name>importExternallyFulfilledOrders</name>
+            <label>Import externally fulfilled orders</label>
+            <label lang="nl-NL">Importeer extern afgehandelde orders</label>
+            <label lang="de-DE">Extern ausgeführte Aufträge importieren</label>
+            <helpText>Whether to include externally fulfilled orders during import.</helpText>
+            <helpText lang="nl-NL">Extern afgehandelde orders meenemen tijdens order import.</helpText>
+            <helpText lang="de-DE">Ob extern ausgeführte Aufträge während des Imports einbezogen werden sollen</helpText>
+            <defaultValue>false</defaultValue>
+        </input-field>
+        <input-field type="single-select">
+            <name>externalShippingStatus</name>
+            <label>Externally fulfilled shipping status</label>
+            <helpText>Select the shipping status for externally fulfilled orders.</helpText>
+            <helpText lang="nl-NL">Selecteer shipping status voor extern afgehandelde orders.</helpText>
+            <helpText lang="de-DE">Wählen Sie den Versandstatus für extern ausgeführte Bestellungen aus.</helpText>
+            <placeholder>Choose a shipping status...</placeholder>
+            <placeholder lang="nl-NL">Kies een verzendstatus...</placeholder>
+            <placeholder lang="de-DE">Wählen Sie einen Versandstatus</placeholder>
+            <defaultValue>shipped</defaultValue>
+            <options>
+                <option>
+                    <id>open</id>
+                    <name>Open</name>
+                    <name lang="nl-NL">Open</name>
+                    <name lang="de-DE">Öffnen</name>
+                </option>
+                <option>
+                    <id>shipped</id>
+                    <name>Shipped</name>
+                    <name lang="nl-NL">Verzonden</name>
+                    <name lang="de-DE">Gesandt</name>
+                </option>
+                <option>
+                    <id>shipped_partially</id>
+                    <name>Partially shipped</name>
+                    <name lang="nl-NL">Gedeeltelijk verzonden</name>
+                    <name lang="de-DE">Teilweise versandt</name>
+                </option>
+            </options>
+        </input-field>
+        <input-field type="single-select">
+            <name>externalPaymentStatus</name>
+            <label>Externally fulfilled payment status</label>
+            <label lang="nl-NL">Betalingsstatus</label>
+            <label lang="de-DE">Zahlungsstatus</label>
+            <helpText>Select the payment status for externally fulfilled orders.</helpText>
+            <helpText lang="nl-NL">Selecteer betalingsstatus voor extern afgehandelde orders.</helpText>
+            <helpText lang="de-DE">Wählen Sie den Zahlungsstatus für extern ausgeführte Bestellungen</helpText>
+            <placeholder>Choose a payment status...</placeholder>
+            <placeholder lang="nl-NL">Kies een betalingsstatus...</placeholder>
+            <placeholder lang="de-DE">Wählen Sie eine Zahlungsstatus...</placeholder>
+            <defaultValue>paid</defaultValue>
+            <options>
+                <option>
+                    <id>paid</id>
+                    <name>Paid</name>
+                    <name lang="nl-NL">Betaald</name>
+                    <name lang="de-DE">Bezahlt</name>
+                </option>
+                <option>
+                    <id>open</id>
+                    <name>Open</name>
+                    <name lang="nl-NL">Open</name>
+                    <name lang="de-DE">Öffnen</name>
+                </option>
+            </options>
+        </input-field>
+        <input-field type="single-select">
+            <name>externalOrderStatus</name>
+            <label>Externally fulfilled order status</label>
+            <label lang="nl-NL">Exernn afgehandelde orderstatus</label>
+            <label lang="de-DE">Extern ausgeführter Bestellstatus</label>
+            <helpText>Select the order status for external fulfilled imported orders.</helpText>
+            <helpText lang="nl-NL">Selecteer order status voor extern afgehandelde geïmporteerde orders.</helpText>
+            <helpText lang="de-DE">Wählen Sie den Bestellstatus für importierte Bestellungen.</helpText>
+            <placeholder>Choose an order status...</placeholder>
+            <placeholder lang="nl-NL">Kies een orderstatus...</placeholder>
+            <placeholder lang="de-DE">Wählen Sie eine Bestellstatus...</placeholder>
+            <defaultValue>open</defaultValue>
+            <options>
+                <option>
+                    <id>open</id>
+                    <name>Open</name>
+                    <name lang="nl-NL">Open</name>
+                    <name lang="de-DE">Öffnen</name>
+                </option>
+                <option>
+                    <id>in_progress</id>
+                    <name>In progress</name>
+                    <name lang="nl-NL">In behandeling</name>
+                    <name lang="de-DE">In Bearbeitung</name>
+                </option>
+            </options>
+        </input-field>
     </card>
 </config>

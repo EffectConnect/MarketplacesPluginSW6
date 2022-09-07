@@ -2,11 +2,13 @@
 
 namespace EffectConnect\Marketplaces\Subscriber;
 
+use EffectConnect\Marketplaces\Enum\FulfilmentType;
 use EffectConnect\Marketplaces\Exception\ShipmentExportFailedException;
 use EffectConnect\Marketplaces\Factory\LoggerFactory;
 use EffectConnect\Marketplaces\Interfaces\LoggerProcess;
 use EffectConnect\Marketplaces\Object\OrderLineDeliveryData;
 use EffectConnect\Marketplaces\Service\Api\ShippingExportService;
+use EffectConnect\Marketplaces\Service\CustomFieldService;
 use Monolog\Logger;
 use Shopware\Core\Checkout\Order\Aggregate\OrderDelivery\OrderDeliveryEntity;
 use Shopware\Core\Checkout\Order\Aggregate\OrderDelivery\OrderDeliveryStates;
@@ -77,6 +79,34 @@ class OrderShippedSubscriber implements EventSubscriberInterface
     }
 
     /**
+     * @param OrderDeliveryEntity|null $delivery
+     * @return string|null
+     */
+    private function getSkipReason(?OrderDeliveryEntity $delivery): ?string
+    {
+        if (is_null($delivery)) {
+            return 'delivery does not exist';
+        }
+        if ($delivery->getStateMachineState()->getTechnicalName() !== OrderDeliveryStates::STATE_SHIPPED) {
+            return 'delivery is not shipped yet.';
+        }
+        if (is_null($delivery->getOrder())) {
+            return 'order does not exist.';
+        }
+        if (empty($delivery->getOrder()->getLineItems())) {
+            return 'order has no orderlines.';
+        }
+        $customFields = $delivery->getOrder()->getCustomFields();
+        if (empty($customFields[CustomFieldService::CUSTOM_FIELD_KEY_ORDER_EFFECTCONNECT_ORDER_NUMBER])) {
+            return 'order is not an EffectConnect order.';
+        }
+        if ($customFields[CustomFieldService::CUSTOM_FIELD_KEY_ORDER_FULFILMENT_TYPE] === FulfilmentType::EXTERNAL) {
+            return 'order is externally fulfilled.';
+        }
+        return null;
+    }
+
+    /**
      * Is triggered when an order delivery is set.
      *
      * @param EntityWrittenEvent $event
@@ -95,21 +125,16 @@ class OrderShippedSubscriber implements EventSubscriberInterface
             $deliveryId     = is_array($writeResult->getPrimaryKey()) ? $writeResult->getPrimaryKey()[0] : $writeResult->getPrimaryKey();
             $delivery       = $this->getDeliveryById($deliveryId, $event->getContext());
 
-            if (
-                is_null($delivery) ||
-                $delivery->getStateMachineState()->getTechnicalName() !== OrderDeliveryStates::STATE_SHIPPED ||
-                is_null($delivery->getOrder()) ||
-                is_null($delivery->getOrder()->getLineItems()) ||
-                !isset($delivery->getOrder()->getCustomFields()['effectConnectOrderNumber']) ||
-                empty($delivery->getOrder()->getCustomFields()['effectConnectOrderNumber'])
-            ) {
-                $this->_logger->notice('Delivery does not exist, is not an EffectConnect order, is not shipped or has no order (lines).', [
+            $skipReason = $this->getSkipReason($delivery);
+            if ($skipReason !== null) {
+                $this->_logger->notice('Delivery shipment skipped, reason: ' . $skipReason, [
                     'process'       => static::LOGGER_PROCESS,
                     'delivery'      => $deliveryId
                 ]);
-
                 continue;
             }
+
+            $salesChannel = $delivery->getOrder()->getSalesChannel();
 
             $lineDeliveries = [];
             $trackingCode   = null;
@@ -124,25 +149,15 @@ class OrderShippedSubscriber implements EventSubscriberInterface
             }
 
             foreach ($delivery->getOrder()->getLineItems() as $lineItem) {
-                if (
-                    isset($lineItem->getCustomFields()['effectConnectLineId']) &&
-                    !empty($lineItem->getCustomFields()['effectConnectLineId'])
-                ) {
-                    $lineId             = strval($lineItem->getCustomFields()['effectConnectLineId']);
-                    $effectConnectId    = null;
-
-                    if (
-                        isset($lineItem->getCustomFields()['effectConnectId']) &&
-                        !empty($lineItem->getCustomFields()['effectConnectId'])
-                    ) {
-                        $effectConnectId = strval($lineItem->getCustomFields()['effectConnectId']);
+                $lineId = $lineItem->getCustomFields()['effectConnectLineId'] ?? null;
+                if ($lineId) {
+                    $effectConnectId = $lineItem->getCustomFields()['effectConnectId'] ?? null;
+                    if ($effectConnectId) {
+                        $effectConnectId = strval($effectConnectId);
                     }
-
-                    $lineDeliveries[]       = new OrderLineDeliveryData($lineId, $effectConnectId, $trackingCode, $carrier);
+                    $lineDeliveries[] = new OrderLineDeliveryData(strval($lineId), $effectConnectId, $trackingCode, $carrier);
                 }
             }
-
-            $salesChannel = $delivery->getOrder()->getSalesChannel();
 
             $this->_logger->notice('Delivery data obtained successfully.', [
                 'process'       => static::LOGGER_PROCESS,
