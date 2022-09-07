@@ -3,6 +3,7 @@
 namespace EffectConnect\Marketplaces\Service\Transformer;
 
 use DateTime;
+use EffectConnect\Marketplaces\Enum\CustomerSourceType;
 use EffectConnect\Marketplaces\Exception\CountryNotFoundException;
 use EffectConnect\Marketplaces\Exception\CountryStateNotFoundException;
 use EffectConnect\Marketplaces\Exception\CreateCurrencyFailedException;
@@ -27,7 +28,9 @@ use EffectConnect\Marketplaces\Service\SalesChannelService;
 use EffectConnect\Marketplaces\Service\SettingsService;
 use EffectConnect\Marketplaces\Setting\SettingStruct;
 use EffectConnect\PHPSdk\Core\Model\Request\OrderFee;
+use EffectConnect\PHPSdk\Core\Model\Response\BillingAddress;
 use EffectConnect\PHPSdk\Core\Model\Response\Order;
+use EffectConnect\PHPSdk\Core\Model\Response\ShippingAddress;
 use Exception;
 use Monolog\Logger;
 use Shopware\Core\Checkout\Cart\Delivery\Struct\DeliveryDate;
@@ -348,6 +351,23 @@ class OrderTransformerService
 
     /**
      * @param Order $order
+     * @return BillingAddress|ShippingAddress
+     */
+    private function getCustomerSource(Order $order) {
+        if (!$this->_settings->isCreateCustomer()) {
+            return $order->getBillingAddress();
+        }
+
+        switch ($this->_settings->getCustomerSourceType()) {
+            case CustomerSourceType::SHIPPING:
+                return $order->getShippingAddress();
+            default:
+                return $order->getBillingAddress();
+        }
+    }
+
+    /**
+     * @param Order $order
      * @return array
      * @throws CountryNotFoundException
      * @throws CountryStateNotFoundException
@@ -368,9 +388,10 @@ class OrderTransformerService
         $orderLineIndex             = 1;
         $orderLines                 = [];
         $currency                   = $this->getCurrency($order->getCurrency());
+        $customerSourceAddress      = $this->getCustomerSource($order);
         $billingAddress             = $this->_customerTransformerService->transformOrderAddress($billingAddressId, $order->getBillingAddress(), $this->_salesChannelContext);
         $shippingAddress            = $this->_customerTransformerService->transformOrderAddress($shippingAddressId, $order->getShippingAddress(), $this->_salesChannelContext);
-        $orderCustomer              = $this->_customerTransformerService->transformOrderCustomer($order->getBillingAddress(), $this->_salesChannelContext);
+        $orderCustomer              = $this->_customerTransformerService->transformOrderCustomer($customerSourceAddress, $this->_salesChannelContext);
         $paymentMethod              = $this->getPaymentMethod();
         $shippingMethod             = $this->getShippingMethod();
         $tags                       = [
@@ -380,6 +401,22 @@ class OrderTransformerService
             [ 'name'    => $order->getChannelInfo()->getTitle() ],
             [ 'name'    => $order->getIdentifiers()->getChannelNumber() ]
         ];
+
+        if ($this->_settings->isCreateCustomer()) {
+            $customer = $this->_customerTransformerService->getCustomer($customerSourceAddress->getEmail());
+            if ($customer === null) {
+                $createContext = new CustomerCreateContext();
+                $createContext->salesChannelContext = $this->_salesChannelContext;
+                $createContext->paymentMethod = $paymentMethod;
+                $createContext->shippingAddressData = $shippingAddress;
+                $createContext->billingAddressData = $billingAddress;
+                $createContext->customerSource = $customerSourceAddress;
+                $createContext->customerGroup = $this->_settings->getCustomerGroup();
+                $customer = $this->_customerTransformerService->createCustomer($createContext);
+            }
+            $orderCustomer['customerId'] = $customer->getId();
+            $orderCustomer['customerNumber'] = $customer->getCustomerNumber();
+        }
 
         try {
             $stateId = $this->_stateMachineRegistry

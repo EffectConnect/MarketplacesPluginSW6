@@ -7,9 +7,13 @@ use EffectConnect\Marketplaces\Exception\CountryStateNotFoundException;
 use EffectConnect\Marketplaces\Exception\CreateSalutationFailedException;
 use EffectConnect\Marketplaces\Exception\InvalidAddressTypeException;
 use EffectConnect\Marketplaces\Service\CustomFieldService;
+use EffectConnect\Marketplaces\Service\SettingsService;
 use EffectConnect\PHPSdk\Core\Model\Response\BillingAddress;
+use EffectConnect\PHPSdk\Core\Model\Response\Order;
 use EffectConnect\PHPSdk\Core\Model\Response\ShippingAddress;
+use Shopware\Core\Checkout\Customer\CustomerEntity;
 use Shopware\Core\Defaults;
+use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\ContainsFilter;
@@ -72,49 +76,92 @@ class CustomerTransformerService
     protected $_countryStateRepository;
 
     /**
+     * @var EntityRepositoryInterface
+     */
+    protected $_customerRepository;
+
+    /**
      * CustomerTransformerService constructor.
      *
      * @param EntityRepositoryInterface $salutationRepository
      * @param EntityRepositoryInterface $countryRepository
      * @param EntityRepositoryInterface $countryStateRepository
+     * @param EntityRepositoryInterface $customerRepository
      */
     public function __construct(
         EntityRepositoryInterface $salutationRepository,
         EntityRepositoryInterface $countryRepository,
-        EntityRepositoryInterface $countryStateRepository
+        EntityRepositoryInterface $countryStateRepository,
+        EntityRepositoryInterface $customerRepository
     ) {
         $this->_salutationRepository    = $salutationRepository;
         $this->_countryRepository       = $countryRepository;
         $this->_countryStateRepository  = $countryStateRepository;
+        $this->_customerRepository      = $customerRepository;
+    }
+
+    /**
+     * @param Order $order
+     * @return ?CustomerEntity
+     */
+    public function getCustomer(string $email): ?CustomerEntity
+    {
+        $criteria = new Criteria();
+        $criteria->addFilter(new EqualsFilter('email', $email));
+        return $this->_customerRepository->search($criteria, Context::createDefaultContext())->first();
+    }
+
+    /**
+     * @param CustomerCreateContext $createContext
+     * @return CustomerEntity
+     * @throws CreateSalutationFailedException
+     */
+    public function createCustomer(CustomerCreateContext $createContext): CustomerEntity
+    {
+        $customerId = Uuid::randomHex();
+        $customerData = $this->transformOrderCustomer($createContext->customerSource, $createContext->salesChannelContext);
+        $customerData['defaultPaymentMethodId'] = $createContext->paymentMethod->getId();
+        $customerData['groupId'] = $createContext->customerGroup;
+        $customerData['defaultBillingAddressId'] = $createContext->billingAddressData['id'];
+        $customerData['defaultShippingAddressId'] = $createContext->shippingAddressData['id'];
+        $customerData['customerNumber'] = 'EC_' . Uuid::randomHex();
+        $customerData['salesChannelId'] = $createContext->salesChannelContext->getSalesChannel()->getId();
+        $customerData['addresses'] = [$createContext->billingAddressData, $createContext->shippingAddressData];
+        $customerData['id'] = $customerId;
+        $this->_customerRepository->create([$customerData], Context::createDefaultContext());
+
+        $criteria = new Criteria();
+        $criteria->addFilter(new EqualsFilter('id', $customerId));
+        return $this->_customerRepository->search($criteria, Context::createDefaultContext())->first();
     }
 
     /**
      * Transform the order customer.
      *
-     * @param BillingAddress $billingAddress
+     * @param ShippingAddress|BillingAddress $address
      * @param SalesChannelContext $context
      * @return array
      * @throws CreateSalutationFailedException
      */
-    public function transformOrderCustomer(BillingAddress $billingAddress, SalesChannelContext $context): array
+    public function transformOrderCustomer($address, SalesChannelContext $context): array
     {
         $customFields = [
-            CustomFieldService::CUSTOM_FIELD_KEY_ORDER_CUSTOMER_PHONE_NUMBER    => $billingAddress->getPhone(),
-            CustomFieldService::CUSTOM_FIELD_KEY_ORDER_CUSTOMER_TAX_NUMBER      => $billingAddress->getTaxNumber()
+            CustomFieldService::CUSTOM_FIELD_KEY_ORDER_CUSTOMER_PHONE_NUMBER => $address->getPhone(),
+            CustomFieldService::CUSTOM_FIELD_KEY_ORDER_CUSTOMER_TAX_NUMBER => $address->getTaxNumber()
         ];
 
-        $customFields[CustomFieldService::CUSTOM_FIELDSET_KEY_EFFECTCONNECT_MARKETPLACES]                   = $customFields;
-        $customFields[CustomFieldService::CUSTOM_FIELDSET_KEY_EFFECTCONNECT_MARKETPLACES_ORDER_CUSTOMER]    = $customFields;
+        $customFields[CustomFieldService::CUSTOM_FIELDSET_KEY_EFFECTCONNECT_MARKETPLACES] = $customFields;
+        $customFields[CustomFieldService::CUSTOM_FIELDSET_KEY_EFFECTCONNECT_MARKETPLACES_ORDER_CUSTOMER] = $customFields;
 
         return [
-            'email'         => $billingAddress->getEmail(),
-            'salutationId'  => $this->getSalutation($billingAddress->getSalutation(), $context)->getId(),
-            'firstName'     => $billingAddress->getFirstName(),
-            'lastName'      => $billingAddress->getLastName(),
-            'company'       => $billingAddress->getCompany(),
-            'customFields'  => $customFields,
-            'tags'  => [
-                [ 'name'    => 'EffectConnect' ]
+            'email' => $address->getEmail(),
+            'salutationId' => $this->getSalutation($address->getSalutation(), $context)->getId(),
+            'firstName' => $address->getFirstName(),
+            'lastName' => $address->getLastName(),
+            'company' => $address->getCompany(),
+            'customFields' => $customFields,
+            'tags' => [
+                ['name' => 'EffectConnect']
             ]
         ];
     }
