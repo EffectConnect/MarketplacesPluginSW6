@@ -1,0 +1,12 @@
+{
+    "ec": {
+        "log": {
+            "overview": {
+                "filename": "Bestandsnaam",
+                "lastUpdated": "Laatst bijgewerkt op",
+                "fullPath": "Bestandsnaam",
+                "download": "Downloaden"
+            }
+        }
+    }
+}

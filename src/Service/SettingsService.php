@@ -2,6 +2,7 @@
 
 namespace EffectConnect\Marketplaces\Service;
 
+use EffectConnect\Marketplaces\Core\Connection\ConnectionEntity;
 use EffectConnect\Marketplaces\Setting\SettingStruct;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
@@ -22,39 +23,45 @@ class SettingsService
      */
     public const CONFIG_GROUP = 'config';
 
-    /**
-     * @var SystemConfigService
-     */
-    protected $_systemConfigService;
+    protected $systemConfigService;
+    protected $connectionService;
+    protected $settingMigrationService;
 
     /**
      * SettingsService constructor.
      *
      * @param SystemConfigService $systemConfigService
+     * @param ConnectionService $connectionService
+     * @param SettingMigrationService $settingMigrationService
      */
-    public function __construct(SystemConfigService $systemConfigService)
+    public function __construct(SystemConfigService $systemConfigService, ConnectionService $connectionService, SettingMigrationService $settingMigrationService)
     {
-        $this->_systemConfigService = $systemConfigService;
+        $this->systemConfigService = $systemConfigService;
+        $this->connectionService = $connectionService;
+        $this->settingMigrationService = $settingMigrationService;
     }
 
     /**
-     * Get the EffectConnect Marketplaces settings from the system config.
+     * Get the EffectConnect Marketplaces settings
      *
-     * @param string|null  $salesChannelId
+     * @param string  $salesChannelId
      * @param Context|null $context
      * @return SettingStruct
      */
-    public function getSettings(?string $salesChannelId = null, ?Context $context = null): SettingStruct
+    public function getSettings(string $salesChannelId, ?Context $context = null): SettingStruct
     {
-        $settings       = new SettingStruct();
-        $settingsValues = [];
-        $configData     = $this->_systemConfigService->all($salesChannelId);
-        $configData     = isset($configData[static::CONFIG_DOMAIN][static::CONFIG_GROUP]) ? $configData[static::CONFIG_DOMAIN][static::CONFIG_GROUP] : [];
-
-        foreach ($configData as $key => $value) {
-            $settingsValues[$key]   = $value;
+        if (!$this->settingMigrationService->isMigrated()) {
+            $this->settingMigrationService->migrate();
         }
 
-        return $settings->assign($settingsValues);
+        $connection = $this->connectionService->get($salesChannelId);
+        if ($connection !== null) {
+            return (new SettingStruct())->assign($connection->jsonSerialize());
+        }
+
+        $connection = new ConnectionEntity();
+        $connection->setSalesChannelId($salesChannelId);
+        $this->connectionService->create($connection);
+        return (new SettingStruct())->assign($connection->jsonSerialize());
     }
 }

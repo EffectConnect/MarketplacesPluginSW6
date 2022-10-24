@@ -1,0 +1,29 @@
+{
+    "ec": {
+        "global": {
+            "save": "Speichern",
+            "cancel": "Absagen",
+            "edit": "Bearbeiten",
+            "delete": "L\u00f6schen",
+            "create": "Schaffen",
+            "successSaved": "Erfolgreich gespeichert",
+            "trigger": "Abzug",
+            "confirm": "Best\u00e4tigen",
+            "modules": {
+                "main": {
+                    "label": "EffectConnect"
+                },
+                "log": {
+                    "label": "Protokolle",
+                    "title": "EffectConnect -Marktpl\u00e4tze - Protokolle",
+                    "description": "Protokolle"
+                },
+                "connection": {
+                    "label": "Verbindungen",
+                    "title": "EffectConnect -Marktpl\u00e4tze - Verbindungen",
+                    "description": "Verbindungen"
+                }
+            }
+        }
+    }
+}

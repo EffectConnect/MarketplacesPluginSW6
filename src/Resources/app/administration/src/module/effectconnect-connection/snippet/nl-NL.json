@@ -1,0 +1,86 @@
+{
+    "ec": {
+        "connection": {
+            "overview": {
+                "deleteConnection": "Verwijderen",
+                "textConfirmDelete": "Weet u zeker dat u deze verbinding wilt verwijderen?",
+                "textDeleteInfo": "Deze actie kan niet worden teruggedraaid."
+            },
+            "edit": {
+                "general": "Algemeen",
+                "api": "API",
+                "catalogExport": "Catalogus exporteren",
+                "offerExport": "Offer exporteren",
+                "orderImport": "Order import",
+                "noSalesChannelsAvailable": "Geen sales channels beschikbaar",
+                "salesChannelHelpText": "Welk sales channel moet worden gebruikt",
+                "salesChannelLabel": "Sales channel",
+                "salesChannelPlaceholder": "Selecteer een sales channel",
+                "nameHelpText": "Alleen gebruikt voor interne referentie",
+                "nameLabel": "Naam",
+                "namePlaceholder": "Kies een interne naam ...",
+                "publicKeyHelpText": "Zoek uw public key in de API key management in EffectConnect.",
+                "publicKeyLabel": "Public key",
+                "publicKeyPlaceholder": "Vul de public key in ...",
+                "secretKeyHelpText": "Zoek uw secret key in de API key management in EffectConnect.",
+                "secretKeyLabel": "Secret key",
+                "secretKeyPlaceholder": "Vul de secret key in ...",
+                "scheduleHelpText": "Bepaalt of en wanneer het proces wordt uitgevoerd.",
+                "scheduleLabel": "Schedule",
+                "schedulePlaceholder": "Kies een aangepaste schedule ...",
+                "schedules": {
+                    "86400": "elke 24 uur",
+                    "64800": "elke 18 uur",
+                    "43200": "elke 12 uur",
+                    "21600": "elke 6 uur",
+                    "3600": "elk uur",
+                    "1800": "elke 30 minuten",
+                    "900": "elke 15 minuten",
+                    "300": "elke 5 minuten",
+                    "0": "uitgeschakeld"
+                },
+                "addLeadingZeroToEanLabel": "Voeg voorloopnul toe aan EAN",
+                "addLeadingZeroToEanHelpText": "Selecteer of de plugin automatisch een voorloopnul moet toevoegen aan een EAN die uit 12 tekens bestaat.",
+                "useSpecialPriceLabel": "Hanteer speciale prijs",
+                "useSpecialPriceHelpText": "Selecteer of het speciale prijskenmerk moet worden gebruikt bij het exporteren van de catalogus naar effectconnect. De oorspronkelijke prijs zal net zo goed worden ge\u00c3\u00abxporteerd, maar in dat geval als oorspronkelijke prijskenmerk.",
+                "useFallbackTranslationsLabel": "Gebruik fallback-vertalingen",
+                "useFallbackTranslationsHelpText": "Selecteer of de standaardtaal moet worden gebruikt wanneer een vertaalbare waarde niet in een van de andere talen wordt ingesteld bij het exporteren van de catalogus naar effectconnect.",
+                "useSalesChannelDefaultLanguageAsFirstFallbackLanguageLabel": "Gebruik de standaardtaal van het sales channel als eerste fallback-taal",
+                "useSalesChannelDefaultLanguageAsFirstFallbackLanguageHelpText": "Standaard wordt de standaardtaal van de systeemtalen gebruikt als fallback-taal. Indien ingeschakeld, wordt de standaardtaal van het sales channel eerst als fallback-taal gebruikt.",
+                "useSystemLanguagesLabel": "Gebruik systeemtalen",
+                "useSystemLanguagesHelpText": "Standaard worden de gedefinieerde talen in het sales channel gebruikt. Indien ingeschakeld, worden de systeemtalen gebruikt bij het exporteren van de catalogus naar effectconnect.",
+                "stockTypeHelpText": "Bepaalt welke voorraad moet worden gebruikt bij het bouwen van de export.",
+                "stockTypeLabel": "Voorraadtype",
+                "stockTypes": {
+                    "physicalStock": "Fysieke voorraad",
+                    "salableStock": "Verkoopbare voorraad"
+                },
+                "paymentStatusLabel": "Betalingsstatus",
+                "paymentStatusHelpText": "Selecteer de betalingsstatus voor ge\u00c3\u00afmporteerde bestellingen.",
+                "paymentStatuses": {
+                    "paid": "Betaald",
+                    "open": "Open"
+                },
+                "orderStatusLabel": "Bestelstatus",
+                "orderStatusHelpText": "Selecteer de bestelstatus voor ge\u00c3\u00afmporteerde bestellingen.",
+                "orderStatuses": {
+                    "open": "Open",
+                    "in_progress": "Bezig"
+                },
+                "paymentMethodHelpText": "Selecteer de betaalmethode voor ge\u00c3\u00afmporteerde bestellingen.",
+                "paymentMethodLabel": "Betalingsmethode",
+                "paymentMethodPlaceholder": "Kies een betaal methode...",
+                "shippingMethodHelpText": "Selecteer de verzendmethode voor ge\u00c3\u00afmporteerde bestellingen.",
+                "shippingMethodLabel": "Verzendmethode",
+                "shippingMethodPlaceholder": "Kies een verzendmethode ...",
+                "triggerCatalogExportHelpText": "Activeert een export van een catalogus.",
+                "triggerCatalogExportLabel": "Trigger catalogus exporteren",
+                "scheduleInformationText": "Dit proces staat ingesteld op <strong>{current}</strong>.",
+                "taskTriggered": "Taak met succes geactiveerd.",
+                "apiCredentialsOK": "Referenties geldig",
+                "apiCredentialsNOK": "Referenties zijn niet geldig",
+                "triggerCatalogExport": "Trigger catalogus exporteren"
+            }
+        }
+    }
+}
