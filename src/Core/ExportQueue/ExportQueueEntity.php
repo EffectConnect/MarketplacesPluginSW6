@@ -19,27 +19,27 @@ class ExportQueueEntity extends Entity
     /**
      * @var string
      */
-    protected string $type;
+    protected $type;
 
     /**
      * @var string
      */
-    protected string $identifier;
+    protected $identifier;
 
     /**
      * @var string|null
      */
-    protected ?string $salesChannelId;
+    protected $salesChannelId;
 
     /**
      * @var array
      */
-    protected array $data;
+    protected $data;
 
     /**
      * @var string
      */
-    protected string $status;
+    protected $status;
 
     /**
      * @return string

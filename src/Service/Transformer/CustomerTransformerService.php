@@ -101,7 +101,7 @@ class CustomerTransformerService
     }
 
     /**
-     * @param Order $order
+     * @param string $email
      * @return ?CustomerEntity
      */
     public function getCustomer(string $email): ?CustomerEntity

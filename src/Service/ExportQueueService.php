@@ -12,7 +12,8 @@ use Shopware\Core\Framework\Uuid\Uuid;
 
 class ExportQueueService
 {
-    private EntityRepository $repository;
+    /** @var EntityRepository */
+    private $repository;
 
     public function __construct(EntityRepository $repository)
     {

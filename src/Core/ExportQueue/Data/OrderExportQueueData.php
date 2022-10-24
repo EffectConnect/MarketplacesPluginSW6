@@ -8,7 +8,7 @@ class OrderExportQueueData extends ExportQueueData
     /**
      * @var OrderLineDeliveryData[]
      */
-    protected array $lineDeliveries;
+    protected $lineDeliveries;
 
     /**
      * @return OrderLineDeliveryData[]
@@ -36,7 +36,7 @@ class OrderExportQueueData extends ExportQueueData
                 $deliveryData['effectConnectLineId'],
                 $deliveryData['effectConnectId'],
                 $deliveryData['trackingNumber'],
-                $deliveryData['carrier'],
+                $deliveryData['carrier']
             );
         }
         return (new OrderExportQueueData())->setLineDeliveries($lineDeliveries);
