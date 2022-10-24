@@ -202,10 +202,19 @@
             <tag name="console.command" />
         </service>
 
+        <!-- Console Command - Export Shipments -->
+        <service id="EffectConnect\Marketplaces\Command\ExportShipments">
+            <tag name="console.command" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\ExportQueueService" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\Api\ShippingExportService" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\SalesChannelService" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\SettingsService" />
+            <argument type="service" id="EffectConnect\Marketplaces\Factory\LoggerFactory" />
+        </service>
+
         <!-- Order Shipped Subscriber -->
         <service id="EffectConnect\Marketplaces\Subscriber\OrderShippedSubscriber" class="EffectConnect\Marketplaces\Subscriber\OrderShippedSubscriber">
             <argument type="service" id="order_delivery.repository" />
-            <argument type="service" id="EffectConnect\Marketplaces\Service\Api\ShippingExportService" />
             <argument type="service" id="EffectConnect\Marketplaces\Service\ExportQueueService" />
             <argument type="service" id="EffectConnect\Marketplaces\Factory\LoggerFactory" />
             <tag name="kernel.event_subscriber" />

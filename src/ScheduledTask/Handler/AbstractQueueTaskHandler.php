@@ -55,7 +55,7 @@ abstract class AbstractQueueTaskHandler extends AbstractTaskHandler
     public function run(): void
     {
         foreach ($this->_salesChannelService->getSalesChannels() as $salesChannel) {
-            $queueList = $this->exportQueueService->getInQueue($salesChannel->getId(), $this->getExportQueueType());
+            $queueList = $this->exportQueueService->getInQueue($salesChannel->getId(), $this->getExportQueueType(), $this->getLimit());
 
             if (count($queueList) === 0) {
                 $this->_logger->info('No queue items to export.', $this->getLogContext($salesChannel));
@@ -76,6 +76,10 @@ abstract class AbstractQueueTaskHandler extends AbstractTaskHandler
                 $this->exportQueueService->complete($ids);
             }
         }
+    }
+
+    protected function getLimit(): ?int {
+        return null;
     }
 
     /**

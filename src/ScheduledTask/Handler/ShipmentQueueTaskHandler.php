@@ -23,7 +23,7 @@ class ShipmentQueueTaskHandler extends AbstractQueueTaskHandler
     /**
      * @var ShippingExportService
      */
-    protected ShippingExportService $shippingExportService;
+    protected $shippingExportService;
 
     public function __construct(
         EntityRepositoryInterface $scheduledTaskRepository,
@@ -34,7 +34,7 @@ class ShipmentQueueTaskHandler extends AbstractQueueTaskHandler
         LoggerFactory $loggerFactory)
     {
         parent::__construct($scheduledTaskRepository, $exportQueueService, $salesChannelService, $settingsService, $loggerFactory);
-        $this->shippingExportService      = $shippingExportService;
+        $this->shippingExportService = $shippingExportService;
     }
 
     public static function getHandledMessages(): iterable

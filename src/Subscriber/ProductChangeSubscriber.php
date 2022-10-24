@@ -32,17 +32,17 @@ class ProductChangeSubscriber implements EventSubscriberInterface
     /**
      * @var ExportQueueService
      */
-    protected ExportQueueService $exportQueueService;
+    protected $exportQueueService;
 
     /**
      * @var Logger
      */
-    protected Logger $logger;
+    protected $logger;
 
     /**
      * @var EntityRepositoryInterface
      */
-    private EntityRepositoryInterface $productVisibilityRepository;
+    private $productVisibilityRepository;
 
     /**
      * ProductChangeSubscriber constructor.

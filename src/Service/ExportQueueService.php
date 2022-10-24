@@ -28,14 +28,16 @@ class ExportQueueService
     /**
      * @param string $salesChannelId
      * @param string|null $type
+     * @param int|null $limit
      * @return ExportQueueEntity[]
      */
-    public function getInQueue(string $salesChannelId, string $type = null): array
+    public function getInQueue(string $salesChannelId, string $type = null, ?int $limit = null): array
     {
         $criteria = (new Criteria())
             ->addFilter(new EqualsFilter('status', ExportQueueStatus::QUEUED))
             ->addFilter(new EqualsFilter('salesChannelId', $salesChannelId))
-        ;
+            ->setLimit($limit);
+
         if ($type !== null) {
             $criteria->addFilter(new EqualsFilter('type', $type));
         }
