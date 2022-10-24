@@ -64,6 +64,13 @@
             <argument type="service" id="EffectConnect\Marketplaces\Factory\LoggerFactory" />
         </service>
 
+        <!-- Api Offer Queue Export Service -->
+        <service id="EffectConnect\Marketplaces\Service\Api\OfferQueueExportService" class="EffectConnect\Marketplaces\Service\Api\OfferQueueExportService">
+            <argument type="service" id="EffectConnect\Marketplaces\Service\Api\InteractionService" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\Transformer\OfferTransformerService" />
+            <argument type="service" id="EffectConnect\Marketplaces\Factory\LoggerFactory" />
+        </service>
+
         <!-- Api Order Import Service -->
         <service id="EffectConnect\Marketplaces\Service\Api\OrderImportService" class="EffectConnect\Marketplaces\Service\Api\OrderImportService">
             <argument type="service" id="EffectConnect\Marketplaces\Service\Api\InteractionService" />
@@ -199,6 +206,7 @@
         <service id="EffectConnect\Marketplaces\Subscriber\OrderShippedSubscriber" class="EffectConnect\Marketplaces\Subscriber\OrderShippedSubscriber">
             <argument type="service" id="order_delivery.repository" />
             <argument type="service" id="EffectConnect\Marketplaces\Service\Api\ShippingExportService" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\ExportQueueService" />
             <argument type="service" id="EffectConnect\Marketplaces\Factory\LoggerFactory" />
             <tag name="kernel.event_subscriber" />
         </service>
@@ -258,6 +266,16 @@
             <tag name="messenger.message_handler" />
         </service>
 
+        <!-- Offer Queue Scheduled Task -->
+        <service id="EffectConnect\Marketplaces\ScheduledTask\OfferQueueTask">
+            <tag name="shopware.scheduled.task" />
+        </service>
+
+        <!-- Shipment Queue Scheduled Task -->
+        <service id="EffectConnect\Marketplaces\ScheduledTask\ShipmentQueueTask">
+            <tag name="shopware.scheduled.task" />
+        </service>
+
         <!-- Clean Log Scheduled Task Handler -->
         <service id="EffectConnect\Marketplaces\ScheduledTask\Handler\CleanLogTaskHandler">
             <argument type="service" id="scheduled_task.repository" />
@@ -275,5 +293,43 @@
             <argument type="service" id="Shopware\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionStateHandler" />
             <tag name="shopware.payment.method.sync" />
         </service>
+
+        <!-- Offer Queue Task Handler -->
+        <service id="EffectConnect\Marketplaces\ScheduledTask\Handler\OfferQueueTaskHandler">
+            <argument type="service" id="scheduled_task.repository" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\ExportQueueService" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\Api\OfferQueueExportService" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\SalesChannelService" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\SettingsService" />
+            <argument type="service" id="EffectConnect\Marketplaces\Factory\LoggerFactory" />
+            <tag name="messenger.message_handler" />
+        </service>
+
+        <!-- Shipment Queue Task Handler -->
+        <service id="EffectConnect\Marketplaces\ScheduledTask\Handler\ShipmentQueueTaskHandler">
+            <argument type="service" id="scheduled_task.repository" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\ExportQueueService" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\Api\ShippingExportService" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\SalesChannelService" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\SettingsService" />
+            <argument type="service" id="EffectConnect\Marketplaces\Factory\LoggerFactory" />
+            <tag name="messenger.message_handler" />
+        </service>
+
+        <service id="EffectConnect\Marketplaces\Core\ExportQueue\ExportQueueDefinition">
+            <tag name="shopware.entity.definition" entity="ec_export_queue" />
+        </service>
+
+        <service id="EffectConnect\Marketplaces\Service\ExportQueueService" class="EffectConnect\Marketplaces\Service\ExportQueueService">
+            <argument type="service" id="ec_export_queue.repository" />
+        </service>
+
+        <service id="EffectConnect\Marketplaces\Subscriber\ProductChangeSubscriber" class="EffectConnect\Marketplaces\Subscriber\ProductChangeSubscriber">
+            <argument type="service" id="product_visibility.repository" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\ExportQueueService" />
+            <argument type="service" id="EffectConnect\Marketplaces\Factory\LoggerFactory" />
+            <tag name="kernel.event_subscriber" />
+        </service>
+
     </services>
 </container>
