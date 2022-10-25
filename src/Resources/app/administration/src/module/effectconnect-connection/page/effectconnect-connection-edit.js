@@ -28,6 +28,8 @@ Shopware.Component.register('effectconnect-connection-edit', {
             stockTypes: [],
             paymentStatuses: [],
             orderStatuses: [],
+            customerSourceTypes: [],
+            shippingStatuses: [],
         };
     },
 
@@ -46,6 +48,8 @@ Shopware.Component.register('effectconnect-connection-edit', {
                         this.stockTypes = this._toOptions('stockTypes', data.stockTypes);
                         this.paymentStatuses = this._toOptions('paymentStatuses', data.payment);
                         this.orderStatuses = this._toOptions('orderStatuses', data.order);
+                        this.customerSourceTypes = this._toOptions('customerSourceTypes', data.customerSourceTypes);
+                        this.shippingStatuses = this._toOptions('shippingStatuses', data.shipping);
                         this.loaded = true;
                     })
                 });

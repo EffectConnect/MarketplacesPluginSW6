@@ -113,7 +113,6 @@
             <argument type="service" id="EffectConnect\Marketplaces\Service\ConnectionService" />
             <argument type="service" id="EffectConnect\Marketplaces\Service\SettingMigrationService" />
             <argument type="service" id="EffectConnect\Marketplaces\Service\SalesChannelService" />
-            <argument type="service" id="EffectConnect\Marketplaces\Service\SalesChannelService" />
             <argument type="service" id="EffectConnect\Marketplaces\Service\Api\CredentialService" />
             <call method="setContainer">
                 <argument type="service" id="service_container"/>

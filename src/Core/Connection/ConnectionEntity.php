@@ -9,24 +9,80 @@ class ConnectionEntity extends Entity
 {
     use EntityIdTrait;
 
+    /** @var string */
     protected $id;
+
+    /** @var string */
     protected $salesChannelId;
+
+    /** @var string|null */
     protected $name;
+
+    /** @var string|null */
     protected $publicKey;
+
+    /** @var string|null */
     protected $secretKey;
+
+    /** @var int */
     protected $catalogExportSchedule;
+
+    /** @var bool|null */
     protected $addLeadingZeroToEan;
+
+    /** @var bool|null */
     protected $useSpecialPrice;
+
+    /** @var bool|null */
     protected $useFallbackTranslations;
+
+    /** @var bool|null */
     protected $useSalesChannelDefaultLanguageAsFirstFallbackLanguage;
+
+    /** @var bool|null */
     protected $useSystemLanguages;
+
+    /** @var int */
     protected $offerExportSchedule;
+
+    /** @var string */
     protected $stockType;
+
+    /** @var int */
     protected $orderImportSchedule;
+
+    /** @var string|null */
     protected $paymentStatus;
+
+    /** @var string|null */
     protected $orderStatus;
+
+    /** @var string|null */
     protected $paymentMethod;
+
+    /** @var string|null */
     protected $shippingMethod;
+
+    /** @var bool|null */
+    protected $createCustomer;
+
+    /** @var string|null */
+    protected $customerGroup;
+
+    /** @var string|null */
+    protected $customerSourceType;
+
+    /** @var bool|null */
+    protected $importExternallyFulfilledOrders;
+
+    /** @var string|null */
+    protected $externalOrderStatus;
+
+    /** @var string|null */
+    protected $externalPaymentStatus;
+
+    /** @var string|null */
+    protected $externalShippingStatus;
 
     /**
      * @return string|null
@@ -34,17 +90,6 @@ class ConnectionEntity extends Entity
     public function getName(): ?string
     {
         return $this->name;
-    }
-
-    /**
-     * @param string $name
-     * @return self
-     */
-    public function setName(string $name): self
-    {
-        $this->name = $name;
-
-        return $this;
     }
 
     /**
@@ -56,33 +101,11 @@ class ConnectionEntity extends Entity
     }
 
     /**
-     * @param string|null $publicKey
-     * @return self
-     */
-    public function setPublicKey(?string $publicKey): self
-    {
-        $this->publicKey = $publicKey;
-
-        return $this;
-    }
-
-    /**
      * @return string|null
      */
     public function getSecretKey(): ?string
     {
         return $this->secretKey;
-    }
-
-    /**
-     * @param string|null $secretKey
-     * @return self
-     */
-    public function setSecretKey(?string $secretKey): self
-    {
-        $this->secretKey = $secretKey;
-
-        return $this;
     }
 
     /**
@@ -94,33 +117,11 @@ class ConnectionEntity extends Entity
     }
 
     /**
-     * @param int|null $catalogExportSchedule
-     * @return self
-     */
-    public function setCatalogExportSchedule(?int $catalogExportSchedule): self
-    {
-        $this->catalogExportSchedule = $catalogExportSchedule;
-
-        return $this;
-    }
-
-    /**
      * @return bool|null
      */
     public function isAddLeadingZeroToEan(): ?bool
     {
         return $this->addLeadingZeroToEan;
-    }
-
-    /**
-     * @param bool|null $addLeadingZeroToEan
-     * @return self
-     */
-    public function setAddLeadingZeroToEan(?bool $addLeadingZeroToEan): self
-    {
-        $this->addLeadingZeroToEan = $addLeadingZeroToEan;
-
-        return $this;
     }
 
     /**
@@ -132,33 +133,11 @@ class ConnectionEntity extends Entity
     }
 
     /**
-     * @param bool|null $useSpecialPrice
-     * @return self
-     */
-    public function setUseSpecialPrice(?bool $useSpecialPrice): self
-    {
-        $this->useSpecialPrice = $useSpecialPrice;
-
-        return $this;
-    }
-
-    /**
      * @return bool|null
      */
     public function isUseFallbackTranslations(): ?bool
     {
         return $this->useFallbackTranslations;
-    }
-
-    /**
-     * @param bool|null $useFallbackTranslations
-     * @return self
-     */
-    public function setUseFallbackTranslations(?bool $useFallbackTranslations): self
-    {
-        $this->useFallbackTranslations = $useFallbackTranslations;
-
-        return $this;
     }
 
     /**
@@ -170,33 +149,11 @@ class ConnectionEntity extends Entity
     }
 
     /**
-     * @param bool|null $useSalesChannelDefaultLanguageAsFirstFallbackLanguage
-     * @return self
-     */
-    public function setUseSalesChannelDefaultLanguageAsFirstFallbackLanguage(?bool $useSalesChannelDefaultLanguageAsFirstFallbackLanguage): self
-    {
-        $this->useSalesChannelDefaultLanguageAsFirstFallbackLanguage = $useSalesChannelDefaultLanguageAsFirstFallbackLanguage;
-
-        return $this;
-    }
-
-    /**
      * @return bool|null
      */
     public function isUseSystemLanguages(): ?bool
     {
         return $this->useSystemLanguages;
-    }
-
-    /**
-     * @param bool|null $useSystemLanguages
-     * @return self
-     */
-    public function setUseSystemLanguages(?bool $useSystemLanguages): self
-    {
-        $this->useSystemLanguages = $useSystemLanguages;
-
-        return $this;
     }
 
     /**
@@ -208,33 +165,11 @@ class ConnectionEntity extends Entity
     }
 
     /**
-     * @param int|null $offerExportSchedule
-     * @return self
-     */
-    public function setOfferExportSchedule(?int $offerExportSchedule): self
-    {
-        $this->offerExportSchedule = $offerExportSchedule;
-
-        return $this;
-    }
-
-    /**
      * @return string
      */
     public function getStockType(): ?string
     {
         return $this->stockType;
-    }
-
-    /**
-     * @param string|null $stockType
-     * @return self
-     */
-    public function setStockType(?string $stockType): self
-    {
-        $this->stockType = $stockType;
-
-        return $this;
     }
 
     /**
@@ -246,33 +181,11 @@ class ConnectionEntity extends Entity
     }
 
     /**
-     * @param int|null $orderImportSchedule
-     * @return self
-     */
-    public function setOrderImportSchedule(?int $orderImportSchedule): self
-    {
-        $this->orderImportSchedule = $orderImportSchedule;
-
-        return $this;
-    }
-
-    /**
      * @return string|null
      */
     public function getPaymentStatus(): ?string
     {
         return $this->paymentStatus;
-    }
-
-    /**
-     * @param string|null $paymentStatus
-     * @return self
-     */
-    public function setPaymentStatus(?string $paymentStatus): self
-    {
-        $this->paymentStatus = $paymentStatus;
-
-        return $this;
     }
 
     /**
@@ -284,33 +197,11 @@ class ConnectionEntity extends Entity
     }
 
     /**
-     * @param string|null $orderStatus
-     * @return self
-     */
-    public function setOrderStatus(?string $orderStatus): self
-    {
-        $this->orderStatus = $orderStatus;
-
-        return $this;
-    }
-
-    /**
      * @return string|null
      */
     public function getPaymentMethod(): ?string
     {
         return $this->paymentMethod;
-    }
-
-    /**
-     * @param string|null $paymentMethod
-     * @return self
-     */
-    public function setPaymentMethod(?string $paymentMethod): self
-    {
-        $this->paymentMethod = $paymentMethod;
-
-        return $this;
     }
 
     /**
@@ -322,17 +213,6 @@ class ConnectionEntity extends Entity
     }
 
     /**
-     * @param string|null $shippingMethod
-     * @return self
-     */
-    public function setShippingMethod(?string $shippingMethod): self
-    {
-        $this->shippingMethod = $shippingMethod;
-
-        return $this;
-    }
-
-    /**
      * @return string|null
      */
     public function getSalesChannelId(): ?string
@@ -340,15 +220,8 @@ class ConnectionEntity extends Entity
         return $this->salesChannelId;
     }
 
-    /**
-     * @param string|null $salesChannelId
-     * @return ConnectionEntity
-     */
-    public function setSalesChannelId(?string $salesChannelId): self
+    public function setSalesChannelId(?string $salesChannelId)
     {
         $this->salesChannelId = $salesChannelId;
-
-        return $this;
     }
-
 }

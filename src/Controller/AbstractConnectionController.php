@@ -3,14 +3,18 @@
 namespace EffectConnect\Marketplaces\Controller;
 
 use EffectConnect\Marketplaces\Core\Connection\ConnectionEntity;
+use EffectConnect\Marketplaces\Enum\CustomerSourceType;
 use EffectConnect\Marketplaces\Exception\InvalidApiCredentialsException;
+use EffectConnect\Marketplaces\Helper\DefaultSettingHelper;
 use EffectConnect\Marketplaces\Service\Api\CredentialService;
 use EffectConnect\Marketplaces\Service\ConnectionService;
 use EffectConnect\Marketplaces\Service\SalesChannelService;
 use EffectConnect\Marketplaces\Service\SettingMigrationService;
 use EffectConnect\Marketplaces\Setting\SettingStruct;
+use Shopware\Core\Checkout\Order\Aggregate\OrderDelivery\OrderDeliveryStates;
 use Shopware\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionStates;
 use Shopware\Core\Checkout\Order\OrderStates;
+use Shopware\Core\Checkout\Shipping\ShippingMethodEntity;
 use Shopware\Core\Framework\Context;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -102,22 +106,7 @@ abstract class AbstractConnectionController extends AbstractController
      */
     public function getDefaultSettings(Request $request, Context $context): JsonResponse
     {
-        $settings = (new SettingStruct());
-        $data = [
-            'catalogExportSchedule' => $settings->getCatalogExportSchedule(),
-            'addLeadingZeroToEan' => $settings->isAddLeadingZeroToEan(),
-            'useSpecialPrice' => $settings->isUseSpecialPrice(),
-            'useFallbackTranslations' => $settings->isUseFallbackTranslations(),
-            'useSalesChannelDefaultLanguageAsFirstFallbackLanguage' => $settings->isUseSalesChannelDefaultLanguageAsFirstFallbackLanguage(),
-            'useSystemLanguages' => $settings->isUseSystemLanguages(),
-            'offerExportSchedule' => $settings->getOfferExportSchedule(),
-            'stockType' => $settings->getStockType(),
-            'orderImportSchedule' => $settings->getOrderImportSchedule(),
-            'paymentStatus' => $settings->getPaymentStatus(),
-            'orderStatus' => $settings->getOrderStatus(),
-        ];
-
-        return new JsonResponse(['data' => $data]);
+        return new JsonResponse(['data' => DefaultSettingHelper::getDefaults()]);
     }
 
     /**
@@ -141,8 +130,16 @@ abstract class AbstractConnectionController extends AbstractController
             'schedules' => [
                 86400, 64800, 43200, 21600, 3600, 1800, 900, 300, 0
             ],
+            'customerSourceTypes' => [
+                CustomerSourceType::SHIPPING,
+                CustomerSourceType::BILLING
+            ],
+            'shipping' => [
+                OrderDeliveryStates::STATE_PARTIALLY_SHIPPED,
+                OrderDeliveryStates::STATE_SHIPPED,
+                OrderDeliveryStates::STATE_OPEN
+            ]
         ];
-
 
         return new JsonResponse(['data' => $data]);
     }

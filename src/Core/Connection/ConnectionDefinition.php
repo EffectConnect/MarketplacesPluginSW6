@@ -46,6 +46,13 @@ class ConnectionDefinition extends EntityDefinition
             new StringField('order_status',  'orderStatus'),
             new StringField('payment_method',  'paymentMethod'),
             new StringField('shipping_method',  'shippingMethod'),
+            new BoolField('create_customer', 'createCustomer'),
+            new StringField('customer_group', 'customerGroup'),
+            new StringField('customer_source_type', 'customerSourceType'),
+            new BoolField('import_externally_fulfilled_orders', 'importExternallyFulfilledOrders'),
+            new StringField('external_order_status', 'externalOrderStatus'),
+            new StringField('external_payment_status', 'externalPaymentStatus'),
+            new StringField('external_shipping_status', 'externalShippingStatus'),
         ]);
     }
 }

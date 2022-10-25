@@ -144,6 +144,16 @@ class SettingStruct extends Struct
     protected $customerSourceType;
 
     /**
+     * @param $property
+     * @param $default
+     * @return mixed
+     */
+    protected function getValueWithDefault($property, $default)
+    {
+        return !is_null($property) ? $property : $default;
+    }
+
+    /**
      * @return string
      */
     public function getName(): string
@@ -152,33 +162,11 @@ class SettingStruct extends Struct
     }
 
     /**
-     * @param string $name
-     * @return self
-     */
-    public function setName(string $name): self
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    /**
      * @return string
      */
     public function getPublicKey(): string
     {
-        return (string)$this->publicKey;
-    }
-
-    /**
-     * @param string $publicKey
-     * @return self
-     */
-    public function setPublicKey(string $publicKey): self
-    {
-        $this->publicKey = $publicKey;
-
-        return $this;
+        return $this->publicKey;
     }
 
     /**
@@ -186,18 +174,7 @@ class SettingStruct extends Struct
      */
     public function getSecretKey(): string
     {
-        return (string)$this->secretKey;
-    }
-
-    /**
-     * @param string $secretKey
-     * @return self
-     */
-    public function setSecretKey(string $secretKey): self
-    {
-        $this->secretKey = $secretKey;
-
-        return $this;
+        return $this->secretKey;
     }
 
     /**
@@ -209,33 +186,11 @@ class SettingStruct extends Struct
     }
 
     /**
-     * @param int $catalogExportSchedule
-     * @return self
-     */
-    public function setCatalogExportSchedule(int $catalogExportSchedule): self
-    {
-        $this->catalogExportSchedule = $catalogExportSchedule;
-
-        return $this;
-    }
-
-    /**
      * @return bool
      */
     public function isAddLeadingZeroToEan(): bool
     {
         return (bool)$this->getValueWithDefault($this->addLeadingZeroToEan, false);
-    }
-
-    /**
-     * @param bool $addLeadingZeroToEan
-     * @return self
-     */
-    public function setAddLeadingZeroToEan(bool $addLeadingZeroToEan): self
-    {
-        $this->addLeadingZeroToEan = $addLeadingZeroToEan;
-
-        return $this;
     }
 
     /**
@@ -247,33 +202,11 @@ class SettingStruct extends Struct
     }
 
     /**
-     * @param bool $useSpecialPrice
-     * @return self
-     */
-    public function setUseSpecialPrice(bool $useSpecialPrice): self
-    {
-        $this->useSpecialPrice = $useSpecialPrice;
-
-        return $this;
-    }
-
-    /**
      * @return bool
      */
     public function isUseFallbackTranslations(): bool
     {
         return (bool)$this->getValueWithDefault($this->useFallbackTranslations, true);
-    }
-
-    /**
-     * @param bool $useFallbackTranslations
-     * @return self
-     */
-    public function setUseFallbackTranslations(bool $useFallbackTranslations): self
-    {
-        $this->useFallbackTranslations = $useFallbackTranslations;
-
-        return $this;
     }
 
     /**
@@ -285,33 +218,11 @@ class SettingStruct extends Struct
     }
 
     /**
-     * @param bool $useSalesChannelDefaultLanguageAsFirstFallbackLanguage
-     * @return self
-     */
-    public function setUseSalesChannelDefaultLanguageAsFirstFallbackLanguage(bool $useSalesChannelDefaultLanguageAsFirstFallbackLanguage): self
-    {
-        $this->useSalesChannelDefaultLanguageAsFirstFallbackLanguage = $useSalesChannelDefaultLanguageAsFirstFallbackLanguage;
-
-        return $this;
-    }
-
-    /**
      * @return bool
      */
     public function isUseSystemLanguages(): bool
     {
         return (bool)$this->getValueWithDefault($this->useSystemLanguages, false);
-    }
-
-    /**
-     * @param bool $useSystemLanguages
-     * @return self
-     */
-    public function setUseSystemLanguages(bool $useSystemLanguages): self
-    {
-        $this->useSystemLanguages = $useSystemLanguages;
-
-        return $this;
     }
 
     /**
@@ -323,33 +234,11 @@ class SettingStruct extends Struct
     }
 
     /**
-     * @param int $offerExportSchedule
-     * @return self
-     */
-    public function setOfferExportSchedule(int $offerExportSchedule): self
-    {
-        $this->offerExportSchedule = $offerExportSchedule;
-
-        return $this;
-    }
-
-    /**
      * @return string
      */
     public function getStockType(): string
     {
         return (string)$this->getValueWithDefault($this->stockType, static::STOCK_TYPE_SALABLE);
-    }
-
-    /**
-     * @param string $stockType
-     * @return self
-     */
-    public function setStockType(string $stockType): self
-    {
-        $this->stockType = $stockType;
-
-        return $this;
     }
 
     /**
@@ -361,33 +250,11 @@ class SettingStruct extends Struct
     }
 
     /**
-     * @param int $orderImportSchedule
-     * @return self
-     */
-    public function setOrderImportSchedule(int $orderImportSchedule): self
-    {
-        $this->orderImportSchedule = $orderImportSchedule;
-
-        return $this;
-    }
-
-    /**
      * @return string
      */
     public function getPaymentStatus(): string
     {
         return (string)$this->getValueWithDefault($this->paymentStatus, OrderTransactionStates::STATE_PAID);
-    }
-
-    /**
-     * @param string $paymentStatus
-     * @return self
-     */
-    public function setPaymentStatus(string $paymentStatus): self
-    {
-        $this->paymentStatus = $paymentStatus;
-
-        return $this;
     }
 
     /**
@@ -399,33 +266,11 @@ class SettingStruct extends Struct
     }
 
     /**
-     * @param string $orderStatus
-     * @return self
-     */
-    public function setOrderStatus(string $orderStatus): self
-    {
-        $this->orderStatus = $orderStatus;
-
-        return $this;
-    }
-
-    /**
      * @return string
      */
     public function getPaymentMethod(): string
     {
-        return (string)$this->paymentMethod;
-    }
-
-    /**
-     * @param string $paymentMethod
-     * @return self
-     */
-    public function setPaymentMethod(string $paymentMethod): self
-    {
-        $this->paymentMethod = $paymentMethod;
-
-        return $this;
+        return $this->paymentMethod;
     }
 
     /**
@@ -433,47 +278,15 @@ class SettingStruct extends Struct
      */
     public function getShippingMethod(): string
     {
-        return (string)$this->shippingMethod;
+        return $this->shippingMethod;
     }
 
-    /**
-     * @param string $shippingMethod
-     * @return self
-     */
-    public function setShippingMethod(string $shippingMethod): self
-    {
-        $this->shippingMethod = $shippingMethod;
-
-        return $this;
-    }
-
-    /**
-     * @param string|null $customerGroup
-     * @return self
-     */
-    public function setCustomerGroup($customerGroup): self
-    {
-        $this->customerGroup = $customerGroup;
-
-        return $this;
-    }
     /**
      * @return ?string
      */
     public function getCustomerGroup(): string
     {
         return $this->customerGroup;
-    }
-
-    /**
-     * @param bool $createCustomer
-     * @return self
-     */
-    public function setCreateCustomer(bool $createCustomer): self
-    {
-        $this->createCustomer = $createCustomer;
-
-        return $this;
     }
 
     /**
@@ -485,17 +298,6 @@ class SettingStruct extends Struct
     }
 
     /**
-     * @param string $customerSourceType
-     * @return self
-     */
-    public function setCustomerSourceType(string $customerSourceType): self
-    {
-        $this->customerSourceType = $customerSourceType;
-
-        return $this;
-    }
-
-    /**
      * @return string
      */
     public function getCustomerSourceType(): string
@@ -504,31 +306,11 @@ class SettingStruct extends Struct
     }
 
     /**
-     * @param $property
-     * @param $default
-     * @return mixed
-     */
-    protected function getValueWithDefault($property, $default)
-    {
-        return !is_null($property) ? $property : $default;
-    }
-
-    /**
      * @return bool
      */
     public function isImportExternallyFulfilledOrders(): bool
     {
-        return $this->importExternallyFulfilledOrders;
-    }
-
-    /**
-     * @param bool $importExternallyFulfilledOrders
-     * @return SettingStruct
-     */
-    public function setImportExternallyFulfilledOrders(bool $importExternallyFulfilledOrders): SettingStruct
-    {
-        $this->importExternallyFulfilledOrders = $importExternallyFulfilledOrders;
-        return $this;
+        return $this->getValueWithDefault($this->importExternallyFulfilledOrders, false);
     }
 
     /**
@@ -540,31 +322,11 @@ class SettingStruct extends Struct
     }
 
     /**
-     * @param string $externalShippingStatus
-     * @return SettingStruct
-     */
-    public function setExternalShippingStatus(string $externalShippingStatus): SettingStruct
-    {
-        $this->externalShippingStatus = $externalShippingStatus;
-        return $this;
-    }
-
-    /**
      * @return string
      */
     public function getExternalPaymentStatus(): string
     {
         return $this->externalPaymentStatus;
-    }
-
-    /**
-     * @param string $externalPaymentStatus
-     * @return SettingStruct
-     */
-    public function setExternalPaymentStatus(string $externalPaymentStatus): SettingStruct
-    {
-        $this->externalPaymentStatus = $externalPaymentStatus;
-        return $this;
     }
 
     /**
@@ -575,15 +337,11 @@ class SettingStruct extends Struct
         return $this->externalOrderStatus;
     }
 
-    /**
-     * @param string $externalOrderStatus
-     * @return SettingStruct
-     */
-    public function setExternalOrderStatus(string $externalOrderStatus): SettingStruct
+    public function getValues(): array
     {
-        $this->externalOrderStatus = $externalOrderStatus;
-        return $this;
+        $methods = get_class_methods($this);
+
+
+
     }
-
-
 }

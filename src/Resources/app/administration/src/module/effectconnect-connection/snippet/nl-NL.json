@@ -79,7 +79,33 @@
                 "taskTriggered": "Taak met succes geactiveerd.",
                 "apiCredentialsOK": "Referenties geldig",
                 "apiCredentialsNOK": "Referenties zijn niet geldig",
-                "triggerCatalogExport": "Trigger catalogus exporteren"
+                "triggerCatalogExport": "Trigger catalogus exporteren",
+                "customerSourceTypes": {
+                    "shipping": "Verzenden",
+                    "billing": "Het factureren"
+                },
+                "shippingStatuses": {
+                    "shipped": "Verzonden",
+                    "open": "Open",
+                    "partially_shipped": "Gedeeltelijk Verzonden"
+                },
+                "shippingStatusLabel": "Verzendstatus",
+                "shippingStatusHelpText": "Selecteer de verzendstatus voor ge\u00efmporteerde bestellingen.",
+                "createCustomerLabel": "Klanten aanmaken?",
+                "createCustomerHelpText": "Of klanten aangemaakt worden bij het importeren van een bestelling.",
+                "customerGroupLabel": "Klantgroep",
+                "customerGroupHelpText": "Welke klantengroep nieuw gecre\u00eberde klanten behoren",
+                "customerSourceTypeLabel": "Type klantenbron",
+                "customerSourceTypeHelpText": "Van welke adresbron nieuw gemaakte klanten hun informatie uit halen",
+                "importExternallyFulfilledOrdersLabel": "Extern vervulde bestellingen importeren?",
+                "importExternallyFulfilledOrdersHelpText": "Of extern vervulde bestellingen geimporteerd moeten worden.",
+                "externalPaymentStatusLabel": "Betalingsstatus (extern vervulde bestelling)",
+                "externalPaymentStatusHelpText": "Welke betalingsstatus extern vervulde bestellingen hebben.",
+                "externalOrderStatusLabel": "Bestelstatus (extern vervulde bestelling)",
+                "externalOrderStatusHelpText": "Welke orderstatus extern vervulde bestellingen zullen hebben.",
+                "externalShippingStatusLabel": "Verzendstatus (extern vervulde bestelling)",
+                "externalShippingStatusHelpText": "Welke verzendstatus extern vervulde bestellingen zullen zijn.",
+                "testCredentials": "Test API-referenties"
             }
         }
     }

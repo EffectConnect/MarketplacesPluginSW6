@@ -137,6 +137,61 @@
                             </sw-entity-single-select>
                         </template>
                     </sw-inherit-wrapper>
+                    <sw-switch-field bordered v-model="connection.createCustomer"
+                                     :label="tc('createCustomerLabel')"
+                                     :helpText="tc('createCustomerHelpText')">
+                    </sw-switch-field>
+                    <sw-inherit-wrapper :helpText="tc('customerGroupHelpText')" :label="tc('customerGroupLabel')" v-show="connection.createCustomer">
+                        <template #content>
+                            <sw-entity-single-select
+                                    :placeHolder="tc('customerGroupPlaceholder')"
+                                    labelProperty="name"
+                                    valueProperty="id"
+                                    entity="customer_group"
+                                    v-model="connection.customerGroup">
+                            </sw-entity-single-select>
+                        </template>
+                    </sw-inherit-wrapper>
+                    <sw-inherit-wrapper :helpText="tc('customerSourceTypeHelpText')" :label="tc('customerSourceTypeLabel')" v-show="connection.createCustomer">
+                        <template #content>
+                            <sw-single-select
+                                    :placeholder="tc('customerSourceTypePlaceholder')"
+                                    :options="customerSourceTypes"
+                                    v-model="connection.customerSourceType">
+                            </sw-single-select>
+                        </template>
+                    </sw-inherit-wrapper>
+                    <sw-switch-field bordered v-model="connection.importExternallyFulfilledOrders"
+                                     :label="tc('importExternallyFulfilledOrdersLabel')"
+                                     :helpText="tc('importExternallyFulfilledOrdersHelpText')">
+                    </sw-switch-field>
+                    <sw-inherit-wrapper :helpText="tc('externalPaymentStatusHelpText')" :label="tc('externalPaymentStatusLabel')" v-show="connection.importExternallyFulfilledOrders">
+                        <template #content>
+                            <sw-single-select
+                                    :placeholder="tc('externalPaymentStatusPlaceholder')"
+                                    :options="paymentStatuses"
+                                    v-model="connection.externalPaymentStatus">
+                            </sw-single-select>
+                        </template>
+                    </sw-inherit-wrapper>
+                    <sw-inherit-wrapper :helpText="tc('externalOrderStatusHelpText')" :label="tc('externalOrderStatusLabel')" v-show="connection.importExternallyFulfilledOrders">
+                        <template #content>
+                            <sw-single-select
+                                    :placeholder="tc('externalOrderStatusPlaceholder')"
+                                    :options="orderStatuses"
+                                    v-model="connection.externalOrderStatus">
+                            </sw-single-select>
+                        </template>
+                    </sw-inherit-wrapper>
+                    <sw-inherit-wrapper :helpText="tc('externalShippingStatusHelpText')" :label="tc('externalShippingStatusLabel')" v-show="connection.importExternallyFulfilledOrders">
+                        <template #content>
+                            <sw-single-select
+                                    :placeholder="tc('externalShippingStatusPlaceholder')"
+                                    :options="shippingStatuses"
+                                    v-model="connection.externalShippingStatus">
+                            </sw-single-select>
+                        </template>
+                    </sw-inherit-wrapper>
                 </sw-card>
             </div>
             <sw-modal v-if="modal != null" @modal-close="modal.onCancel()">

@@ -3,6 +3,8 @@
 namespace EffectConnect\Marketplaces\Service;
 
 use EffectConnect\Marketplaces\Core\Connection\ConnectionEntity;
+use EffectConnect\Marketplaces\Helper\DefaultSettingHelper;
+use EffectConnect\Marketplaces\Setting\SettingStruct;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 
 class SettingMigrationService
@@ -49,17 +51,18 @@ class SettingMigrationService
             return;
         }
 
-        $configData = $this->systemConfigService->all($salesChannelId);
-        $configData = $configData[SettingsService::CONFIG_DOMAIN][SettingsService::CONFIG_GROUP] ?? [];
+        $configData = $this->systemConfigService->all($salesChannelId)[SettingsService::CONFIG_DOMAIN][SettingsService::CONFIG_GROUP] ?? [];
+        if (count($configData) === 0) {
+            return;
+        }
         $settingsValues = [];
         foreach ($configData as $key => $value) {
-            if (in_array($key, ['offerExportSchedule', 'orderImportSchedule', 'catalogExportSchedule'])) {
-                $value = (int)$value;
-            }
             $settingsValues[$key] = $value;
         }
-        if (count($settingsValues) === 0) {
-            return;
+        foreach(DefaultSettingHelper::getDefaults() as $key => $value) {
+            if (!isset($settingsValues[$key])) {
+                $settingsValues[$key] = $value;
+            }
         }
         if (empty($settingsValues['name'])) {
             $settingsValues['name'] = ' - ';

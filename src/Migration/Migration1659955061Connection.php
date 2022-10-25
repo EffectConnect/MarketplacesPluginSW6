@@ -41,6 +41,13 @@ CREATE TABLE IF NOT EXISTS `ec_connection` (
     `order_status` VARCHAR(255) DEFAULT NULL,
     `payment_method` VARCHAR(255) DEFAULT NULL,
     `shipping_method` VARCHAR(255) DEFAULT NULL,
+    `create_customer` TINYINT(1) DEFAULT NULL,
+    `customer_group` VARCHAR(255) DEFAULT NULL,
+    `customer_source_type` VARCHAR(255) DEFAULT NULL,
+    `import_externally_fulfilled_orders` TINYINT(1) DEFAULT NULL,
+    `external_order_status` VARCHAR(255) DEFAULT NULL,
+    `external_payment_status` VARCHAR(255) DEFAULT NULL,
+    `external_shipping_status` VARCHAR(255) DEFAULT NULL,
     `created_at` DATETIME(3) NOT NULL,
     `updated_at` DATETIME(3),
     PRIMARY KEY (`id`)

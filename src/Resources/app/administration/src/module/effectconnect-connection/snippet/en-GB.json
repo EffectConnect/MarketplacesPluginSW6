@@ -71,12 +71,38 @@
           "open": "Open",
           "in_progress": "In progress"
         },
+        "customerSourceTypes": {
+          "shipping": "Shipping",
+          "billing": "Billing"
+        },
+        "shippingStatuses": {
+          "shipped": "Shipped",
+          "open": "Open",
+          "partially_shipped": "Partially shipped"
+        },
+        "shippingStatusLabel": "Shipping status",
+        "shippingStatusHelpText": "Select the shipping status for imported orders.",
+        "createCustomerLabel": "Create customers?",
+        "createCustomerHelpText": "Whether to create customers on order import",
+        "customerGroupLabel": "Customer group",
+        "customerGroupHelpText": "Which customer group newly created customers belong to",
+        "customerSourceTypeLabel": "Customer source type",
+        "customerSourceTypeHelpText": "Which address source newly created customers get their information from",
+        "importExternallyFulfilledOrdersLabel": "Import externally fulfilled orders?",
+        "importExternallyFulfilledOrdersHelpText": "Whether to import orders that are externally fulfilled.",
+        "externalPaymentStatusLabel": "Payment status (externally fulfilled order)",
+        "externalPaymentStatusHelpText": "Which payment status externally fulfilled orders will have.",
+        "externalOrderStatusLabel": "Order status (externally fulfilled order)",
+        "externalOrderStatusHelpText": "Which order status externally fulfilled orders will have.",
+        "externalShippingStatusLabel": "Shipping status (externally fulfilled order)",
+        "externalShippingStatusHelpText": "Which shipping status externally fulfilled orders will have.",
         "paymentMethodHelpText": "Select the payment method for imported orders.",
         "paymentMethodLabel":"Payment method",
         "paymentMethodPlaceholder": "Choose a payment method...",
         "shippingMethodHelpText":"Select the shipment method for imported orders.",
         "shippingMethodLabel": "Shipment method",
         "shippingMethodPlaceholder":"Choose a shipment method...",
+        "testCredentials": "Test API credentials",
         "apiCredentialsOK": "Credentials valid",
         "apiCredentialsNOK": "Credentials are not valid",
         "triggerCatalogExport": "Trigger catalog export"

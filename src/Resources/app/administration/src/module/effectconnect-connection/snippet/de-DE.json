@@ -79,7 +79,33 @@
                 "taskTriggered": "Aufgabe erfolgreich ausgel\u00f6st.",
                 "apiCredentialsOK": "Anmeldeinformationen g\u00fcltig",
                 "apiCredentialsNOK": "Anmeldeinformationen sind nicht g\u00fcltig",
-                "triggerCatalogExport": "Ausl\u00f6ser Katalogexport"
+                "triggerCatalogExport": "Ausl\u00f6ser Katalogexport",
+                "customerSourceTypes": {
+                    "shipping": "Versand",
+                    "billing": "Abrechnung"
+                },
+                "shippingStatuses": {
+                    "shipped": "Versendet",
+                    "open": "Offen",
+                    "partially_shipped": "Zum Teil versandt"
+                },
+                "shippingStatusLabel": "Versandstatus",
+                "shippingStatusHelpText": "W\u00e4hlen Sie den Versandstatus f\u00fcr importierte Bestellungen aus.",
+                "createCustomerLabel": "Kunden schaffen?",
+                "createCustomerHelpText": "Ob Sie Kunden f\u00fcr den Einfuhr von Bestellungen erstellen m\u00f6chten",
+                "customerGroupLabel": "Kundengruppe",
+                "customerGroupHelpText": "Zu welcher Kundengruppe neu erstellte Kunden geh\u00f6ren",
+                "customerSourceTypeLabel": "Kundenquelltyp",
+                "customerSourceTypeHelpText": "Die Quelle neu erstellte Kunden ansprechen, holen ihre Informationen aus",
+                "importExternallyFulfilledOrdersLabel": "Extern erf\u00fcllte Auftr\u00e4ge importieren?",
+                "importExternallyFulfilledOrdersHelpText": "Ob extern erf\u00fcllt werden soll.",
+                "externalPaymentStatusLabel": "Zahlungsstatus (extern erf\u00fcllte Bestellung)",
+                "externalPaymentStatusHelpText": "Welcher Zahlungsstatus extern erf\u00fcllte Bestellungen haben wird.",
+                "externalOrderStatusLabel": "Bestellstatus (extern erf\u00fcllte Reihenfolge)",
+                "externalOrderStatusHelpText": "Welchen Bestellstatus extern erf\u00fcllte Bestellungen haben.",
+                "externalShippingStatusLabel": "Versandstatus (extern erf\u00fcllte Bestellung)",
+                "externalShippingStatusHelpText": "Welcher Versandstatus extern erf\u00fcllte Bestellungen haben wird.",
+                "testCredentials": "API -Anmeldeinformationen testen"
             }
         }
     }
