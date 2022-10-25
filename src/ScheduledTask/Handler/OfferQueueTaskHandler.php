@@ -23,9 +23,12 @@ class OfferQueueTaskHandler extends AbstractQueueTaskHandler
     /**
      * @var OfferTransformerService
      */
-    protected OfferTransformerService $offerTransformerService;
+    protected $offerTransformerService;
 
-    private OfferQueueExportService $offerQueueExportService;
+    /**
+     * @var OfferQueueExportService
+     */
+    private $offerQueueExportService;
 
     public function __construct(
         EntityRepositoryInterface $scheduledTaskRepository,

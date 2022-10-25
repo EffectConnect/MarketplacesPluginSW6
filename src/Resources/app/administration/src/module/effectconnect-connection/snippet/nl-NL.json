@@ -81,8 +81,8 @@
                 "apiCredentialsNOK": "Referenties zijn niet geldig",
                 "triggerCatalogExport": "Trigger catalogus exporteren",
                 "customerSourceTypes": {
-                    "shipping": "Verzenden",
-                    "billing": "Het factureren"
+                    "shipping": "Verzendadres",
+                    "billing": "Factuuradres"
                 },
                 "shippingStatuses": {
                     "shipped": "Verzonden",

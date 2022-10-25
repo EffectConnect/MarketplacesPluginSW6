@@ -440,24 +440,6 @@ class OrderTransformerService
             $orderCustomer['customerNumber'] = $customer->getCustomerNumber();
         }
 
-        try {
-            $stateId = $this->_stateMachineRegistry
-                ->getInitialState(OrderStates::STATE_MACHINE, $this->_salesChannelContext->getContext())
-                ->getId();
-        } catch (Exception $e) {
-            throw new ObtainingStateFailedException(OrderStates::STATE_MACHINE);
-        }
-
-        try {
-            $stateMachine = $this->_stateMachineRegistry->getStateMachine(OrderStates::STATE_MACHINE, $this->_salesChannelContext->getContext());
-
-            foreach ($stateMachine->getStates() as $state) {
-                if ($state->getTechnicalName() === $this->_settings->getOrderStatus()) {
-                    $stateId = $state->getId();
-                }
-            }
-        } catch (Exception $e) { }
-
         foreach ($order->getLines() as $line) {
             $orderLines[] = $this->_orderLineTransformerService->transformOrderLine($line, $orderLineIndex, $this->_salesChannelContext);
             $orderLineIndex++;

@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `ec_export_queue` (
     DEFAULT CHARSET = utf8mb4
     COLLATE = utf8mb4_unicode_ci;
 SQL;
-        $connection->executeStatement($sql);
+        $connection->executeUpdate($sql);
     }
 
     /**
@@ -46,7 +46,7 @@ SQL;
      */
     public function updateDestructive(Connection $connection): void
     {
-        $connection->executeStatement("DROP TABLE `ec_export_queue`");
+        $connection->executeUpdate("DROP TABLE `ec_export_queue`");
         $this->update($connection);
     }
 }

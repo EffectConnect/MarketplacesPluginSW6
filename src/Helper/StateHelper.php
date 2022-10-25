@@ -8,7 +8,6 @@ use Shopware\Core\System\StateMachine\StateMachineEntity;
 
 class StateHelper
 {
-
     /**
      * @param StateMachineEntity $stateMachine
      * @param string|null $name

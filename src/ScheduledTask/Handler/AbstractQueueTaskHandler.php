@@ -20,7 +20,7 @@ abstract class AbstractQueueTaskHandler extends AbstractTaskHandler
     /**
      * @var ExportQueueService
      */
-    private ExportQueueService $exportQueueService;
+    private $exportQueueService;
 
     /**
      * @param EntityRepositoryInterface $scheduledTaskRepository

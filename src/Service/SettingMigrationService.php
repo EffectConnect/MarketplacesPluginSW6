@@ -17,7 +17,7 @@ class SettingMigrationService
     protected $salesChannelService;
 
     /**
-     * SettingsService constructor.
+     * SettingMigrationService constructor.
      *
      * @param SystemConfigService $systemConfigService
      * @param ConnectionService $connectionService
@@ -46,8 +46,7 @@ class SettingMigrationService
      * @param string void
      */
     private function migrateFor(string $salesChannelId) {
-        $connection = $this->connectionService->get($salesChannelId);
-        if ($connection !== null) {
+        if ($this->connectionService->exists($salesChannelId)) {
             return;
         }
 
@@ -57,6 +56,9 @@ class SettingMigrationService
         }
         $settingsValues = [];
         foreach ($configData as $key => $value) {
+            if (in_array($key, ['offerExportSchedule', 'orderImportSchedule', 'catalogExportSchedule'])) {
+                $value = (int)$value;
+            }
             $settingsValues[$key] = $value;
         }
         foreach(DefaultSettingHelper::getDefaults() as $key => $value) {

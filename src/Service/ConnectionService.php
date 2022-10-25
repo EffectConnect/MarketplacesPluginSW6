@@ -65,6 +65,15 @@ class ConnectionService
     }
 
     /**
+     * @param string $salesChannelId
+     * @return bool
+     */
+    public function exists(string $salesChannelId): bool
+    {
+        return $this->get($salesChannelId) !== null;
+    }
+
+    /**
      * @param string $id
      * @return ConnectionEntity|null
      */
@@ -74,7 +83,7 @@ class ConnectionService
     }
 
     /**
-     * @param array|null $includes
+     * @param string[]|null $includes
      * @return ConnectionEntity[]
      */
     public function getAll(?array $includes = null): array
