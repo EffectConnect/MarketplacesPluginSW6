@@ -65,6 +65,7 @@ class CatalogExportTaskHandler extends AbstractTaskHandler
 
     public function run(): void
     {
+        /** @var CatalogExportTask $task */
         $task = $this->_task;
         $this->_logger->info('Executing catalog export task handler started.', [
             'process'       => static::LOGGER_PROCESS

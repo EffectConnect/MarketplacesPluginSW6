@@ -4,7 +4,6 @@ namespace EffectConnect\Marketplaces\Service;
 
 use EffectConnect\Marketplaces\Core\Connection\ConnectionEntity;
 use EffectConnect\Marketplaces\Helper\DefaultSettingHelper;
-use EffectConnect\Marketplaces\Setting\SettingStruct;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 
 class SettingMigrationService
