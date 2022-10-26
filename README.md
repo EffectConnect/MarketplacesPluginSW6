@@ -37,8 +37,6 @@ After installation the plugin can be activated in the Shopware 6 Extensions modu
 ## Configuration
 #### API Keys
 First create an API keyset in your EffectConnect Marketplace environment. Then go the configuration page of the EffectConnect Marketplaces plugin in your Shopware 6 webshop and set the API keys for the appropriate sales channel.
-  
-**WARNING: Never configure API keys for the "All sales channels" sales channel.** This will cause data collisions while exporting. 
 
 #### Tasks
 The automatic import, export, and cleanup can be enabled in two ways:
@@ -49,6 +47,7 @@ The automatic import, export, and cleanup can be enabled in two ways:
 0 3 * * * php {APPLICATION_PATH}/bin/console ec:export-catalog
 */30 * * * * php {APPLICATION_PATH}/bin/console ec:export-offers  
 */15 * * * * php {APPLICATION_PATH}/bin/console ec:import-orders  
+*/15 * * * * php {APPLICATION_PATH}/bin/console ec:export-shipments  
 0 * * * * php {APPLICATION_PATH}/bin/console ec:clean-exports  
 0 * * * * php {APPLICATION_PATH}/bin/console ec:clean-log  
 ```  
@@ -57,6 +56,7 @@ The cron times above can be adjusted as desired. The times above are explained b
 - **Catalog Export (ec:export-catalog)**: Every night at 3:00 AM.  
 - **Offers Export (ec:export-offers)**: Every half hour (00th minute, 30th minute).  
 - **Import Orders (ec:import-orders)**: Every 15 minutes (00th minute, 15th minute, 30th minute, 45th minute).  
+- **Export Shipments (ec:export-shipments)**: Every 15 minutes (00th minute, 15th minute, 30th minute, 45th minute).
 - **Clearing Old Exports (ec:clean-exports)**: Every hour on the hour.  
 - **Clearing Old Logs (ec:clean-log)**: Every hour on the hour.  
 

@@ -1,3 +1,10 @@
+Version 1.4.0 - 2022-10-26
+    - Added offer changes and shipments to a queue that periodically sends.
+    - Moved configuration over to custom 'Connections'.
+    - Added an interface for downloading log files.
+    - Creating a customer on order import (if setting is enabled).
+    - Importing externally fulfilled orders (if setting is enabled).
+
 Version 1.3.4 - 2022-08-19
 - Fixed a bug which could cause the content export to fail.
 
