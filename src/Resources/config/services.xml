@@ -120,14 +120,14 @@
         </service>
 
         <service id="EffectConnect\Marketplaces\Controller\TaskController" class="EffectConnect\Marketplaces\Controller\TaskController" public="true">
-            <argument type="service" id="Shopware\Core\Framework\MessageQueue\MonitoringBusDecorator"/>
+            <argument type="service" id="Symfony\Component\Messenger\MessageBusInterface"/>
             <call method="setContainer">
                 <argument type="service" id="service_container"/>
             </call>
         </service>
 
         <service id="EffectConnect\Marketplaces\Controller\LegacyTaskController" class="EffectConnect\Marketplaces\Controller\LegacyTaskController" public="true">
-            <argument type="service" id="Shopware\Core\Framework\MessageQueue\MonitoringBusDecorator"/>
+            <argument type="service" id="Symfony\Component\Messenger\MessageBusInterface"/>
             <call method="setContainer">
                 <argument type="service" id="service_container"/>
             </call>
