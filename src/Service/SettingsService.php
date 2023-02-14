@@ -61,7 +61,6 @@ class SettingsService
 
         $connection = new ConnectionEntity();
         $connection->setSalesChannelId($salesChannelId);
-        $this->connectionService->create($connection);
         return (new SettingStruct())->assign($connection->jsonSerialize());
     }
 }
