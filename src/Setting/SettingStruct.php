@@ -29,12 +29,12 @@ class SettingStruct extends Struct
     protected $name;
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $publicKey;
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $secretKey;
 
@@ -94,12 +94,12 @@ class SettingStruct extends Struct
     protected $orderStatus;
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $paymentMethod;
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $shippingMethod;
 
@@ -114,22 +114,22 @@ class SettingStruct extends Struct
     protected $importExternallyFulfilledOrders = false;
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $externalShippingStatus;
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $externalPaymentStatus;
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $externalOrderStatus;
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $customerGroup;
 
@@ -166,7 +166,7 @@ class SettingStruct extends Struct
      */
     public function getPublicKey(): string
     {
-        return $this->publicKey;
+        return (string)$this->publicKey;
     }
 
     /**
@@ -174,7 +174,7 @@ class SettingStruct extends Struct
      */
     public function getSecretKey(): string
     {
-        return $this->secretKey;
+        return (string)$this->secretKey;
     }
 
     /**
@@ -270,7 +270,7 @@ class SettingStruct extends Struct
      */
     public function getPaymentMethod(): string
     {
-        return $this->paymentMethod;
+        return (string)$this->paymentMethod;
     }
 
     /**
@@ -278,7 +278,7 @@ class SettingStruct extends Struct
      */
     public function getShippingMethod(): string
     {
-        return $this->shippingMethod;
+        return (string)$this->shippingMethod;
     }
 
     /**
@@ -286,7 +286,7 @@ class SettingStruct extends Struct
      */
     public function getCustomerGroup(): string
     {
-        return $this->customerGroup;
+        return (string)$this->customerGroup;
     }
 
     /**
@@ -318,7 +318,7 @@ class SettingStruct extends Struct
      */
     public function getExternalShippingStatus(): string
     {
-        return $this->externalShippingStatus;
+        return (string)$this->externalShippingStatus;
     }
 
     /**
@@ -326,7 +326,7 @@ class SettingStruct extends Struct
      */
     public function getExternalPaymentStatus(): string
     {
-        return $this->externalPaymentStatus;
+        return (string)$this->externalPaymentStatus;
     }
 
     /**
@@ -334,14 +334,6 @@ class SettingStruct extends Struct
      */
     public function getExternalOrderStatus(): string
     {
-        return $this->externalOrderStatus;
-    }
-
-    public function getValues(): array
-    {
-        $methods = get_class_methods($this);
-
-
-
+        return (string)$this->externalOrderStatus;
     }
 }
