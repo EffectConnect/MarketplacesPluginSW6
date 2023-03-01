@@ -181,6 +181,8 @@ final class XmlHelper
             if(is_string($value)) {
                 $value = htmlspecialchars($value);
                 $value  = $this->removeControlCharacters($value);
+            } else if (is_int($value)) {
+                $value = (string)$value;
             }
 
             $element->nodeValue = $value;
