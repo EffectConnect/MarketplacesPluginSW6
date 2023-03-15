@@ -59,6 +59,11 @@ class SettingStruct extends Struct
     protected $useFallbackTranslations;
 
     /**
+     * @var string
+     */
+    protected $salesChannelId;
+
+    /**
      * @var bool
      */
     protected $useSalesChannelDefaultLanguageAsFirstFallbackLanguage;
@@ -335,5 +340,13 @@ class SettingStruct extends Struct
     public function getExternalOrderStatus(): string
     {
         return (string)$this->externalOrderStatus;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSalesChannelId(): string
+    {
+        return $this->salesChannelId;
     }
 }
