@@ -68,12 +68,8 @@ class OfferExportTaskHandler extends AbstractTaskHandler
             'process'       => static::LOGGER_PROCESS
         ]);
 
-        /**
-         * @var SalesChannelEntity $salesChannel
-         */
-        foreach ($this->_salesChannelService->getSalesChannels() as $salesChannel) {
-            $settings = $this->_settingsService->getSettings($salesChannel->getId());
-
+        foreach ($this->_settingsService->getAllSettings() as $settings) {
+            $salesChannel = $this->_salesChannelService->getSalesChannel($settings->getSalesChannelId());
             try {
                 $this->_offerExportService->exportOffers($salesChannel);
 

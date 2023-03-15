@@ -84,7 +84,7 @@ class ImportOrders extends AbstractInteractionCommand
         $salesChannelId = $input->getArgument('sales-channel-id');
 
         try {
-            $salesChannels = $this->getSalesChannels($salesChannelId);
+            $allSettings = $this->getSettings($salesChannelId);
         } catch (Exception $e) {
             $output->writeln($e->getMessage());
 
@@ -100,11 +100,8 @@ class ImportOrders extends AbstractInteractionCommand
             return 0;
         }
 
-        /**
-         * @var SalesChannelEntity $salesChannel
-         */
-        foreach ($salesChannels as $salesChannel) {
-            $settings = $this->_settingsService->getSettings($salesChannel->getId(), $context);
+        foreach ($allSettings as $settings) {
+            $salesChannel = $this->_salesChannelService->getSalesChannel($settings->getSalesChannelId());
             $this->importOrders($salesChannel, $settings, $output, false);
             if ($settings->isImportExternallyFulfilledOrders()) {
                 $this->importOrders($salesChannel, $settings, $output, true);

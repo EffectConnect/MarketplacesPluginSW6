@@ -71,12 +71,15 @@ class CatalogExportTaskHandler extends AbstractTaskHandler
             'process'       => static::LOGGER_PROCESS
         ]);
 
-        foreach ($this->_salesChannelService->getSalesChannels() as $salesChannel) {
-            if ($task->getSalesChannelId() !== null && $task->getSalesChannelId() !== $salesChannel->getId()) {
-                continue;
-            }
+        $salesChannelId = $task->getSalesChannelId();
+        if ($salesChannelId === null) {
+            $allSettings = $this->_settingsService->getAllSettings();
+        } else {
+            $allSettings = [$this->_settingsService->getSettings($salesChannelId)];
+        }
 
-            $settings = $this->_settingsService->getSettings($salesChannel->getId());
+        foreach ($allSettings as $settings) {
+            $salesChannel = $this->_salesChannelService->getSalesChannel($settings->getSalesChannelId());
 
             try {
                 $this->_catalogExportService->exportCatalog($salesChannel);

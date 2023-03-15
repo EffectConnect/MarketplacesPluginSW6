@@ -99,11 +99,8 @@ class OrderImportTaskHandler extends AbstractTaskHandler
             'process'       => static::LOGGER_PROCESS
         ]);
 
-        /**
-         * @var SalesChannelEntity $salesChannel
-         */
-        foreach ($this->_salesChannelService->getSalesChannels() as $salesChannel) {
-            $settings = $this->_settingsService->getSettings($salesChannel->getId());
+        foreach ($this->_settingsService->getAllSettings() as $settings) {
+            $salesChannel = $this->_salesChannelService->getSalesChannel($settings->getSalesChannelId());
             $this->importOrders($salesChannel, $settings, false);
             if ($settings->isImportExternallyFulfilledOrders()) {
                 $this->importOrders($salesChannel, $settings, true);

@@ -7,6 +7,7 @@ use EffectConnect\Marketplaces\Object\SalesChannelCheckApiCredentialResult;
 use EffectConnect\Marketplaces\Service\SalesChannelService;
 use EffectConnect\Marketplaces\Service\Api\CredentialService;
 use EffectConnect\Marketplaces\Service\SettingsService;
+use EffectConnect\Marketplaces\Setting\SettingStruct;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\System\SalesChannel\SalesChannelEntity;
 use Symfony\Component\Console\Command\Command;
@@ -79,28 +80,15 @@ class CheckApiCredentials extends Command
     {
         $salesChannelId = $input->getArgument('sales-channel-id');
         $results        = [true => [], false => []];
-        $salesChannels  = [];
-
-        if (is_null($salesChannelId)) {
-            $salesChannels = $this->_salesChannelService->getSalesChannels();
+        if ($salesChannelId === null) {
+            $settings = $this->_settingsService->getAllSettings();
         } else {
-            try {
-                $salesChannels = [$this->_salesChannelService->getSalesChannel($salesChannelId)];
-            } catch (SalesChannelNotFoundException $e) {
-                $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
-                return 0;
-            }
+            $settings = [$this->_settingsService->getSettings($salesChannelId)];
         }
 
-        if (is_null($salesChannels) || empty($salesChannels)) {
-            $output->writeln(sprintf('<error>No sales channels found.</error>'));
-        }
-
-        /**
-         * @var SalesChannelEntity $salesChannel
-         */
-        foreach ($salesChannels as $salesChannel) {
-            $result = $this->checkSalesChannel($salesChannel);
+        foreach ($settings as $setting) {
+            $salesChannel = $this->_salesChannelService->getSalesChannel($setting->getSalesChannelId());
+            $result = $this->checkSalesChannel($setting, $salesChannel);
             $results[$result->isValid()][] = $result->getMessage();
         }
 
@@ -114,18 +102,12 @@ class CheckApiCredentials extends Command
     /**
      * Check if the API credentials for a specific sales channel are valid.
      *
+     * @param SettingStruct $settings
      * @param SalesChannelEntity $salesChannel
      * @return SalesChannelCheckApiCredentialResult
      */
-    protected function checkSalesChannel(SalesChannelEntity $salesChannel): SalesChannelCheckApiCredentialResult
+    protected function checkSalesChannel(SettingStruct $settings, SalesChannelEntity $salesChannel): SalesChannelCheckApiCredentialResult
     {
-        try {
-            $context = $this->_salesChannelService->getContext($salesChannel->getId());
-        } catch (SalesChannelNotFoundException $e) {
-            $context = Context::createDefaultContext();
-        }
-
-        $settings   = $this->_settingsService->getSettings($salesChannel->getId(), $context);
         $publicKey  = $settings->getPublicKey();
         $secretKey  = $settings->getSecretKey();
         $valid      = $this->_credentialService->checkApiCredentials($publicKey, $secretKey);

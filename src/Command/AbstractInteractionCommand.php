@@ -5,8 +5,7 @@ namespace EffectConnect\Marketplaces\Command;
 use EffectConnect\Marketplaces\Factory\LoggerFactory;
 use EffectConnect\Marketplaces\Interfaces\LoggerProcess;
 use EffectConnect\Marketplaces\Service\SettingsService;
-use Exception;
-use EffectConnect\Marketplaces\Exception\SalesChannelNotFoundException;
+use EffectConnect\Marketplaces\Setting\SettingStruct;
 use EffectConnect\Marketplaces\Service\SalesChannelService;
 use Monolog\Logger;
 use Shopware\Core\System\SalesChannel\SalesChannelEntity;
@@ -68,31 +67,16 @@ abstract class AbstractInteractionCommand extends Command
     }
 
     /**
-     * Get a sales channel array with one specific or all sales channels.
-     *
      * @param string|null $salesChannelId
-     * @return array|SalesChannelEntity[]
-     * @throws Exception
+     * @return SettingStruct[]
      */
-    protected function getSalesChannels(?string $salesChannelId = null)
+    protected function getSettings(?string $salesChannelId = null): array
     {
-        $salesChannels  = [];
-
-        if (is_null($salesChannelId)) {
-            $salesChannels = $this->_salesChannelService->getSalesChannels();
+        if ($salesChannelId === null) {
+            return $this->_settingsService->getAllSettings();
         } else {
-            try {
-                $salesChannels = [$this->_salesChannelService->getSalesChannel($salesChannelId)];
-            } catch (SalesChannelNotFoundException $e) {
-                throw new Exception(sprintf('<error>%s</error>', $e->getMessage()));
-            }
+            return [$this->_settingsService->getSettings($salesChannelId)];
         }
-
-        if (is_null($salesChannels) || empty($salesChannels)) {
-            throw new Exception(sprintf('<error>No sales channels found.</error>'));
-        }
-
-        return $salesChannels;
     }
 
     /**

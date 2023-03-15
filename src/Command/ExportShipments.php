@@ -9,6 +9,7 @@ use EffectConnect\Marketplaces\Interfaces\LoggerProcess;
 use EffectConnect\Marketplaces\Service\Api\ShippingExportService;
 use EffectConnect\Marketplaces\Service\ExportQueueService;
 use EffectConnect\Marketplaces\Service\SettingsService;
+use EffectConnect\Marketplaces\Setting\SettingStruct;
 use Exception;
 use EffectConnect\Marketplaces\Service\SalesChannelService;
 use Shopware\Core\Framework\Context;
@@ -88,10 +89,10 @@ class ExportShipments extends AbstractInteractionCommand
      * @param OutputInterface $output
      * @param Context|null $context
      * @return void
+     * @throws \EffectConnect\Marketplaces\Exception\SalesChannelNotFoundException
      */
-    private function executeFor(SalesChannelEntity $salesChannel, OutputInterface $output, ?Context $context = null) {
-        $settings = $this->_settingsService->getSettings($salesChannel->getId(), $context);
-
+    private function executeFor(SettingStruct $settings, OutputInterface $output, ?Context $context = null) {
+        $salesChannel = $this->_salesChannelService->getSalesChannel($settings->getSalesChannelId());
         $queueList = $this->exportQueueService->getInQueue($salesChannel->getId(), ExportQueueType::SHIPMENT);
 
         if (count($queueList) === 0) {
@@ -142,9 +143,9 @@ class ExportShipments extends AbstractInteractionCommand
         /**
          * @var SalesChannelEntity $salesChannel
          */
-        foreach ($this->getSalesChannels($input->getArgument('sales-channel-id')) as $salesChannel) {
+        foreach ($this->getSettings($input->getArgument('sales-channel-id')) as $settings) {
             try {
-                $this->executeFor($salesChannel, $output, $context);
+                $this->executeFor($settings, $output, $context);
             } catch (Throwable $e) {
                 $output->writeln($this->generateOutputMessage(false, $salesChannel, $salesChannel->getName(), 'Shipments Export', $e->getMessage()));
                 $this->_logger->critical('Executing export shipments command for sales channel failed.',

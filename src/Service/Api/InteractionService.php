@@ -66,25 +66,6 @@ class InteractionService
     }
 
     /**
-     * Get an array of all or one specified sales channel(s).
-     *
-     * @param SalesChannelEntity|null $salesChannel
-     * @return array
-     */
-    public function getSalesChannels(?SalesChannelEntity $salesChannel = null): array
-    {
-        $salesChannels = [];
-
-        if (is_null($salesChannel)) {
-            $salesChannels = $this->_salesChannelService->getSalesChannels();
-        } else {
-            $salesChannels[] = $salesChannel;
-        }
-
-        return $salesChannels;
-    }
-
-    /**
      * Get the initialized SDK based on the sales channel.
      *
      * @param string $salesChannelId
