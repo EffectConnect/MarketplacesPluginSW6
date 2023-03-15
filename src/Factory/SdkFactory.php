@@ -84,23 +84,6 @@ class SdkFactory
     }
 
     /**
-     * Initialize the SDK based on the public and secret key in the settings.
-     *
-     * @param string|null $salesChannelId
-     * @return Core
-     * @throws InvalidApiCredentialsException
-     * @throws UnknownException
-     */
-    public function initializeSdkBySalesChannel(?string $salesChannelId = null): Core
-    {
-        if ($this->_sdkCore === null) {
-            $this->_sdkCore = $this->getSdkBySalesChannel($salesChannelId);
-        }
-
-        return $this->_sdkCore;
-    }
-
-    /**
      * @return bool
      */
     public function isInitialized(): bool
