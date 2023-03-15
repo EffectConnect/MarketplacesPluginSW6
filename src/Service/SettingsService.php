@@ -25,20 +25,17 @@ class SettingsService
 
     protected $systemConfigService;
     protected $connectionService;
-    protected $settingMigrationService;
 
     /**
      * SettingsService constructor.
      *
      * @param SystemConfigService $systemConfigService
      * @param ConnectionService $connectionService
-     * @param SettingMigrationService $settingMigrationService
      */
-    public function __construct(SystemConfigService $systemConfigService, ConnectionService $connectionService, SettingMigrationService $settingMigrationService)
+    public function __construct(SystemConfigService $systemConfigService, ConnectionService $connectionService)
     {
         $this->systemConfigService = $systemConfigService;
         $this->connectionService = $connectionService;
-        $this->settingMigrationService = $settingMigrationService;
     }
 
     /**
@@ -50,10 +47,6 @@ class SettingsService
      */
     public function getSettings(string $salesChannelId, ?Context $context = null): SettingStruct
     {
-        if (!$this->settingMigrationService->isMigrated()) {
-            $this->settingMigrationService->migrate();
-        }
-
         $connection = $this->connectionService->get($salesChannelId);
         if ($connection !== null) {
             return (new SettingStruct())->assign($connection->jsonSerialize());
@@ -63,4 +56,18 @@ class SettingsService
         $connection->setSalesChannelId($salesChannelId);
         return (new SettingStruct())->assign($connection->jsonSerialize());
     }
+
+    /**
+     * @return SettingStruct[]
+     */
+    public function getAllSettings(): array
+    {
+        $settings = [];
+        foreach($this->connectionService->getAll() as $connection) {
+            $settings[] = (new SettingStruct())->assign($connection->jsonSerialize());
+        }
+        return $settings;
+    }
+
+
 }

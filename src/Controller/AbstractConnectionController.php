@@ -9,7 +9,6 @@ use EffectConnect\Marketplaces\Helper\DefaultSettingHelper;
 use EffectConnect\Marketplaces\Service\Api\CredentialService;
 use EffectConnect\Marketplaces\Service\ConnectionService;
 use EffectConnect\Marketplaces\Service\SalesChannelService;
-use EffectConnect\Marketplaces\Service\SettingMigrationService;
 use EffectConnect\Marketplaces\Setting\SettingStruct;
 use Shopware\Core\Checkout\Order\Aggregate\OrderDelivery\OrderDeliveryStates;
 use Shopware\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionStates;
@@ -26,17 +25,14 @@ abstract class AbstractConnectionController extends AbstractController
 {
     /** @var ConnectionService */
     protected $connectionService;
-    /** @var SettingMigrationService */
-    protected $settingMigrationService;
     /** @var SalesChannelService */
     protected $salesChannelService;
     /** @var CredentialService */
     protected $credentialService;
 
-    public function __construct(ConnectionService $connectionService, SettingMigrationService $settingMigrationService, SalesChannelService $salesChannelService, CredentialService $credentialService)
+    public function __construct(ConnectionService $connectionService, SalesChannelService $salesChannelService, CredentialService $credentialService)
     {
         $this->connectionService = $connectionService;
-        $this->settingMigrationService = $settingMigrationService;
         $this->salesChannelService = $salesChannelService;
         $this->credentialService = $credentialService;
     }
@@ -46,10 +42,6 @@ abstract class AbstractConnectionController extends AbstractController
      */
     public function getAll(Request $request, Context $context): JsonResponse
     {
-        if (!$this->settingMigrationService->isMigrated()) {
-            $this->settingMigrationService->migrate();
-        }
-
         $salesChannels = $this->salesChannelService->getSalesChannels();
 
         $connections = [];

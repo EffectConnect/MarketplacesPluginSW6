@@ -4,41 +4,37 @@ namespace EffectConnect\Marketplaces\Service;
 
 use EffectConnect\Marketplaces\Core\Connection\ConnectionEntity;
 use EffectConnect\Marketplaces\Helper\DefaultSettingHelper;
+use Shopware\Core\Framework\Context;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 
 class SettingMigrationService
 {
-    private const FLAG_DIR =  __DIR__ . '/../../data';
-    private const MIGRATION_FILE_PATH = self::FLAG_DIR . '/settings_migrated';
-
     protected $systemConfigService;
     protected $connectionService;
-    protected $salesChannelService;
+    protected $salesChannelRepository;
 
     /**
      * SettingMigrationService constructor.
      *
      * @param SystemConfigService $systemConfigService
      * @param ConnectionService $connectionService
-     * @param SalesChannelService $salesChannelService
+     * @param EntityRepositoryInterface $salesChannelRepository
      */
-    public function __construct(SystemConfigService $systemConfigService, ConnectionService $connectionService, SalesChannelService $salesChannelService)
+    public function __construct(SystemConfigService $systemConfigService, ConnectionService $connectionService, EntityRepositoryInterface $salesChannelRepository)
     {
         $this->systemConfigService = $systemConfigService;
         $this->connectionService = $connectionService;
-        $this->salesChannelService = $salesChannelService;
-    }
-
-    public function isMigrated(): bool
-    {
-        return file_exists(self::MIGRATION_FILE_PATH);
+        $this->salesChannelRepository = $salesChannelRepository;
     }
 
     public function migrate() {
-        foreach($this->salesChannelService->getSalesChannels() as $salesChannel) {
+        $salesChannels = $this->salesChannelRepository->search(new Criteria(), Context::createDefaultContext());
+
+        foreach($salesChannels->getEntities()->getElements() as $salesChannel) {
             $this->migrateFor($salesChannel->getId());
         }
-        $success = touch(self::MIGRATION_FILE_PATH);
     }
 
     /**

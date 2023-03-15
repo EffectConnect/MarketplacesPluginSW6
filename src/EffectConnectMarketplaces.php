@@ -2,6 +2,9 @@
 
 namespace EffectConnect\Marketplaces;
 
+use EffectConnect\Marketplaces\Helper\ShopwareVersion;
+use EffectConnect\Marketplaces\Service\ConnectionService;
+use EffectConnect\Marketplaces\Service\SettingMigrationService;
 use EffectConnect\Marketplaces\Traits\CustomFieldsTrait;
 use EffectConnect\Marketplaces\Traits\PaymentMethodTrait;
 use EffectConnect\Marketplaces\Traits\ShippingMethodTrait;
@@ -60,6 +63,24 @@ class EffectConnectMarketplaces extends Plugin
         parent::update($context);
 
         $this->addCustomFields($context->getContext(), $this->container);
+    }
+
+    private function updateTo140() {
+        $settingMigrationService = new SettingMigrationService(
+            $this->container->get('Shopware\Core\System\SystemConfig\SystemConfigService'),
+            new ConnectionService($this->container->get('ec_connection.repository')),
+            $this->container->get('sales_channel.repository')
+        );
+        $settingMigrationService->migrate();
+    }
+
+    public function postUpdate(UpdateContext $updateContext): void
+    {
+        parent::postUpdate($updateContext);
+
+        if (\version_compare($updateContext->getCurrentPluginVersion(), '1.4.0', '<')) {
+            $this->updateTo140();
+        }
     }
 
     /**

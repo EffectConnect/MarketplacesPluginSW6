@@ -5,14 +5,6 @@
         <service id="EffectConnect\Marketplaces\Service\SettingsService" class="EffectConnect\Marketplaces\Service\SettingsService">
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService" />
             <argument type="service" id="EffectConnect\Marketplaces\Service\ConnectionService" />
-            <argument type="service" id="EffectConnect\Marketplaces\Service\SettingMigrationService" />
-        </service>
-
-        <!-- Settings Service -->
-        <service id="EffectConnect\Marketplaces\Service\SettingMigrationService" class="EffectConnect\Marketplaces\Service\SettingMigrationService">
-            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService" />
-            <argument type="service" id="EffectConnect\Marketplaces\Service\ConnectionService" />
-            <argument type="service" id="EffectConnect\Marketplaces\Service\SalesChannelService" />
         </service>
 
         <!-- SDK -->
@@ -101,7 +93,6 @@
 
         <service id="EffectConnect\Marketplaces\Controller\LegacyConnectionController" class="EffectConnect\Marketplaces\Controller\LegacyConnectionController" public="true">
             <argument type="service" id="EffectConnect\Marketplaces\Service\ConnectionService" />
-            <argument type="service" id="EffectConnect\Marketplaces\Service\SettingMigrationService" />
             <argument type="service" id="EffectConnect\Marketplaces\Service\SalesChannelService" />
             <argument type="service" id="EffectConnect\Marketplaces\Service\Api\CredentialService" />
             <call method="setContainer">
@@ -111,7 +102,6 @@
 
         <service id="EffectConnect\Marketplaces\Controller\ConnectionController" class="EffectConnect\Marketplaces\Controller\ConnectionController" public="true">
             <argument type="service" id="EffectConnect\Marketplaces\Service\ConnectionService" />
-            <argument type="service" id="EffectConnect\Marketplaces\Service\SettingMigrationService" />
             <argument type="service" id="EffectConnect\Marketplaces\Service\SalesChannelService" />
             <argument type="service" id="EffectConnect\Marketplaces\Service\Api\CredentialService" />
             <call method="setContainer">
