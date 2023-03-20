@@ -1,3 +1,8 @@
+Version 1.5.0 - 2023-03-17
+- Optimized the logic for obtaining the connection settings.
+- Optimized the migration logic for 1.4.0 and lower to 1.5.0 and higher.
+- Fixed several minor bugs.
+
 Version 1.4.0 - 2022-10-26
 - Offer changes and shipments are now queued and exported in batches periodically.
 - The plugin configuration has been moved to the EffectConnect -> Connections menu item.
