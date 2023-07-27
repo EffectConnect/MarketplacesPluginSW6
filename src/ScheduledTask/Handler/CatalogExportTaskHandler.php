@@ -2,6 +2,7 @@
 
 namespace EffectConnect\Marketplaces\ScheduledTask\Handler;
 
+use EffectConnect\Marketplaces\Exception\SalesChannelNotFoundException;
 use EffectConnect\Marketplaces\Factory\LoggerFactory;
 use EffectConnect\Marketplaces\Interfaces\LoggerProcess;
 use EffectConnect\Marketplaces\ScheduledTask\CatalogExportTask;
@@ -79,7 +80,11 @@ class CatalogExportTaskHandler extends AbstractTaskHandler
         }
 
         foreach ($allSettings as $settings) {
-            $salesChannel = $this->_salesChannelService->getSalesChannel($settings->getSalesChannelId());
+            try {
+                $salesChannel = $this->_salesChannelService->getSalesChannel($settings->getSalesChannelId());
+            } catch (SalesChannelNotFoundException $e) {
+                continue;
+            }
 
             try {
                 $this->_catalogExportService->exportCatalog($salesChannel);

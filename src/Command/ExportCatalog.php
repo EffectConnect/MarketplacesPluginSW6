@@ -2,6 +2,7 @@
 
 namespace EffectConnect\Marketplaces\Command;
 
+use EffectConnect\Marketplaces\Exception\SalesChannelNotFoundException;
 use EffectConnect\Marketplaces\Factory\LoggerFactory;
 use EffectConnect\Marketplaces\Interfaces\LoggerProcess;
 use EffectConnect\Marketplaces\Service\Api\CatalogExportService;
@@ -100,7 +101,11 @@ class ExportCatalog extends AbstractInteractionCommand
 
         foreach ($allSettings as $settings) {
             try {
-                $salesChannel = $this->_salesChannelService->getSalesChannel($settings->getSalesChannelId());
+                try {
+                    $salesChannel = $this->_salesChannelService->getSalesChannel($settings->getSalesChannelId());
+                } catch (SalesChannelNotFoundException $e) {
+                    continue;
+                }
                 $this->_catalogExportService->exportCatalog($salesChannel);
 
                 $output->writeln($this->generateOutputMessage(true, $salesChannel, $settings->getName(), 'Catalog Export'));
