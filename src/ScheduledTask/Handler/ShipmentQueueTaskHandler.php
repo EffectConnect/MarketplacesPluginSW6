@@ -2,39 +2,28 @@
 
 namespace EffectConnect\Marketplaces\ScheduledTask\Handler;
 
-use EffectConnect\Marketplaces\Core\ExportQueue\Data\OrderExportQueueData;
-use EffectConnect\Marketplaces\Core\ExportQueue\ExportQueueEntity;
-use EffectConnect\Marketplaces\Core\ExportQueue\ExportQueueType;
-use EffectConnect\Marketplaces\Exception\ShipmentExportFailedException;
 use EffectConnect\Marketplaces\Factory\LoggerFactory;
-use EffectConnect\Marketplaces\Interfaces\LoggerProcess;
 use EffectConnect\Marketplaces\ScheduledTask\ShipmentQueueTask;
-use EffectConnect\Marketplaces\Service\Api\ShippingExportService;
-use EffectConnect\Marketplaces\Service\ExportQueueService;
 use EffectConnect\Marketplaces\Service\SalesChannelService;
 use EffectConnect\Marketplaces\Service\SettingsService;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
-use Shopware\Core\System\SalesChannel\SalesChannelEntity;
 
-class ShipmentQueueTaskHandler extends AbstractQueueTaskHandler
+class ShipmentQueueTaskHandler extends AbstractTaskHandler
 {
-    const LOGGER_PROCESS = LoggerProcess::EXPORT_SHIPMENT_TASK;
-
     /**
-     * @var ShippingExportService
+     * @var ShipmentQueueService
      */
-    protected $shippingExportService;
+    private $shipmentQueueService;
 
     public function __construct(
         EntityRepositoryInterface $scheduledTaskRepository,
-        ExportQueueService $exportQueueService,
-        ShippingExportService $shippingExportService,
-        SalesChannelService $salesChannelService,
-        SettingsService $settingsService,
-        LoggerFactory $loggerFactory)
+        ShipmentQueueService      $shipmentQueueService,
+        SalesChannelService       $salesChannelService,
+        SettingsService           $settingsService,
+        LoggerFactory             $loggerFactory)
     {
-        parent::__construct($scheduledTaskRepository, $exportQueueService, $salesChannelService, $settingsService, $loggerFactory);
-        $this->shippingExportService = $shippingExportService;
+        parent::__construct($scheduledTaskRepository, $salesChannelService, $settingsService, $loggerFactory);
+        $this->shipmentQueueService = $shipmentQueueService;
     }
 
     public static function getHandledMessages(): iterable
@@ -42,26 +31,9 @@ class ShipmentQueueTaskHandler extends AbstractQueueTaskHandler
         return [ShipmentQueueTask::class];
     }
 
-    /**
-     * @param ExportQueueEntity[] $queueList
-     * @param SalesChannelEntity $salesChannel
-     * @return void
-     * @throws ShipmentExportFailedException
-     */
-    protected function processQueueList(array $queueList, SalesChannelEntity $salesChannel)
-    {
-        $orderExportDataList = array_map(function($q) {return OrderExportQueueData::fromArray($q->getData());}, $queueList);
-        $lineDeliveries = [];
-        foreach($orderExportDataList as $data) {
-            foreach($data->getLineDeliveries() as $lineDelivery) {
-                $lineDeliveries[] = $lineDelivery;
-            }
-        }
-        $this->shippingExportService->exportShipment($salesChannel, $lineDeliveries);
-    }
 
-    protected function getExportQueueType(): string
+    public function run(): void
     {
-        return ExportQueueType::SHIPMENT;
+        $this->shipmentQueueService->run();
     }
 }

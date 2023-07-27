@@ -1,6 +1,6 @@
 <?php
 
-namespace EffectConnect\Marketplaces\ScheduledTask\Handler;
+namespace EffectConnect\Marketplaces\Service;
 
 use EffectConnect\Marketplaces\Core\ExportQueue\ExportQueueEntity;
 use EffectConnect\Marketplaces\Factory\LoggerFactory;
@@ -9,11 +9,12 @@ use EffectConnect\Marketplaces\ScheduledTask\Handler\AbstractTaskHandler;
 use EffectConnect\Marketplaces\Service\ExportQueueService;
 use EffectConnect\Marketplaces\Service\SalesChannelService;
 use EffectConnect\Marketplaces\Service\SettingsService;
+use Monolog\Logger;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\System\SalesChannel\SalesChannelEntity;
 use Throwable;
 
-abstract class AbstractQueueTaskHandler extends AbstractTaskHandler
+abstract class AbstractQueueService
 {
     const LOGGER_PROCESS = LoggerProcess::OTHER;
 
@@ -23,22 +24,28 @@ abstract class AbstractQueueTaskHandler extends AbstractTaskHandler
     private $exportQueueService;
 
     /**
-     * @param EntityRepositoryInterface $scheduledTaskRepository
+     * @var SalesChannelService
+     */
+    private $salesChannelService;
+
+    /**
+     * @var Logger
+     */
+    private $logger;
+
+    /**
      * @param ExportQueueService $exportQueueService
      * @param SalesChannelService $salesChannelService
-     * @param SettingsService $settingsService
      * @param LoggerFactory $loggerFactory
      */
     public function __construct(
-        EntityRepositoryInterface $scheduledTaskRepository,
         ExportQueueService $exportQueueService,
         SalesChannelService $salesChannelService,
-        SettingsService $settingsService,
         LoggerFactory $loggerFactory)
     {
-        parent::__construct($scheduledTaskRepository, $salesChannelService, $settingsService, $loggerFactory);
         $this->exportQueueService = $exportQueueService;
-        $this->_logger = $this->_loggerFactory::createLogger(static::LOGGER_PROCESS);
+        $this->salesChannelService = $salesChannelService;
+        $this->logger = $loggerFactory::createLogger(static::LOGGER_PROCESS);
     }
 
     private function getLogContext(SalesChannelEntity $salesChannel, array $additions = []): array
@@ -54,22 +61,22 @@ abstract class AbstractQueueTaskHandler extends AbstractTaskHandler
 
     public function run(): void
     {
-        foreach ($this->_salesChannelService->getSalesChannels() as $salesChannel) {
+        foreach ($this->salesChannelService->getSalesChannels() as $salesChannel) {
             $queueList = $this->exportQueueService->getInQueue($salesChannel->getId(), $this->getExportQueueType(), $this->getLimit());
 
             if (count($queueList) === 0) {
-                $this->_logger->info('No queue items to export.', $this->getLogContext($salesChannel));
+                $this->logger->info('No queue items to export.', $this->getLogContext($salesChannel));
                 continue;
             }
 
             $ids = array_values(array_map(function($q) {return $q->getId();}, $queueList));
             $this->exportQueueService->start($ids);
-            $this->_logger->info(count($ids) . ' queue items started exporting.', $this->getLogContext($salesChannel));
+            $this->logger->info(count($ids) . ' queue items started exporting.', $this->getLogContext($salesChannel));
             try {
                 $this->processQueueList($queueList, $salesChannel);
-                $this->_logger->info(count($ids) . ' queue items exported.', $this->getLogContext($salesChannel));
+                $this->logger->info(count($ids) . ' queue items exported.', $this->getLogContext($salesChannel));
             } catch (Throwable $e) {
-                $this->_logger->error(count($ids) . ' queue items failed to export.',
+                $this->logger->error(count($ids) . ' queue items failed to export.',
                     $this->getLogContext($salesChannel, ['message' => $e->getMessage()])
                 );
             } finally {

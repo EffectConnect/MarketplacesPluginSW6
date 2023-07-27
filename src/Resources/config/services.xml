@@ -265,6 +265,18 @@
             <argument type="service" id="EffectConnect\Marketplaces\Factory\LoggerFactory" />
         </service>
 
+        <!-- Console Command - Run Offer Queue -->
+        <service id="EffectConnect\Marketplaces\Command\RunOfferQueue">
+            <tag name="console.command" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\OfferQueueService" />
+        </service>
+
+        <!-- Console Command - Run Shipment Queue -->
+        <service id="EffectConnect\Marketplaces\Command\RunShipmentQueue">
+            <tag name="console.command" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\ShipmentQueueService" />
+        </service>
+
         <!-- Order Shipped Subscriber -->
         <service id="EffectConnect\Marketplaces\Subscriber\OrderShippedSubscriber" class="EffectConnect\Marketplaces\Subscriber\OrderShippedSubscriber">
             <argument type="service" id="order_delivery.repository" />
@@ -359,8 +371,7 @@
         <!-- Offer Queue Task Handler -->
         <service id="EffectConnect\Marketplaces\ScheduledTask\Handler\OfferQueueTaskHandler">
             <argument type="service" id="scheduled_task.repository" />
-            <argument type="service" id="EffectConnect\Marketplaces\Service\ExportQueueService" />
-            <argument type="service" id="EffectConnect\Marketplaces\Service\Api\OfferQueueExportService" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\OfferQueueService" />
             <argument type="service" id="EffectConnect\Marketplaces\Service\SalesChannelService" />
             <argument type="service" id="EffectConnect\Marketplaces\Service\SettingsService" />
             <argument type="service" id="EffectConnect\Marketplaces\Factory\LoggerFactory" />
@@ -370,8 +381,7 @@
         <!-- Shipment Queue Task Handler -->
         <service id="EffectConnect\Marketplaces\ScheduledTask\Handler\ShipmentQueueTaskHandler">
             <argument type="service" id="scheduled_task.repository" />
-            <argument type="service" id="EffectConnect\Marketplaces\Service\ExportQueueService" />
-            <argument type="service" id="EffectConnect\Marketplaces\Service\Api\ShippingExportService" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\ShipmentQueueService" />
             <argument type="service" id="EffectConnect\Marketplaces\Service\SalesChannelService" />
             <argument type="service" id="EffectConnect\Marketplaces\Service\SettingsService" />
             <argument type="service" id="EffectConnect\Marketplaces\Factory\LoggerFactory" />
@@ -384,6 +394,20 @@
 
         <service id="EffectConnect\Marketplaces\Service\ExportQueueService" class="EffectConnect\Marketplaces\Service\ExportQueueService">
             <argument type="service" id="ec_export_queue.repository" />
+        </service>
+
+        <service id="EffectConnect\Marketplaces\Service\OfferQueueService" class="EffectConnect\Marketplaces\Service\OfferQueueService">
+            <argument type="service" id="EffectConnect\Marketplaces\Service\ExportQueueService" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\Api\OfferQueueExportService" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\SalesChannelService" />
+            <argument type="service" id="EffectConnect\Marketplaces\Factory\LoggerFactory" />
+        </service>
+
+        <service id="EffectConnect\Marketplaces\Service\ShipmentQueueService" class="EffectConnect\Marketplaces\Service\ShipmentQueueService">
+            <argument type="service" id="EffectConnect\Marketplaces\Service\ExportQueueService" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\Api\ShippingExportService" />
+            <argument type="service" id="EffectConnect\Marketplaces\Service\SalesChannelService" />
+            <argument type="service" id="EffectConnect\Marketplaces\Factory\LoggerFactory" />
         </service>
 
         <service id="EffectConnect\Marketplaces\Subscriber\ProductChangeSubscriber" class="EffectConnect\Marketplaces\Subscriber\ProductChangeSubscriber">
