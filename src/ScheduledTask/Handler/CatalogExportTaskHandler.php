@@ -52,7 +52,6 @@ class CatalogExportTaskHandler extends AbstractTaskHandler
         parent::__construct($scheduledTaskRepository, $salesChannelService, $settingsService, $loggerFactory);
 
         $this->_catalogExportService    = $catalogExportService;
-        $this->_logger                  = $this->_loggerFactory::createLogger(static::LOGGER_PROCESS);
     }
 
     /**
@@ -64,13 +63,10 @@ class CatalogExportTaskHandler extends AbstractTaskHandler
         return [ CatalogExportTask::class ];
     }
 
-    public function run(): void
+    public function runTask(): void
     {
         /** @var CatalogExportTask $task */
         $task = $this->_task;
-        $this->_logger->info('Executing catalog export task handler started.', [
-            'process'       => static::LOGGER_PROCESS
-        ]);
 
         $salesChannelId = $task->getSalesChannelId();
         if ($salesChannelId === null) {
@@ -109,8 +105,5 @@ class CatalogExportTaskHandler extends AbstractTaskHandler
                 ]);
             }
         }
-        $this->_logger->info('Executing catalog export task handler finished.', [
-            'process'       => static::LOGGER_PROCESS
-        ]);
     }
 }

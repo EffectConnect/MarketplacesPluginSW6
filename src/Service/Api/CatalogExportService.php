@@ -94,8 +94,7 @@ class CatalogExportService extends AbstractApiService
         }
 
         try {
-            $file = $this->_catalogTransformerService
-                ->buildCatalogXmlForSalesChannel($salesChannel);
+            $file = $this->_catalogTransformerService->buildCatalogXmlForSalesChannel($salesChannel);
         } catch (Exception $e) {
             $this->_logger->error('Failed to build the catalog XML (or finding the sales channel).', [
                 'process'       => static::LOGGER_PROCESS,
@@ -116,6 +115,8 @@ class CatalogExportService extends AbstractApiService
 
             throw new CatalogExportFailedException($salesChannel->getId());
         }
+        // just to avoid actual calls
+        return;
 
         try {
             $this->productCreateCall($core, $file);

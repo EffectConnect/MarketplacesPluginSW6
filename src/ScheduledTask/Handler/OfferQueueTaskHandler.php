@@ -3,13 +3,17 @@
 namespace EffectConnect\Marketplaces\ScheduledTask\Handler;
 
 use EffectConnect\Marketplaces\Factory\LoggerFactory;
+use EffectConnect\Marketplaces\Interfaces\LoggerProcess;
 use EffectConnect\Marketplaces\ScheduledTask\OfferQueueTask;
+use EffectConnect\Marketplaces\Service\OfferQueueService;
 use EffectConnect\Marketplaces\Service\SalesChannelService;
 use EffectConnect\Marketplaces\Service\SettingsService;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 
 class OfferQueueTaskHandler extends AbstractTaskHandler
 {
+    protected const LOGGER_PROCESS = LoggerProcess::OFFER_CHANGE_TASK;
+
     /**
      * @var OfferQueueService
      */
@@ -31,7 +35,7 @@ class OfferQueueTaskHandler extends AbstractTaskHandler
         return [OfferQueueTask::class];
     }
 
-    public function run(): void
+    public function runTask(): void
     {
         $this->offerQueueService->run();
     }

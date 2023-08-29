@@ -218,6 +218,12 @@
             <argument type="service" id="EffectConnect\Marketplaces\Service\SalesChannelService" />
         </service>
 
+        <!-- Console Command - Reset Failed Tasks -->
+        <service id="EffectConnect\Marketplaces\Command\ResetFailedTasks">
+            <tag name="console.command" />
+            <argument type="service" id="scheduled_task.repository" />
+        </service>
+
         <!-- Console Command - Export Catalog -->
         <service id="EffectConnect\Marketplaces\Command\ExportCatalog">
             <tag name="console.command" />

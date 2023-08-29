@@ -20,9 +20,6 @@ use Shopware\Core\System\SalesChannel\SalesChannelEntity;
  */
 class OrderImportTaskHandler extends AbstractTaskHandler
 {
-    /**
-     * The logger process for this service.
-     */
     protected const LOGGER_PROCESS = LoggerProcess::IMPORT_ORDERS;
 
     /**
@@ -47,9 +44,7 @@ class OrderImportTaskHandler extends AbstractTaskHandler
         OrderImportService $orderImportService
     ) {
         parent::__construct($scheduledTaskRepository, $salesChannelService, $settingsService, $loggerFactory);
-
         $this->_orderImportService  = $orderImportService;
-        $this->_logger              = $this->_loggerFactory::createLogger(static::LOGGER_PROCESS);
     }
 
     /**
@@ -93,12 +88,8 @@ class OrderImportTaskHandler extends AbstractTaskHandler
     /**
      * @inheritDoc
      */
-    public function run(): void
+    public function runTask(): void
     {
-        $this->_logger->info('Executing order import task handler started.', [
-            'process'       => static::LOGGER_PROCESS
-        ]);
-
         foreach ($this->_settingsService->getAllSettings() as $settings) {
             $salesChannel = $this->_salesChannelService->getSalesChannel($settings->getSalesChannelId());
             $this->importOrders($salesChannel, $settings, false);

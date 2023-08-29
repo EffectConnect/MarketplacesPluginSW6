@@ -3,6 +3,7 @@
 namespace EffectConnect\Marketplaces\ScheduledTask\Handler;
 
 use EffectConnect\Marketplaces\Factory\LoggerFactory;
+use EffectConnect\Marketplaces\Interfaces\LoggerProcess;
 use EffectConnect\Marketplaces\ScheduledTask\AbstractTask;
 use EffectConnect\Marketplaces\Service\SalesChannelService;
 use EffectConnect\Marketplaces\Service\SettingsService;
@@ -17,6 +18,8 @@ use Throwable;
  */
 abstract class AbstractTaskHandler extends ScheduledTaskHandler
 {
+    protected const LOGGER_PROCESS = LoggerProcess::OTHER;
+
     /**
      * @var SalesChannelService
      */
@@ -61,6 +64,28 @@ abstract class AbstractTaskHandler extends ScheduledTaskHandler
         $this->_salesChannelService = $salesChannelService;
         $this->_settingsService     = $settingsService;
         $this->_loggerFactory       = $loggerFactory;
+        $this->_logger              = $this->_loggerFactory::createLogger(static::LOGGER_PROCESS);
+    }
+
+    protected abstract function runTask(): void;
+
+    public function run(): void
+    {
+        try {
+            $this->_logger->info('Executing task handler '.self::class.' started.', [
+                'process'       => static::LOGGER_PROCESS
+            ]);
+
+            $this->runTask();
+        } catch (\Throwable $e) {
+            $this->_logger->critical('Executing task handler '.self::class.' failed (unknown error)', [
+                'process'       => static::LOGGER_PROCESS,
+                'message'       => $e->getMessage(),
+            ]);
+        }
+        $this->_logger->info('Executing task handler '.self::class.' ended.', [
+            'process'       => static::LOGGER_PROCESS
+        ]);
     }
 
     /**

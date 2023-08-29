@@ -18,9 +18,6 @@ use Shopware\Core\System\SalesChannel\SalesChannelEntity;
  */
 class OfferExportTaskHandler extends AbstractTaskHandler
 {
-    /**
-     * The logger process for this service.
-     */
     protected const LOGGER_PROCESS = LoggerProcess::EXPORT_OFFERS;
 
     /**
@@ -62,12 +59,8 @@ class OfferExportTaskHandler extends AbstractTaskHandler
     /**
      * @inheritDoc
      */
-    public function run(): void
+    public function runTask(): void
     {
-        $this->_logger->info('Executing offer export task handler started.', [
-            'process'       => static::LOGGER_PROCESS
-        ]);
-
         foreach ($this->_settingsService->getAllSettings() as $settings) {
             $salesChannel = $this->_salesChannelService->getSalesChannel($settings->getSalesChannelId());
             try {
@@ -93,9 +86,5 @@ class OfferExportTaskHandler extends AbstractTaskHandler
                 ]);
             }
         }
-
-        $this->_logger->info('Executing offer export task handler ended.', [
-            'process'       => static::LOGGER_PROCESS
-        ]);
     }
 }

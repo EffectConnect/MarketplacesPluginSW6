@@ -3,13 +3,18 @@
 namespace EffectConnect\Marketplaces\ScheduledTask\Handler;
 
 use EffectConnect\Marketplaces\Factory\LoggerFactory;
+use EffectConnect\Marketplaces\Interfaces\LoggerProcess;
 use EffectConnect\Marketplaces\ScheduledTask\ShipmentQueueTask;
 use EffectConnect\Marketplaces\Service\SalesChannelService;
 use EffectConnect\Marketplaces\Service\SettingsService;
+use EffectConnect\Marketplaces\Service\ShipmentQueueService;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 
 class ShipmentQueueTaskHandler extends AbstractTaskHandler
 {
+    protected const LOGGER_PROCESS = LoggerProcess::EXPORT_SHIPMENT_TASK;
+
+
     /**
      * @var ShipmentQueueService
      */
@@ -32,7 +37,7 @@ class ShipmentQueueTaskHandler extends AbstractTaskHandler
     }
 
 
-    public function run(): void
+    public function runTask(): void
     {
         $this->shipmentQueueService->run();
     }
