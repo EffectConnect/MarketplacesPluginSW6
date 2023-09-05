@@ -50,7 +50,7 @@ class AttributesHelper
      * @param $values
      * @return array|null
      */
-    public function getStaticAttributeArray(string $name, $values): ?array
+    public function getStaticAttributeArray(string $name, $values, array $translations = null): ?array
     {
         if (is_null($name) || empty($name) || is_null($values) || is_object($values) || empty($values)) {
             return null;
@@ -65,7 +65,11 @@ class AttributesHelper
         $attributeArray = $this->getAttributeArrayFormat($this->getCodeFromString($name));
 
         foreach ($this->_languages->getLanguageCodes() as $languageCode) {
-            $this->addXmlValue($attributeArray['names']['name'], $name, $languageCode);
+            if ($translations && isset($translations[$languageCode])) {
+                $this->addXmlValue($attributeArray['names']['name'], $translations[$languageCode], $languageCode);
+            } else {
+                $this->addXmlValue($attributeArray['names']['name'], $name, $languageCode);
+            }
         }
 
         foreach ($values as $value) {

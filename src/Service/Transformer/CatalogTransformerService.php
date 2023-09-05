@@ -4,7 +4,6 @@ namespace EffectConnect\Marketplaces\Service\Transformer;
 
 use DOMException;
 use EffectConnect\Marketplaces\Exception\FileCreationFailedException;
-use EffectConnect\Marketplaces\Exception\NoProductsFoundException;
 use EffectConnect\Marketplaces\Exception\SalesChannelNotFoundException;
 use EffectConnect\Marketplaces\Factory\LoggerFactory;
 use EffectConnect\Marketplaces\Factory\SdkFactory;
@@ -30,10 +29,14 @@ use Shopware\Core\Content\Product\ProductCollection;
 use Shopware\Core\Content\Product\ProductEntity;
 use Shopware\Core\Content\Rule\Aggregate\RuleCondition\RuleConditionEntity;
 use Shopware\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface;
+use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\Dbal\Common\SalesChannelRepositoryIterator;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
+use Shopware\Core\System\CustomField\CustomFieldEntity;
 use Shopware\Core\System\SalesChannel\Entity\SalesChannelRepositoryInterface;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Core\System\SalesChannel\SalesChannelEntity;
@@ -151,6 +154,11 @@ class CatalogTransformerService
     protected $_attributesHelper;
 
     /**
+     * @var EntityRepositoryInterface
+     */
+    private $_customFieldRepository;
+
+    /**
      * CatalogTransformerService constructor.
      *
      * @param SdkFactory $sdkFactory
@@ -172,7 +180,8 @@ class CatalogTransformerService
         LoggerFactory $loggerFactory,
         SettingsService $settingsService,
         LanguagesService $languagesService,
-        SeoUrlPlaceholderHandlerInterface $seoUrlService
+        SeoUrlPlaceholderHandlerInterface $seoUrlService,
+        EntityRepositoryInterface $customFieldRepository
     ) {
         $this->_sdkFactory                  = $sdkFactory;
         $this->_productRepository           = $productRepository;
@@ -183,6 +192,7 @@ class CatalogTransformerService
         $this->_settingsService             = $settingsService;
         $this->_languagesService            = $languagesService;
         $this->_seoUrlService               = $seoUrlService;
+        $this->_customFieldRepository       = $customFieldRepository;
     }
 
     private function addProductResultToXml(EntitySearchResult $productResult) {
@@ -265,6 +275,7 @@ class CatalogTransformerService
         }
 
         $this->_xmlHelper->endTransaction();
+        $this->cachedLabels = [];
         return realpath($this->_fileLocation);
     }
 
@@ -358,8 +369,7 @@ class CatalogTransformerService
     protected function getProductArray(ProductEntity $product): array
     {
         $productArray                   = [];
-        $productArray['identifier']     = [ '_cdata' => strval($product->getId())];
-        $productArray['brand']          = '';
+        $productArray['identifier']     = [ '_cdata' => $product->getId()];
         $productArray['categories']     = [
             'category'  => $this->_categoryTransformerService->getProductCategoryTree($product, $this->_salesChannelContext, $this->_languages)
         ];
@@ -869,7 +879,46 @@ class CatalogTransformerService
         $attributes[]   = $this->_attributesHelper->getStaticTranslatableAttributeArray('Meta Description', $product, 'metaDescription');
         $attributes[]   = $this->_attributesHelper->getStaticTranslatableAttributeArray('Keywords', $product, 'keywords');
 
+        $attributes = array_merge($attributes, $this->getCustomFieldAttributes($product));
         return $this->_attributesHelper->mergeAttributes(array_filter($attributes));
+    }
+
+    private $cachedLabels = [];
+
+    private function fetchCustomFieldLabels(string $key): array
+    {
+        $criteria = (new Criteria())->addFilter((new EqualsFilter('name', $key)));
+        /** @var CustomFieldEntity $customFieldSet */
+        $customFieldSet = $this->_customFieldRepository->search($criteria, Context::createDefaultContext())->first();
+        $labels = [];
+        if ($customFieldSet !== null) {
+            foreach ($customFieldSet->getConfig()['label'] as $language => $label) {
+                $labels[explode('-', $language)[0]] = $label;
+            }
+        }
+        return $labels;
+    }
+
+    private function getCustomFieldLabels(string $key) {
+        if (isset($this->cachedLabels[$key])) {
+            return $this->cachedLabels[$key];
+        }
+        try {
+            $labels = $this->fetchCustomFieldLabels($key);
+        } catch (\Throwable $e) {
+            $labels = [];
+        }
+        $this->cachedLabels[$key] = $labels;
+        return $labels;
+    }
+
+    private function getCustomFieldAttributes(ProductEntity $product): array
+    {
+        $attributes = [];
+        foreach($product->getCustomFields() ?: [] as $key => $value) {
+            $attributes[] = $this->_attributesHelper->getStaticAttributeArray($key, $value, $this->getCustomFieldLabels($key));
+        }
+        return $attributes;
     }
 
     /**
