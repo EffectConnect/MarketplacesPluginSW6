@@ -115,8 +115,6 @@ class CatalogExportService extends AbstractApiService
 
             throw new CatalogExportFailedException($salesChannel->getId());
         }
-        // just to avoid actual calls
-        return;
 
         try {
             $this->productCreateCall($core, $file);
