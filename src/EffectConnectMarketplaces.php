@@ -2,7 +2,6 @@
 
 namespace EffectConnect\Marketplaces;
 
-use EffectConnect\Marketplaces\Helper\ShopwareVersion;
 use EffectConnect\Marketplaces\Service\ConnectionService;
 use EffectConnect\Marketplaces\Service\SettingMigrationService;
 use EffectConnect\Marketplaces\Traits\CustomFieldsTrait;
