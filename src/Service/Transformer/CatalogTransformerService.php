@@ -170,6 +170,7 @@ class CatalogTransformerService
      * @param SettingsService $settingsService
      * @param LanguagesService $languagesService
      * @param SeoUrlPlaceholderHandlerInterface $seoUrlService
+     * @param EntityRepositoryInterface $customFieldRepository
      */
     public function __construct(
         SdkFactory $sdkFactory,
