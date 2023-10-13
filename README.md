@@ -24,17 +24,16 @@ Use this plugin to connect your Shopware 6 webshop with EffectConnect Marketplac
     + [Tasks](#tasks)
 
 ## Installation
-You can install the EffectConnect Marketplaces Shopware 6 Plugin using 2 possible methods:
+You can install the EffectConnect Marketplaces Shopware 6 Plugin using the ZIP installation method.
 
-##### 1. Shopware Store (recommended)
-In the back-end of your Shopware 6 webshop, go to Extensions -> Store and search for EffectConnect Marketplaces. Then install the plugin from there and follow the steps.  
-*Note: This method is highly recommended, because you will receive updates automatically.*
-
-##### 2. ZIP upload
+##### ZIP upload
 In the back-end of your Shopware 6 webshop, go to Extensions -> My Extensions and click the upload extension button. Then upload the ZIP-file which can be downloaded from the GitHub releases page of this project.
 
 #### Activation
 After installation the plugin can be activated in the Shopware 6 Extensions module.
+
+#### Updating
+In Shopware versions below 6.4.17 it's necessary to run the scheduled-task:register command after plug-in updates.
 
 ## Configuration
 #### API Keys
@@ -47,19 +46,23 @@ The automatic import, export, and cleanup can be enabled in two ways:
 
 ```bash
 0 3 * * * php {APPLICATION_PATH}/bin/console ec:export-catalog
-*/30 * * * * php {APPLICATION_PATH}/bin/console ec:export-offers  
-*/15 * * * * php {APPLICATION_PATH}/bin/console ec:import-orders  
-*/15 * * * * php {APPLICATION_PATH}/bin/console ec:export-shipments  
-0 * * * * php {APPLICATION_PATH}/bin/console ec:clean-exports  
-0 * * * * php {APPLICATION_PATH}/bin/console ec:clean-log  
-```  
+*/30 * * * * php {APPLICATION_PATH}/bin/console ec:export-offers
+*/15 * * * * php {APPLICATION_PATH}/bin/console ec:import-orders
+*/15 * * * * php {APPLICATION_PATH}/bin/console ec:export-shipments
+0 * * * * php {APPLICATION_PATH}/bin/console ec:clean-exports
+0 * * * * php {APPLICATION_PATH}/bin/console ec:clean-log
+* * * * * php {APPLICATION_PATH}/bin/console ec:run-shipment-queue
+* * * * * php {APPLICATION_PATH}/bin/console ec:run-offer-queue
+```
 
-The cron times above can be adjusted as desired. The times above are explained below:  
-- **Catalog Export (ec:export-catalog)**: Every night at 3:00 AM.  
-- **Offers Export (ec:export-offers)**: Every half hour (00th minute, 30th minute).  
-- **Import Orders (ec:import-orders)**: Every 15 minutes (00th minute, 15th minute, 30th minute, 45th minute).  
-- **Export Shipments (ec:export-shipments)**: Every 15 minutes (00th minute, 15th minute, 30th minute, 45th minute).
-- **Clearing Old Exports (ec:clean-exports)**: Every hour on the hour.  
-- **Clearing Old Logs (ec:clean-log)**: Every hour on the hour.  
+The cron times above can be adjusted as desired. The times above are explained below:
+- **Catalog export (ec:export-catalog)**: Every night at 3:00 AM.
+- **Offers export (ec:export-offers)**: Every half hour (00th minute, 30th minute).
+- **Import orders (ec:import-orders)**: Every 15 minutes (00th minute, 15th minute, 30th minute, 45th minute).
+- **Export shipments (ec:export-shipments)**: Every 15 minutes (00th minute, 15th minute, 30th minute, 45th minute).
+- **Clearing old exports (ec:clean-exports)**: Every hour on the hour.
+- **Clearing old logs (ec:clean-log)**: Every hour on the hour.
+- **Exports all queued shipments (ec:run-shipment-queue)**: Every minute.
+- **Exports all queued offer changes (ec:run-offer-queue)**: Every minute.
 
 *Note: In older versions of Shopware 6 the extensions module is located under Settings -> System -> Plugins.*
