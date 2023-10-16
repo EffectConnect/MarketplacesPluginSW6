@@ -186,7 +186,7 @@ class CustomerTransformerService
 
         $country    = $this->getCountry($orderAddress->getCountry(), $context);
         $state      = $this->getCountryState($orderAddress->getState(), $country->getId(), (boolval($country->get('forceStateInRegistration') ?? false)), $context);
-        $address    = $orderAddress->getStreet() . ' ' . $orderAddress->getHouseNumber() . $orderAddress->getHouseNumberExtension();
+        $address    = $orderAddress->getStreet() . ' ' . $orderAddress->getHouseNumber() . ' ' . $orderAddress->getHouseNumberExtension();
 
         $customFields = [
             CustomFieldService::CUSTOM_FIELD_KEY_ORDER_ADDRESS_EMAIL        => $orderAddress->getEmail(),
