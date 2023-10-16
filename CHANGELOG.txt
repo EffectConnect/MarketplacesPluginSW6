@@ -1,6 +1,7 @@
 Version 1.6.0 - 2023-10-13
 - Fixed several minor bugs.
 - Added support for custom fields.
+- Added space between housenumber and housenumber extension.
 - Updated README.
 
 Version 1.5.0 - 2023-03-17
