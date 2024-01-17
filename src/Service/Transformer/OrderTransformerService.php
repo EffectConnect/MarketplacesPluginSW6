@@ -54,7 +54,7 @@ use Shopware\Core\Checkout\Payment\PaymentMethodEntity;
 use Shopware\Core\Checkout\Shipping\ShippingMethodEntity;
 use Shopware\Core\Defaults;
 use Shopware\Core\Framework\Context;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
@@ -78,7 +78,7 @@ class OrderTransformerService
     protected const LOGGER_PROCESS = LoggerProcess::IMPORT_ORDERS;
 
     /**
-     * @var EntityRepositoryInterface
+     * @var EntityRepository
      */
     protected $_orderRepository;
 
@@ -93,17 +93,17 @@ class OrderTransformerService
     protected $_stateMachineRegistry;
 
     /**
-     * @var EntityRepositoryInterface
+     * @var EntityRepository
      */
     protected $_currencyRepository;
 
     /**
-     * @var EntityRepositoryInterface
+     * @var EntityRepository
      */
     protected $_paymentRepository;
 
     /**
-     * @var EntityRepositoryInterface
+     * @var EntityRepository
      */
     protected $_shipmentRepository;
 
@@ -148,7 +148,7 @@ class OrderTransformerService
     protected $_settingsService;
 
     /**
-     * @var EntityRepositoryInterface
+     * @var EntityRepository
      */
     protected $_orderTransactionRepository;
 
@@ -175,12 +175,12 @@ class OrderTransformerService
     /**
      * OrderTransformerService constructor.
      *
-     * @param EntityRepositoryInterface $orderRepository
+     * @param EntityRepository $orderRepository
      * @param SalesChannelService $salesChannelService
      * @param StateMachineRegistry $stateMachineRegistry
-     * @param EntityRepositoryInterface $currencyRepository
-     * @param EntityRepositoryInterface $paymentRepository
-     * @param EntityRepositoryInterface $shipmentRepository
+     * @param EntityRepository $currencyRepository
+     * @param EntityRepository $paymentRepository
+     * @param EntityRepository $shipmentRepository
      * @param CustomerTransformerService $customerTransformerService
      * @param OrderLineTransformerService $orderLineTransformerService
      * @param NumberRangeValueGeneratorInterface $numberRangeValueGenerator
@@ -189,15 +189,15 @@ class OrderTransformerService
      * @param AmountCalculator $amountCalculator
      * @param LoggerFactory $loggerFactory
      * @param SettingsService $settingsService
-     * @param EntityRepositoryInterface $orderTransactionRepository
+     * @param EntityRepository $orderTransactionRepository
      */
     public function __construct(
-        EntityRepositoryInterface $orderRepository,
+        EntityRepository $orderRepository,
         SalesChannelService $salesChannelService,
         StateMachineRegistry $stateMachineRegistry,
-        EntityRepositoryInterface $currencyRepository,
-        EntityRepositoryInterface $paymentRepository,
-        EntityRepositoryInterface $shipmentRepository,
+        EntityRepository $currencyRepository,
+        EntityRepository $paymentRepository,
+        EntityRepository $shipmentRepository,
         CustomerTransformerService $customerTransformerService,
         OrderLineTransformerService $orderLineTransformerService,
         NumberRangeValueGeneratorInterface $numberRangeValueGenerator,
@@ -206,7 +206,7 @@ class OrderTransformerService
         AmountCalculator $amountCalculator,
         LoggerFactory $loggerFactory,
         SettingsService $settingsService,
-        EntityRepositoryInterface $orderTransactionRepository
+        EntityRepository $orderTransactionRepository
     ) {
         $this->_orderRepository             = $orderRepository;
         $this->_salesChannelService         = $salesChannelService;
@@ -501,12 +501,12 @@ class OrderTransformerService
             'campaignCode'      => null,
             'customerComment'   => null,
             'paymentMethodId'   => $paymentMethod->getId(),
-            'item_rounding'     => [
+            'itemRounding'     => [
                 'decimals'          => 2,
                 'interval'          => 0.01,
                 'roundForNet'       => true,
             ],
-            'total_rounding'    => [
+            'totalRounding'    => [
                 'decimals'          => 2,
                 'interval'          => 0.01,
                 'roundForNet'       => true,

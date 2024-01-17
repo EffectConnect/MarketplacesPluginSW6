@@ -4,7 +4,7 @@ namespace EffectConnect\Marketplaces\Command;
 
 use EffectConnect\Marketplaces\Helper\ExportsCleaner;
 use Shopware\Core\Framework\Context;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskDefinition;
@@ -32,11 +32,11 @@ class ResetFailedTasks extends Command
     }
 
     /**
-     * @var EntityRepositoryInterface
+     * @var EntityRepository
      */
     protected $scheduledTaskRepository;
 
-    public function __construct(EntityRepositoryInterface $scheduledTaskRepository)
+    public function __construct(EntityRepository $scheduledTaskRepository)
     {
         parent::__construct();
         $this->scheduledTaskRepository = $scheduledTaskRepository;

@@ -11,10 +11,10 @@ use EffectConnect\Marketplaces\Service\LanguagesService;
 use Monolog\Logger;
 use Shopware\Core\Content\Category\CategoryEntity;
 use Shopware\Core\Content\Product\ProductEntity;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
-use Shopware\Core\System\SalesChannel\Entity\SalesChannelRepositoryInterface;
+use Shopware\Core\System\SalesChannel\Entity\SalesChannelRepository;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 
 /**
@@ -29,7 +29,7 @@ class CategoryTransformerService
     protected const LOGGER_PROCESS      = LoggerProcess::EXPORT_CATALOG;
 
     /**
-     * @var EntityRepositoryInterface
+     * @var EntityRepository
      */
     protected $_categoryRepository;
 
@@ -61,12 +61,12 @@ class CategoryTransformerService
     /**
      * CategoryTransformerService constructor.
      *
-     * @param SalesChannelRepositoryInterface $categoryRepository
+     * @param SalesChannelRepository $categoryRepository
      * @param LoggerFactory $loggerFactory
      * @param LanguagesService $languagesService
      */
     public function __construct(
-        SalesChannelRepositoryInterface $categoryRepository,
+        SalesChannelRepository $categoryRepository,
         LoggerFactory $loggerFactory,
         LanguagesService $languagesService
     ) {

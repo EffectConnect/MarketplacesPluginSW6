@@ -17,7 +17,7 @@ use Shopware\Core\Checkout\Order\Aggregate\OrderDelivery\OrderDeliveryEntity;
 use Shopware\Core\Checkout\Order\Aggregate\OrderDelivery\OrderDeliveryStates;
 use Shopware\Core\Checkout\Order\OrderEvents;
 use Shopware\Core\Framework\Context;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -34,7 +34,7 @@ class OrderShippedSubscriber implements EventSubscriberInterface
     protected const LOGGER_PROCESS = LoggerProcess::EXPORT_SHIPMENT;
 
     /**
-     * @var EntityRepositoryInterface
+     * @var EntityRepository
      */
     protected $_orderDeliveryRepository;
 
@@ -56,12 +56,12 @@ class OrderShippedSubscriber implements EventSubscriberInterface
     /**
      * OrderShippedSubscriber constructor.
      *
-     * @param EntityRepositoryInterface $orderDeliveryRepository
+     * @param EntityRepository $orderDeliveryRepository
      * @param ExportQueueService $exportQueueService
      * @param LoggerFactory $loggerFactory
      */
     public function __construct(
-        EntityRepositoryInterface $orderDeliveryRepository,
+        EntityRepository $orderDeliveryRepository,
         ExportQueueService $exportQueueService,
         LoggerFactory $loggerFactory
     ) {

@@ -13,7 +13,7 @@ use EffectConnect\Marketplaces\Service\Api\ShippingExportService;
 use EffectConnect\Marketplaces\Service\ExportQueueService;
 use EffectConnect\Marketplaces\Service\SalesChannelService;
 use EffectConnect\Marketplaces\Service\SettingsService;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\System\SalesChannel\SalesChannelEntity;
 
 class ShipmentQueueService extends AbstractQueueService

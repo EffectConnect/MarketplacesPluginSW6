@@ -11,7 +11,7 @@ use EffectConnect\Marketplaces\Service\SalesChannelService;
 use EffectConnect\Marketplaces\Service\SettingsService;
 use Exception;
 use Shopware\Core\Framework\Context;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskDefinition;
 use Shopware\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskEntity;
@@ -36,14 +36,14 @@ class CatalogExportTaskHandler extends AbstractTaskHandler
     /**
      * CatalogExportTaskHandler constructor.
      *
-     * @param EntityRepositoryInterface $scheduledTaskRepository
+     * @param EntityRepository $scheduledTaskRepository
      * @param SalesChannelService $salesChannelService
      * @param SettingsService $settingsService
      * @param LoggerFactory $loggerFactory
      * @param CatalogExportService $catalogExportService
      */
     public function __construct(
-        EntityRepositoryInterface $scheduledTaskRepository,
+        EntityRepository $scheduledTaskRepository,
         SalesChannelService $salesChannelService,
         SettingsService $settingsService,
         LoggerFactory $loggerFactory,

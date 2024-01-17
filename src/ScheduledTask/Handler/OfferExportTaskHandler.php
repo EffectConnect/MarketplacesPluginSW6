@@ -9,7 +9,7 @@ use EffectConnect\Marketplaces\Service\Api\OfferExportService;
 use EffectConnect\Marketplaces\Service\SalesChannelService;
 use EffectConnect\Marketplaces\Service\SettingsService;
 use Exception;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\System\SalesChannel\SalesChannelEntity;
 
 /**
@@ -28,14 +28,14 @@ class OfferExportTaskHandler extends AbstractTaskHandler
     /**
      * OfferExportTaskHandler constructor.
      *
-     * @param EntityRepositoryInterface $scheduledTaskRepository
+     * @param EntityRepository $scheduledTaskRepository
      * @param SalesChannelService $salesChannelService
      * @param SettingsService $settingsService
      * @param LoggerFactory $loggerFactory
      * @param OfferExportService $offerExportService
      */
     public function __construct(
-        EntityRepositoryInterface $scheduledTaskRepository,
+        EntityRepository $scheduledTaskRepository,
         SalesChannelService $salesChannelService,
         SettingsService $settingsService,
         LoggerFactory $loggerFactory,

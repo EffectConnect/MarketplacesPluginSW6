@@ -14,7 +14,7 @@ use EffectConnect\PHPSdk\Core\Model\Response\ShippingAddress;
 use Shopware\Core\Checkout\Customer\CustomerEntity;
 use Shopware\Core\Defaults;
 use Shopware\Core\Framework\Context;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\ContainsFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
@@ -61,38 +61,38 @@ class CustomerTransformerService
     ];
 
     /**
-     * @var EntityRepositoryInterface
+     * @var EntityRepository
      */
     protected $_salutationRepository;
 
     /**
-     * @var EntityRepositoryInterface
+     * @var EntityRepository
      */
     protected $_countryRepository;
 
     /**
-     * @var EntityRepositoryInterface
+     * @var EntityRepository
      */
     protected $_countryStateRepository;
 
     /**
-     * @var EntityRepositoryInterface
+     * @var EntityRepository
      */
     protected $_customerRepository;
 
     /**
      * CustomerTransformerService constructor.
      *
-     * @param EntityRepositoryInterface $salutationRepository
-     * @param EntityRepositoryInterface $countryRepository
-     * @param EntityRepositoryInterface $countryStateRepository
-     * @param EntityRepositoryInterface $customerRepository
+     * @param EntityRepository $salutationRepository
+     * @param EntityRepository $countryRepository
+     * @param EntityRepository $countryStateRepository
+     * @param EntityRepository $customerRepository
      */
     public function __construct(
-        EntityRepositoryInterface $salutationRepository,
-        EntityRepositoryInterface $countryRepository,
-        EntityRepositoryInterface $countryStateRepository,
-        EntityRepositoryInterface $customerRepository
+        EntityRepository $salutationRepository,
+        EntityRepository $countryRepository,
+        EntityRepository $countryStateRepository,
+        EntityRepository $customerRepository
     ) {
         $this->_salutationRepository    = $salutationRepository;
         $this->_countryRepository       = $countryRepository;

@@ -8,7 +8,7 @@ use EffectConnect\Marketplaces\ScheduledTask\ShipmentQueueTask;
 use EffectConnect\Marketplaces\Service\SalesChannelService;
 use EffectConnect\Marketplaces\Service\SettingsService;
 use EffectConnect\Marketplaces\Service\ShipmentQueueService;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 
 class ShipmentQueueTaskHandler extends AbstractTaskHandler
 {
@@ -21,7 +21,7 @@ class ShipmentQueueTaskHandler extends AbstractTaskHandler
     private $shipmentQueueService;
 
     public function __construct(
-        EntityRepositoryInterface $scheduledTaskRepository,
+        EntityRepository $scheduledTaskRepository,
         ShipmentQueueService      $shipmentQueueService,
         SalesChannelService       $salesChannelService,
         SettingsService           $settingsService,

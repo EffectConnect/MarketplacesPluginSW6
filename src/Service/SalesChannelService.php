@@ -5,7 +5,7 @@ namespace EffectConnect\Marketplaces\Service;
 use Exception;
 use EffectConnect\Marketplaces\Exception\SalesChannelNotFoundException;
 use Shopware\Core\Framework\Context;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\Uuid\Uuid;
 use Shopware\Core\System\SalesChannel\Context\SalesChannelContextFactory;
@@ -19,7 +19,7 @@ use Shopware\Core\System\SalesChannel\SalesChannelEntity;
 class SalesChannelService
 {
     /**
-     * @var EntityRepositoryInterface
+     * @var EntityRepository
      */
     protected $_salesChannelRepository;
 
@@ -31,11 +31,11 @@ class SalesChannelService
     /**
      * SalesChannelService constructor.
      *
-     * @param EntityRepositoryInterface $salesChannelRepository
+     * @param EntityRepository $salesChannelRepository
      * @param SalesChannelContextFactory $salesChannelContextFactory
      */
     public function __construct(
-        EntityRepositoryInterface $salesChannelRepository,
+        EntityRepository $salesChannelRepository,
         $salesChannelContextFactory // removed type because of Shopware 6.4 compatibility.
     ) {
         $this->_salesChannelRepository      = $salesChannelRepository;

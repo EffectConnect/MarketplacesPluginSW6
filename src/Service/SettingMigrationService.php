@@ -5,7 +5,7 @@ namespace EffectConnect\Marketplaces\Service;
 use EffectConnect\Marketplaces\Core\Connection\ConnectionEntity;
 use EffectConnect\Marketplaces\Helper\DefaultSettingHelper;
 use Shopware\Core\Framework\Context;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 
@@ -20,9 +20,9 @@ class SettingMigrationService
      *
      * @param SystemConfigService $systemConfigService
      * @param ConnectionService $connectionService
-     * @param EntityRepositoryInterface $salesChannelRepository
+     * @param EntityRepository $salesChannelRepository
      */
-    public function __construct(SystemConfigService $systemConfigService, ConnectionService $connectionService, EntityRepositoryInterface $salesChannelRepository)
+    public function __construct(SystemConfigService $systemConfigService, ConnectionService $connectionService, EntityRepository $salesChannelRepository)
     {
         $this->systemConfigService = $systemConfigService;
         $this->connectionService = $connectionService;

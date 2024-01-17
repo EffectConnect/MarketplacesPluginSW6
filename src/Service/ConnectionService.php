@@ -5,7 +5,7 @@ namespace EffectConnect\Marketplaces\Service;
 use EffectConnect\Marketplaces\Core\Connection\ConnectionEntity;
 use Shopware\Core\Framework\Api\Context\SystemSource;
 use Shopware\Core\Framework\Context;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\Filter;
@@ -17,14 +17,16 @@ use Shopware\Core\Framework\Uuid\Uuid;
  */
 class ConnectionService
 {
-    protected $connectionRepository;
+
 
     /**
      * ConnectionService constructor.
      *
-     * @param EntityRepositoryInterface $connectionRepository
+     * @param EntityRepository $connectionRepository
      */
-    public function __construct(EntityRepositoryInterface $connectionRepository) {
+    protected EntityRepository $connectionRepository;
+
+    public function __construct(EntityRepository $connectionRepository) {
         $this->connectionRepository = $connectionRepository;
     }
 

@@ -4,7 +4,7 @@ namespace EffectConnect\Marketplaces\Traits;
 
 use EffectConnect\Marketplaces\Handler\EffectConnectPayment;
 use Shopware\Core\Framework\Context;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\Plugin\Util\PluginIdProvider;
@@ -46,7 +46,7 @@ trait PaymentMethodTrait
         ];
 
         /**
-         * @var EntityRepositoryInterface $paymentRepository
+         * @var EntityRepository $paymentRepository
          */
         $paymentRepository      = $container->get('payment_method.repository');
 
@@ -63,7 +63,7 @@ trait PaymentMethodTrait
     private function setPaymentMethodIsActive(bool $active, Context $context, ContainerInterface $container): void
     {
         /**
-         * @var EntityRepositoryInterface $paymentRepository
+         * @var EntityRepository $paymentRepository
          */
         $paymentRepository  = $container->get('payment_method.repository');
         $paymentMethodId    = $this->getPaymentMethodId($container);
@@ -90,7 +90,7 @@ trait PaymentMethodTrait
     private function getPaymentMethodId(ContainerInterface $container): ?string
     {
         /**
-         * @var EntityRepositoryInterface $paymentRepository
+         * @var EntityRepository $paymentRepository
          */
         $paymentRepository  = $container->get('payment_method.repository');
         $criteria           = new Criteria();

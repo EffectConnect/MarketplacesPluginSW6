@@ -12,7 +12,7 @@ use Monolog\Logger;
 use Shopware\Core\Content\Product\Aggregate\ProductVisibility\ProductVisibilityEntity;
 use Shopware\Core\Content\Product\ProductEvents;
 use Shopware\Core\Framework\Context;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
@@ -40,19 +40,19 @@ class ProductChangeSubscriber implements EventSubscriberInterface
     protected $logger;
 
     /**
-     * @var EntityRepositoryInterface
+     * @var EntityRepository
      */
     private $productVisibilityRepository;
 
     /**
      * ProductChangeSubscriber constructor.
      *
-     * @param EntityRepositoryInterface $productVisibilityRepository
+     * @param EntityRepository $productVisibilityRepository
      * @param ExportQueueService $exportQueueService
      * @param LoggerFactory $loggerFactory
      */
     public function __construct(
-        EntityRepositoryInterface $productVisibilityRepository,
+        EntityRepository $productVisibilityRepository,
         ExportQueueService $exportQueueService,
         LoggerFactory $loggerFactory
     ) {

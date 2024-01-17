@@ -2,15 +2,14 @@
 
 namespace EffectConnect\Marketplaces\Controller;
 
-use Shopware\Core\Framework\Routing\Annotation\RouteScope;
+
 use Symfony\Component\Routing\Annotation\Route;
-use Shopware\Core\Framework\Routing\Annotation\Acl;
 
 /**
- * @RouteScope(scopes={"api"})
- * @Route("api/ec/action/connection")
  * @Acl({"sales_channel.viewer"})
  */
+#[Route(path: '/api/ec/action/connection', defaults: ['_routeScope' => ['api']])]
 class ConnectionController extends AbstractConnectionController
 {
+
 }

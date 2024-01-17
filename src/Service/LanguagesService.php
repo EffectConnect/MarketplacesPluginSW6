@@ -6,7 +6,7 @@ use EffectConnect\Marketplaces\Object\Language;
 use EffectConnect\Marketplaces\Object\LanguagesCollection;
 use EffectConnect\Marketplaces\Setting\SettingStruct;
 use EffectConnect\Marketplaces\Exception\SalesChannelNotFoundException;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\System\Language\LanguageCollection;
 use Shopware\Core\System\Language\LanguageEntity;
@@ -30,7 +30,7 @@ class LanguagesService
     protected $_settingsService;
 
     /**
-     * @var EntityRepositoryInterface
+     * @var EntityRepository
      */
     protected $_languageRepository;
 
@@ -59,12 +59,12 @@ class LanguagesService
      *
      * @param SalesChannelService $salesChannelService
      * @param SettingsService $settingsService
-     * @param EntityRepositoryInterface $languageRepository
+     * @param EntityRepository $languageRepository
      */
     public function __construct(
         SalesChannelService $salesChannelService,
         SettingsService $settingsService,
-        EntityRepositoryInterface $languageRepository
+        EntityRepository $languageRepository
     ) {
         $this->_salesChannelService         = $salesChannelService;
         $this->_settingsService             = $settingsService;

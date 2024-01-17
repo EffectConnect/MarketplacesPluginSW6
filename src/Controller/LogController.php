@@ -3,14 +3,12 @@
 namespace EffectConnect\Marketplaces\Controller;
 
 use Symfony\Component\Routing\Annotation\Route;
-use Shopware\Core\Framework\Routing\Annotation\RouteScope;
 use Shopware\Core\Framework\Routing\Annotation\Acl;
 
 /**
- * @RouteScope(scopes={"api"})
- * @Route("api/ec/action/log")
  * @Acl({"sales_channel.viewer"})
  */
+#[Route(path: 'api/ec/action/log', defaults: ['_routeScope' => ['api']])]
 class LogController extends AbstractLogController
 {
 }

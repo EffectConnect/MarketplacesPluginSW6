@@ -10,7 +10,7 @@ use Shopware\Core\Checkout\Order\Aggregate\OrderCustomer\OrderCustomerDefinition
 use Shopware\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemDefinition;
 use Shopware\Core\Checkout\Order\OrderDefinition;
 use Shopware\Core\Framework\Context;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\Uuid\Uuid;
@@ -61,13 +61,13 @@ class CustomFieldService
     /** @var ContainerInterface */
     private $_container;
 
-    /** @var EntityRepositoryInterface */
+    /** @var EntityRepository */
     private $_customFieldSetRepository;
 
-    /** @var EntityRepositoryInterface */
+    /** @var EntityRepository */
     private $_customFieldRepository;
 
-    /** @var EntityRepositoryInterface */
+    /** @var EntityRepository */
     private $_customFieldSetRelationRepository;
 
     /**

@@ -31,13 +31,13 @@ use Shopware\Core\Content\Rule\Aggregate\RuleCondition\RuleConditionEntity;
 use Shopware\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\Dbal\Common\SalesChannelRepositoryIterator;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\System\CustomField\CustomFieldEntity;
-use Shopware\Core\System\SalesChannel\Entity\SalesChannelRepositoryInterface;
+use Shopware\Core\System\SalesChannel\Entity\SalesChannelRepository;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Core\System\SalesChannel\SalesChannelEntity;
 use Shopware\Core\System\Tag\TagEntity;
@@ -74,7 +74,7 @@ class CatalogTransformerService
     protected $_sdkFactory;
 
     /**
-     * @var SalesChannelRepositoryInterface
+     * @var SalesChannelRepository
      */
     protected $_productRepository;
 
@@ -154,7 +154,7 @@ class CatalogTransformerService
     protected $_attributesHelper;
 
     /**
-     * @var EntityRepositoryInterface
+     * @var EntityRepository
      */
     private $_customFieldRepository;
 
@@ -162,7 +162,7 @@ class CatalogTransformerService
      * CatalogTransformerService constructor.
      *
      * @param SdkFactory $sdkFactory
-     * @param SalesChannelRepositoryInterface $productRepository
+     * @param SalesChannelRepository $productRepository
      * @param SalesChannelService $salesChannelService
      * @param CategoryTransformerService $categoryTransformerService
      * @param FileLoader $fileLoader
@@ -170,11 +170,11 @@ class CatalogTransformerService
      * @param SettingsService $settingsService
      * @param LanguagesService $languagesService
      * @param SeoUrlPlaceholderHandlerInterface $seoUrlService
-     * @param EntityRepositoryInterface $customFieldRepository
+     * @param EntityRepository $customFieldRepository
      */
     public function __construct(
         SdkFactory $sdkFactory,
-        SalesChannelRepositoryInterface $productRepository,
+        SalesChannelRepository $productRepository,
         SalesChannelService $salesChannelService,
         CategoryTransformerService $categoryTransformerService,
         FileLoader $fileLoader,
@@ -182,7 +182,7 @@ class CatalogTransformerService
         SettingsService $settingsService,
         LanguagesService $languagesService,
         SeoUrlPlaceholderHandlerInterface $seoUrlService,
-        EntityRepositoryInterface $customFieldRepository
+        EntityRepository $customFieldRepository
     ) {
         $this->_sdkFactory                  = $sdkFactory;
         $this->_productRepository           = $productRepository;

@@ -8,7 +8,7 @@ use EffectConnect\Marketplaces\ScheduledTask\OfferQueueTask;
 use EffectConnect\Marketplaces\Service\OfferQueueService;
 use EffectConnect\Marketplaces\Service\SalesChannelService;
 use EffectConnect\Marketplaces\Service\SettingsService;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 
 class OfferQueueTaskHandler extends AbstractTaskHandler
 {
@@ -20,7 +20,7 @@ class OfferQueueTaskHandler extends AbstractTaskHandler
     private $offerQueueService;
 
     public function __construct(
-        EntityRepositoryInterface $scheduledTaskRepository,
+        EntityRepository $scheduledTaskRepository,
         OfferQueueService         $offerQueueService,
         SalesChannelService       $salesChannelService,
         SettingsService           $settingsService,

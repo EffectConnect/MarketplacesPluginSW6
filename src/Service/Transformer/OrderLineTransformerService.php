@@ -17,7 +17,7 @@ use Shopware\Core\Checkout\Cart\Tax\Struct\TaxRuleCollection;
 use Shopware\Core\Content\Product\ProductEntity;
 use Shopware\Core\Content\Property\Aggregate\PropertyGroupOption\PropertyGroupOptionEntity;
 use Shopware\Core\Defaults;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\Uuid\Uuid;
@@ -31,7 +31,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class OrderLineTransformerService
 {
     /**
-     * @var EntityRepositoryInterface
+     * @var EntityRepository
      */
     protected $_productRepository;
 
@@ -48,12 +48,12 @@ class OrderLineTransformerService
     /**
      * OrderLineTransformerService constructor.
      *
-     * @param EntityRepositoryInterface $productRepository
+     * @param EntityRepository $productRepository
      * @param QuantityPriceCalculator $quantityPriceCalculator
      * @param ContainerInterface $container
      */
     public function __construct(
-        EntityRepositoryInterface $productRepository,
+        EntityRepository $productRepository,
         QuantityPriceCalculator $quantityPriceCalculator,
         ContainerInterface $container
     ) {

@@ -12,7 +12,7 @@ use EffectConnect\Marketplaces\Service\ExportQueueService;
 use EffectConnect\Marketplaces\Service\SalesChannelService;
 use EffectConnect\Marketplaces\Service\SettingsService;
 use EffectConnect\Marketplaces\Service\Transformer\OfferTransformerService;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\System\SalesChannel\SalesChannelEntity;
 use Throwable;
 

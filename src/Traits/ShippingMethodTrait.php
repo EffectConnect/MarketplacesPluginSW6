@@ -4,7 +4,7 @@ namespace EffectConnect\Marketplaces\Traits;
 
 use EffectConnect\Marketplaces\Handler\EffectConnectShipment;
 use Shopware\Core\Framework\Context;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\System\DeliveryTime\DeliveryTimeEntity;
@@ -47,7 +47,7 @@ trait ShippingMethodTrait
         ];
 
         /**
-         * @var EntityRepositoryInterface $shipmentRepository
+         * @var EntityRepository $shipmentRepository
          */
         $shipmentRepository     = $container->get('shipping_method.repository');
 
@@ -64,7 +64,7 @@ trait ShippingMethodTrait
     protected function setShipmentMethodIsActive(bool $active, Context $context, ContainerInterface $container): void
     {
         /**
-         * @var EntityRepositoryInterface $shipmentRepository
+         * @var EntityRepository $shipmentRepository
          */
         $shipmentRepository = $container->get('shipping_method.repository');
         $shipmentMethodId   = $this->getShipmentMethodId($container);
@@ -91,7 +91,7 @@ trait ShippingMethodTrait
     protected function getShipmentMethodId(ContainerInterface $container): ?string
     {
         /**
-         * @var EntityRepositoryInterface $shipmentRepository
+         * @var EntityRepository $shipmentRepository
          */
         $shipmentRepository = $container->get('shipping_method.repository');
         $criteria           = new Criteria();
@@ -120,7 +120,7 @@ trait ShippingMethodTrait
     protected function getAvailabilityRuleId(Context $context, ContainerInterface $container, bool $created = false): ?string
     {
         /**
-         * @var EntityRepositoryInterface $ruleRepository
+         * @var EntityRepository $ruleRepository
          */
         $ruleRepository = $container->get('rule.repository');
         $criteria       = new Criteria();
@@ -158,7 +158,7 @@ trait ShippingMethodTrait
         ];
 
         /**
-         * @var EntityRepositoryInterface $ruleRepository
+         * @var EntityRepository $ruleRepository
          */
         $ruleRepository = $container->get('rule.repository');
 
@@ -178,7 +178,7 @@ trait ShippingMethodTrait
     protected function getDeliveryTimeId(Context $context, ContainerInterface $container, bool $created = false): ?string
     {
         /**
-         * @var EntityRepositoryInterface $deliveryRepository
+         * @var EntityRepository $deliveryRepository
          */
         $deliveryRepository = $container->get('delivery_time.repository');
         $criteria           = new Criteria();
@@ -217,7 +217,7 @@ trait ShippingMethodTrait
         ];
 
         /**
-         * @var EntityRepositoryInterface $deliveryRepository
+         * @var EntityRepository $deliveryRepository
          */
         $deliveryRepository = $container->get('delivery_time.repository');
 

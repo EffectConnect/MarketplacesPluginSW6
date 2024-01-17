@@ -91,15 +91,6 @@
             <argument type="service" id="EffectConnect\Marketplaces\Factory\LoggerFactory" />
         </service>
 
-        <service id="EffectConnect\Marketplaces\Controller\LegacyConnectionController" class="EffectConnect\Marketplaces\Controller\LegacyConnectionController" public="true">
-            <argument type="service" id="EffectConnect\Marketplaces\Service\ConnectionService" />
-            <argument type="service" id="EffectConnect\Marketplaces\Service\SalesChannelService" />
-            <argument type="service" id="EffectConnect\Marketplaces\Service\Api\CredentialService" />
-            <call method="setContainer">
-                <argument type="service" id="service_container"/>
-            </call>
-        </service>
-
         <service id="EffectConnect\Marketplaces\Controller\ConnectionController" class="EffectConnect\Marketplaces\Controller\ConnectionController" public="true">
             <argument type="service" id="EffectConnect\Marketplaces\Service\ConnectionService" />
             <argument type="service" id="EffectConnect\Marketplaces\Service\SalesChannelService" />
@@ -116,20 +107,7 @@
             </call>
         </service>
 
-        <service id="EffectConnect\Marketplaces\Controller\LegacyTaskController" class="EffectConnect\Marketplaces\Controller\LegacyTaskController" public="true">
-            <argument type="service" id="Symfony\Component\Messenger\MessageBusInterface"/>
-            <call method="setContainer">
-                <argument type="service" id="service_container"/>
-            </call>
-        </service>
-
         <service id="EffectConnect\Marketplaces\Controller\LogController" class="EffectConnect\Marketplaces\Controller\LogController" public="true">
-            <call method="setContainer">
-                <argument type="service" id="service_container"/>
-            </call>
-        </service>
-
-        <service id="EffectConnect\Marketplaces\Controller\LegacyLogController" class="EffectConnect\Marketplaces\Controller\LegacyLogController" public="true">
             <call method="setContainer">
                 <argument type="service" id="service_container"/>
             </call>
