@@ -1,3 +1,10 @@
+Version 1.7.0 - 2024-01-24
+- Added Shopware 6.5 support
+- Dropped Shopware 6.4, 6.3 and 6.2 support.
+- Added PHP 8 support.
+- Composer2 is now default.
+- Updated README.
+
 Version 1.6.0 - 2023-10-13
 - Fixed several minor bugs.
 - Added support for custom fields.
