@@ -2,14 +2,12 @@
 
 namespace EffectConnect\Marketplaces\Controller;
 
-use Symfony\Component\Routing\Annotation\Route;
-use Shopware\Core\Framework\Routing\Annotation\Acl;
+use Symfony\Component\Routing\Attribute\Route;
 
 /**
- * @Route("api/ec/action/task")
  * @Acl({"sales_channel.viewer"})
  */
-#[Route(defaults: ['_routeScope' => ['api']])]
+#[Route(path: '/api/ec/action/task',defaults: ['_routeScope' => ['api']])]
 class TaskController extends AbstractTaskController
 {
 }

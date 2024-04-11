@@ -10,36 +10,37 @@
                 <sw-icon name="default-arrow-head-left" small></sw-icon>
             </router-link>
         </template>
-        <template slot="content">
+        <template #content>
             <sw-loader v-if="busySaving"></sw-loader>
             <div v-if="loaded">
                 <br><br>
                 <sw-card :title="tc('general')">
                     <sw-inherit-wrapper :helpText="tc('salesChannelHelpText')" :label="tc('salesChannelLabel')">
-                        <template #content>
+                        <template v-slot:content>
                             <sw-single-select
                                     :placeholder="tc('salesChannelPlaceholder')"
                                     :disabled="!newItem"
                                     :options="availableSalesChannels"
-                                    v-model="connection.salesChannelId">
+                                    :value="connection.salesChannelId" @update:value="connection.salesChannelId = $event"
+                            >
                             </sw-single-select>
                         </template>
                     </sw-inherit-wrapper>
                     <sw-inherit-wrapper :helpText="tc('nameHelpText')" :label="tc('nameLabel')">
-                        <template #content>
-                            <sw-field type="input" v-model="connection.name" :placeholder="tc('namePlaceholder')"></sw-field>
-                        </template>
+                        <template v-slot:content>
+                            <sw-text-field :value="connection.name" @update:value="connection.name = $event" :placeholder="tc('namePlaceholder')"></sw-text-field>
+                        </template> {# }v-model="connection.name"#}
                     </sw-inherit-wrapper>
                 </sw-card>
                 <sw-card :title="tc('api')">
                     <sw-inherit-wrapper :helpText="tc('publicKeyHelpText')" :label="tc('publicKeyLabel')">
-                        <template #content>
-                            <sw-field type="input" :placeholder="tc('publicKeyPlaceholder')" v-model="connection.publicKey"></sw-field>
+                        <template v-slot:content>
+                            <sw-text-field type="input" :placeholder="tc('publicKeyPlaceholder')" :value="connection.publicKey" @update:value="connection.publicKey = $event"></sw-text-field>
                         </template>
                     </sw-inherit-wrapper>
                     <sw-inherit-wrapper :helpText="tc('secretKeyHelpText')" :label="tc('secretKeyLabel')">
-                        <template #content>
-                            <sw-field type="password" :placeholder="tc('secretKeyPlaceholder')" v-model="connection.secretKey"></sw-field>
+                        <template v-slot:content>
+                            <sw-text-field type="password" :placeholder="tc('secretKeyPlaceholder')" :value="connection.secretKey" @update:value="connection.secretKey = $event"></sw-text-field>
                         </template>
                     </sw-inherit-wrapper>
                     <sw-button :disabled="!connection.secretKey || !connection.publicKey" @click="testApiCredentials()" size="small">
@@ -52,23 +53,28 @@
                         <div v-html="$tc('ec.connection.edit.scheduleInformationText', 0, {current: tc('schedules.' + connection.catalogExportSchedule)})"></div>
                     </sw-label>
                     <br>
-                    <sw-switch-field bordered v-model="connection.addLeadingZeroToEan"
+                    <sw-switch-field bordered
+                                     :value="connection.addLeadingZeroToEan" @update:value="connection.addLeadingZeroToEan = $event"
                                      :label="tc('addLeadingZeroToEanLabel')"
                                      :helpText="tc('addLeadingZeroToEanHelpText')">
                     </sw-switch-field>
-                    <sw-switch-field bordered v-model="connection.useSpecialPrice"
+                    <sw-switch-field bordered
+                                     :value="connection.useSpecialPrice" @update:value="connection.useSpecialPrice = $event"
                                      :label="tc('useSpecialPriceLabel')"
                                      :helpText="tc('useSpecialPriceHelpText')">
                     </sw-switch-field>
-                    <sw-switch-field bordered v-model="connection.useFallbackTranslations"
+                    <sw-switch-field bordered
+                                     :value="connection.useFallbackTranslations" @update:value="connection.useFallbackTranslations = $event"
                                      :label="tc('useFallbackTranslationsLabel')"
                                      :helpText="tc('useFallbackTranslationsHelpText')">
                     </sw-switch-field>
-                    <sw-switch-field bordered v-model="connection.useSalesChannelDefaultLanguageAsFirstFallbackLanguage"
+                    <sw-switch-field bordered
+                                     :value="connection.useSalesChannelDefaultLanguageAsFirstFallbackLanguage" @update:value="connection.useSalesChannelDefaultLanguageAsFirstFallbackLanguage = $event"
                                      :label="tc('useSalesChannelDefaultLanguageAsFirstFallbackLanguageLabel')"
                                      :helpText="tc('useSalesChannelDefaultLanguageAsFirstFallbackLanguageHelpText')">
                     </sw-switch-field>
-                    <sw-switch-field bordered v-model="connection.useSystemLanguages"
+                    <sw-switch-field bordered
+                                     :value="connection.useSystemLanguages" @update:value="connection.useSystemLanguages = $event"
                                      :label="tc('useSystemLanguagesLabel')"
                                      :helpText="tc('useSystemLanguagesHelpText')">
                     </sw-switch-field>
@@ -83,11 +89,11 @@
                     </sw-label>
                     <br>
                     <sw-inherit-wrapper :helpText="tc('stockTypeHelpText')" :label="tc('stockTypeLabel')">
-                        <template #content>
+                        <template v-slot:content>
                             <sw-single-select
                                     :placeholder="tc('stockTypePlaceholder')"
                                     :options="stockTypes"
-                                    v-model="connection.stockType">
+                                    :value="connection.stockType" @update:value="connection.stockType = $event">
                             </sw-single-select>
                         </template>
                     </sw-inherit-wrapper>
@@ -98,25 +104,25 @@
                     </sw-label>
                     <br>
                     <sw-inherit-wrapper :helpText="tc('orderStatusHelpText')" :label="tc('orderStatusLabel')">
-                        <template #content>
+                        <template v-slot:content>
                             <sw-single-select
                                     :placeholder="tc('orderStatusPlaceholder')"
                                     :options="orderStatuses"
-                                    v-model="connection.orderStatus">
+                                    :value="connection.orderStatus" @update:value="connection.orderStatus = $event">
                             </sw-single-select>
                         </template>
                     </sw-inherit-wrapper>
                     <sw-inherit-wrapper :helpText="tc('paymentStatusHelpText')" :label="tc('paymentStatusLabel')">
-                        <template #content>
+                        <template v-slot:content>
                             <sw-single-select
                                     :placeholder="tc('paymentStatusPlaceholder')"
                                     :options="paymentStatuses"
-                                    v-model="connection.paymentStatus">
+                                    :value="connection.paymentStatus" @update:value="connection.paymentStatus = $event">
                             </sw-single-select>
                         </template>
                     </sw-inherit-wrapper>
                     <sw-inherit-wrapper :helpText="tc('paymentMethodHelpText')" :label="tc('paymentMethodLabel')">
-                        <template #content>
+                        <template v-slot:content>
                             <sw-entity-single-select
                                     :placeHolder="tc('paymentMethodPlaceholder')"
                                     labelProperty="name"
@@ -127,7 +133,7 @@
                         </template>
                     </sw-inherit-wrapper>
                     <sw-inherit-wrapper :helpText="tc('shippingMethodHelpText')" :label="tc('shippingMethodLabel')">
-                        <template #content>
+                        <template v-slot:content>
                             <sw-entity-single-select
                                     :placeHolder="tc('shippingMethodPlaceholder')"
                                     labelProperty="name"
@@ -142,7 +148,7 @@
                                      :helpText="tc('createCustomerHelpText')">
                     </sw-switch-field>
                     <sw-inherit-wrapper :helpText="tc('customerGroupHelpText')" :label="tc('customerGroupLabel')" v-show="connection.createCustomer">
-                        <template #content>
+                        <template v-slot:content>
                             <sw-entity-single-select
                                     :placeHolder="tc('customerGroupPlaceholder')"
                                     labelProperty="name"
@@ -153,7 +159,7 @@
                         </template>
                     </sw-inherit-wrapper>
                     <sw-inherit-wrapper :helpText="tc('customerSourceTypeHelpText')" :label="tc('customerSourceTypeLabel')" v-show="connection.createCustomer">
-                        <template #content>
+                        <template v-slot:content>
                             <sw-single-select
                                     :placeholder="tc('customerSourceTypePlaceholder')"
                                     :options="customerSourceTypes"
@@ -166,7 +172,7 @@
                                      :helpText="tc('importExternallyFulfilledOrdersHelpText')">
                     </sw-switch-field>
                     <sw-inherit-wrapper :helpText="tc('externalPaymentStatusHelpText')" :label="tc('externalPaymentStatusLabel')" v-show="connection.importExternallyFulfilledOrders">
-                        <template #content>
+                        <template v-slot:content>
                             <sw-single-select
                                     :placeholder="tc('externalPaymentStatusPlaceholder')"
                                     :options="paymentStatuses"
@@ -175,20 +181,20 @@
                         </template>
                     </sw-inherit-wrapper>
                     <sw-inherit-wrapper :helpText="tc('externalOrderStatusHelpText')" :label="tc('externalOrderStatusLabel')" v-show="connection.importExternallyFulfilledOrders">
-                        <template #content>
+                        <template v-slot:content>
                             <sw-single-select
                                     :placeholder="tc('externalOrderStatusPlaceholder')"
                                     :options="orderStatuses"
-                                    v-model="connection.externalOrderStatus">
+                                    :value="connection.externalOrderStatus" @update:value="connection.externalOrderStatus = $event">
                             </sw-single-select>
                         </template>
                     </sw-inherit-wrapper>
                     <sw-inherit-wrapper :helpText="tc('externalShippingStatusHelpText')" :label="tc('externalShippingStatusLabel')" v-show="connection.importExternallyFulfilledOrders">
-                        <template #content>
+                        <template v-slot:content>
                             <sw-single-select
                                     :placeholder="tc('externalShippingStatusPlaceholder')"
                                     :options="shippingStatuses"
-                                    v-model="connection.externalShippingStatus">
+                                    :value="connection.externalShippingStatus" @update:value="connection.externalShippingStatus = $event">
                             </sw-single-select>
                         </template>
                     </sw-inherit-wrapper>
@@ -196,7 +202,7 @@
             </div>
             <sw-modal v-if="modal != null" @modal-close="modal.onCancel()">
                 <p>{{ modal.text }}</p>
-                <template #modal-footer>
+                <template v-slot:modal-footer>
                     <sw-button size="small" @click="modal.onCancel()">
                         {{ $tc('ec.global.cancel') }}
                     </sw-button>

@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class AbstractTaskController extends AbstractController
 {
@@ -28,9 +28,7 @@ class AbstractTaskController extends AbstractController
         return $this->messageBus->dispatch(Envelope::wrap($message, $stamps), $stamps);
     }
 
-    /**
-     * @Route("/trigger/{salesChannelId}/{type}", methods={"POST"})
-     */
+    #[Route(path: '/trigger/{salesChannelId}/{type}', name: 'trigger', methods: ['POST'])]
     public function triggerTask(Request $request, Context $context): JsonResponse
     {
         $salesChannelId = $request->get('salesChannelId');

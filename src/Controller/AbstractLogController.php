@@ -15,7 +15,7 @@ use Shopware\Core\Framework\Context;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use ZipArchive;
 
 class AbstractLogController extends AbstractController
@@ -23,9 +23,7 @@ class AbstractLogController extends AbstractController
     private const PLUGIN_DIR = '../custom/plugins/EffectConnectMarketplaces';
     private const LOG_DIR = self::PLUGIN_DIR . '/data/logs';
 
-    /**
-     * @Route("/getAll", methods={"GET"})
-     */
+    #[Route(path: '/getAll', name: 'log_get_all', methods: ['GET'])]
     public function getLogFiles(Request $request, Context $context): JsonResponse
     {
         $files = [];
@@ -48,9 +46,7 @@ class AbstractLogController extends AbstractController
         return new JsonResponse(['files' => $files]);
     }
 
-    /**
-     * @Route("/downloadFiles", methods={"GET"})
-     */
+    #[Route(path: '/downloadFiles', name: 'download_files', methods: ['GET'])]
     public function downloadLogFiles(Request $request, Context $context): JsonResponse
     {
         $filenames = explode(',', $request->get('filenames'));

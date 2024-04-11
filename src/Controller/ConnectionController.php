@@ -3,7 +3,7 @@
 namespace EffectConnect\Marketplaces\Controller;
 
 
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 /**
  * @Acl({"sales_channel.viewer"})

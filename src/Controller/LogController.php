@@ -2,8 +2,7 @@
 
 namespace EffectConnect\Marketplaces\Controller;
 
-use Symfony\Component\Routing\Annotation\Route;
-use Shopware\Core\Framework\Routing\Annotation\Acl;
+use Symfony\Component\Routing\Attribute\Route;
 
 /**
  * @Acl({"sales_channel.viewer"})

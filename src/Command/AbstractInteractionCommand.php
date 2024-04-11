@@ -9,6 +9,7 @@ use EffectConnect\Marketplaces\Setting\SettingStruct;
 use EffectConnect\Marketplaces\Service\SalesChannelService;
 use Monolog\Logger;
 use Shopware\Core\System\SalesChannel\SalesChannelEntity;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 
 /**

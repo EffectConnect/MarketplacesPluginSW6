@@ -8,11 +8,13 @@ use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskDefinition;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[AsCommand(name: 'ec:reset-tasks')]
 class ResetFailedTasks extends Command
 {
     /**
@@ -48,7 +50,7 @@ class ResetFailedTasks extends Command
      * @param OutputInterface $output
      * @param Context|null $context
      */
-    protected function execute(InputInterface $input, OutputInterface $output, ?Context $context = null)
+    protected function execute(InputInterface $input, OutputInterface $output, ?Context $context = null): int
     {
         try {
             $updatePayload = [];

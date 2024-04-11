@@ -4,6 +4,7 @@ namespace EffectConnect\Marketplaces\Command;
 
 use EffectConnect\Marketplaces\Service\ShipmentQueueService;
 use Shopware\Core\Framework\Context;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -12,6 +13,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Class RunShipmentQueue
  * @package EffectConnect\Marketplaces\Command
  */
+
+#[AsCommand(name: 'ec:run-shipment-queue')]
 class RunShipmentQueue extends Command
 {
     /**
@@ -47,7 +50,7 @@ class RunShipmentQueue extends Command
      * @param OutputInterface $output
      * @param Context|null $context
      */
-    protected function execute(InputInterface $input, OutputInterface $output, ?Context $context = null)
+    protected function execute(InputInterface $input, OutputInterface $output, ?Context $context = null): int
     {
         $this->queueService->run();
         return 1;

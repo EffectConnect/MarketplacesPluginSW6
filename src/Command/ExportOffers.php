@@ -10,6 +10,7 @@ use Exception;
 use EffectConnect\Marketplaces\Service\SalesChannelService;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\System\SalesChannel\SalesChannelEntity;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -18,6 +19,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Class ExportOffers
  * @package EffectConnect\Marketplaces\Command
  */
+#[AsCommand(name: 'ec:export-offers')]
 class ExportOffers extends AbstractInteractionCommand
 {
     /**
@@ -73,7 +75,7 @@ class ExportOffers extends AbstractInteractionCommand
      * @param OutputInterface $output
      * @param Context|null $context
      */
-    protected function execute(InputInterface $input, OutputInterface $output, ?Context $context = null)
+    protected function execute(InputInterface $input, OutputInterface $output, ?Context $context = null): int
     {
         $this->_logger->info('Executing offer export command started.', [
             'process'       => static::LOGGER_PROCESS

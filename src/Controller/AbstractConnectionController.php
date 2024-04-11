@@ -19,7 +19,7 @@ use stdClass;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 abstract class AbstractConnectionController extends AbstractController
 {
@@ -37,9 +37,7 @@ abstract class AbstractConnectionController extends AbstractController
         $this->credentialService = $credentialService;
     }
 
-    /**
-     * @Route("/getAll", methods={"GET"})
-     */
+    #[Route(path: '/getAll', name: 'connection_get_all', methods: ['GET'])]
     public function getAll(Request $request, Context $context): JsonResponse
     {
         $salesChannels = $this->salesChannelService->getSalesChannels();
@@ -57,9 +55,7 @@ abstract class AbstractConnectionController extends AbstractController
         return new JsonResponse(['connections' => $connections]);
     }
 
-    /**
-     * @Route("/get/{id}", methods={"GET"})
-     */
+    #[Route(path: '/get/{id}', name: 'get_id', methods: ['GET'])]
     public function getFromId(Request $request, Context $context): JsonResponse
     {
         $connection = $this->connectionService->getFromId($request->get('id'));
@@ -71,9 +67,7 @@ abstract class AbstractConnectionController extends AbstractController
         return new JsonResponse(['connection' => $data]);
     }
 
-    /**
-     * @Route("/delete/{id}", methods={"POST"})
-     */
+    #[Route(path: '/delete/{id}', name: 'delete_id', methods: ['POST'])]
     public function delete(Request $request, Context $context): JsonResponse
     {
         $id = $request->get('id');
@@ -81,9 +75,7 @@ abstract class AbstractConnectionController extends AbstractController
         return new JsonResponse(['status' => 'OK']);
     }
 
-    /**
-     * @Route("/getSalesChannelData", methods={"GET"})
-     */
+    #[Route(path: '/getSalesChannelData', name: 'get_sales_channel_data', methods: ['GET'])]
     public function getSalesChannels(Request $request, Context $context): JsonResponse
     {
         $allSalesChannels = $this->salesChannelService->getSalesChannels();
@@ -93,17 +85,13 @@ abstract class AbstractConnectionController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/getDefaultSettings", methods={"GET"})
-     */
+    #[Route(path: '/getDefaultSettings', name: 'get_default_settings', methods: ['GET'])]
     public function getDefaultSettings(Request $request, Context $context): JsonResponse
     {
         return new JsonResponse(['data' => DefaultSettingHelper::getDefaults()]);
     }
 
-    /**
-     * @Route("/getOptions", methods={"GET"})
-     */
+    #[Route(path: '/getOptions', name: 'get_options', methods: ['GET'])]
     public function getOptions(Request $request, Context $context): JsonResponse
     {
         $data = [
@@ -136,9 +124,7 @@ abstract class AbstractConnectionController extends AbstractController
         return new JsonResponse(['data' => $data]);
     }
 
-    /**
-     * @Route("/save", methods={"POST"})
-     */
+    #[Route(path: '/save', name: 'save', methods: ['POST'])]
     public function save(Request $request, Context $context): JsonResponse
     {
         $rawConnection = $request->get('connection');
@@ -152,9 +138,7 @@ abstract class AbstractConnectionController extends AbstractController
         return new JsonResponse(['status' => 'OK', 'id' => $connection->getId()]);
     }
 
-    /**
-     * @Route("/testApiCredentials", methods={"POST"})
-     */
+    #[Route(path: '/testApiCredentials', name: 'test_api_credentials', methods: ['POST'])]
     public function testApiCredentials(Request $request, Context $context): JsonResponse
     {
 

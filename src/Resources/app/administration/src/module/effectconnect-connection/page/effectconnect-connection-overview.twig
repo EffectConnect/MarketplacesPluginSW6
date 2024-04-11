@@ -5,13 +5,13 @@
                 {{ $tc('ec.global.create') }}
             </sw-button>
         </template>
-        <template slot="content">
+        <template v-slot:content>
             <sw-alert variant="error" appearance="system" :showIcon="true" :closable="false" v-if="error">
                 {{ error }}
             </sw-alert>
             <div>
                 <sw-data-grid :dataSource="connections" :columns="columns" :showSelection="false">
-                    <template #actions="{ item }">
+                    <template v-slot:actions="{ item }">
                         <sw-context-menu-item :router-link="{ name: 'effectconnect.connection.edit', params: { id: item.id } }">
                             {{ $tc('ec.global.edit') }}
                         </sw-context-menu-item>

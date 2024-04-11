@@ -14,6 +14,7 @@ use Exception;
 use EffectConnect\Marketplaces\Service\SalesChannelService;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\System\SalesChannel\SalesChannelEntity;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -23,6 +24,7 @@ use Throwable;
  * Class ExportShipments
  * @package EffectConnect\Marketplaces\Command
  */
+#[AsCommand(name: 'ec:export-shipments')]
 class ExportShipments extends AbstractInteractionCommand
 {
     /**
