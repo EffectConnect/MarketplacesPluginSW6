@@ -49,12 +49,12 @@ class SettingsService
     {
         $connection = $this->connectionService->get($salesChannelId);
         if ($connection !== null) {
-            return (new SettingStruct())->assign($connection->jsonSerialize());
+            return (new SettingStruct($connection));
         }
 
         $connection = new ConnectionEntity();
         $connection->setSalesChannelId($salesChannelId);
-        return (new SettingStruct())->assign($connection->jsonSerialize());
+        return (new SettingStruct($connection));
     }
 
     /**
@@ -64,10 +64,8 @@ class SettingsService
     {
         $settings = [];
         foreach($this->connectionService->getAll() as $connection) {
-            $settings[] = (new SettingStruct())->assign($connection->jsonSerialize());
+            $settings[] = new SettingStruct($connection);
         }
         return $settings;
     }
-
-
 }

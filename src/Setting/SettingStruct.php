@@ -2,6 +2,7 @@
 
 namespace EffectConnect\Marketplaces\Setting;
 
+use EffectConnect\Marketplaces\Core\Connection\ConnectionEntity;
 use EffectConnect\Marketplaces\Enum\CustomerSourceType;
 use Shopware\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionStates;
 use Shopware\Core\Checkout\Order\OrderStates;
@@ -147,6 +148,36 @@ class SettingStruct extends Struct
      * @var string
      */
     protected $customerSourceType;
+
+
+    public function __construct(ConnectionEntity $connection)
+    {
+        $this->name = $connection->getName();
+        $this->publicKey = $connection->getPublicKey();
+        $this->secretKey = $connection->getSecretKey();
+        $this->catalogExportSchedule = $connection->getCatalogExportSchedule();
+        $this->addLeadingZeroToEan = $connection->getAddLeadingZeroToEan();
+        $this->useSpecialPrice = $connection->getUseSpecialPrice();
+        $this->useFallbackTranslations = $connection->getUseFallbackTranslations();
+        $this->salesChannelId = $connection->getSalesChannelId();
+        $this->useSalesChannelDefaultLanguageAsFirstFallbackLanguage = $connection->getUseSalesChannelDefaultLanguageAsFirstFallbackLanguage();
+        $this->useSystemLanguages = $connection->getUseSystemLanguages();
+        $this->offerExportSchedule = $connection->getOfferExportSchedule();
+        $this->stockType = $connection->getStockType();
+        $this->orderImportSchedule = $connection->getOrderImportSchedule();
+        $this->paymentStatus = $connection->getPaymentStatus();
+        $this->orderStatus = $connection->getOrderStatus();
+        $this->paymentMethod = $connection->getPaymentMethod();
+        $this->shippingMethod = $connection->getShippingMethod();
+        $this->logExpiration = 7;
+        $this->importExternallyFulfilledOrders = $connection->getImportExternallyFulfilledOrders();
+        $this->externalShippingStatus = $connection->getExternalShippingStatus();
+        $this->externalPaymentStatus = $connection->getExternalPaymentStatus();
+        $this->externalOrderStatus = $connection->getExternalOrderStatus();
+        $this->customerGroup = $connection->getCustomerGroup();
+        $this->createCustomer = $connection->getCreateCustomer();
+        $this->customerSourceType = $connection->getCustomerSourceType();
+    }
 
     /**
      * @param $property
