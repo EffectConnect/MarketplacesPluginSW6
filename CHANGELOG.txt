@@ -1,3 +1,6 @@
+Version 1.8.1 - 2024-06-13
+- Removed 0 check on stock and price in offer export
+
 Version 1.8.0 - 2024-04-11
 - Added Shopware 6.6 support
 - Dropped Shopware 6.5 support.
