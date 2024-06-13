@@ -88,8 +88,6 @@ class OfferTransformerService extends CatalogTransformerService
 
         $this->removeFromArrayWhenEmpty($productOptionArray, [
             'cost',
-            'price',
-            'stock',
             'deliveryTime'
         ]);
 
