@@ -7,18 +7,15 @@ use Shopware\Core\Framework\Context;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
 
 /**
  * Class RunOfferQueue
  * @package EffectConnect\Marketplaces\Command
  */
+#[AsCommand(name: 'ec:run-offer-queue')]
 class RunOfferQueue extends Command
 {
-    /**
-     * @inheritDoc
-     */
-    protected static $defaultName = 'ec:run-offer-queue';
-
     /**
      * @var OfferQueueService
      */
@@ -47,7 +44,7 @@ class RunOfferQueue extends Command
      * @param OutputInterface $output
      * @param Context|null $context
      */
-    protected function execute(InputInterface $input, OutputInterface $output, ?Context $context = null)
+    protected function execute(InputInterface $input, OutputInterface $output, ?Context $context = null): int
     {
         $this->queueService->run();
         return 1;

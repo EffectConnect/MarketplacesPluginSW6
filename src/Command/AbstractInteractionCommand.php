@@ -18,11 +18,6 @@ use Symfony\Component\Console\Command\Command;
 abstract class AbstractInteractionCommand extends Command
 {
     /**
-     * @inheritDoc
-     */
-    protected static $defaultName   = 'ec:export-catalog';
-
-    /**
      * @var SalesChannelService
      */
     protected $_salesChannelService;

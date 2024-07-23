@@ -49,7 +49,7 @@ class SettingsService
     {
         $connection = $this->connectionService->get($salesChannelId);
         if ($connection !== null) {
-            return (new SettingStruct($connection));
+            return (new SettingStruct())->assign($connection->jsonSerialize());
         }
 
         $connection = new ConnectionEntity();
@@ -64,7 +64,7 @@ class SettingsService
     {
         $settings = [];
         foreach($this->connectionService->getAll() as $connection) {
-            $settings[] = new SettingStruct($connection);
+            $settings[] = (new SettingStruct())->assign($connection->jsonSerialize());
         }
         return $settings;
     }

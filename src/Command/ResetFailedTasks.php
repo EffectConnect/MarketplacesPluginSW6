@@ -2,24 +2,23 @@
 
 namespace EffectConnect\Marketplaces\Command;
 
-use EffectConnect\Marketplaces\Helper\ExportsCleaner;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskDefinition;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
 
+/**
+ * Class ResetFailedTasks
+ * @package EffectConnect\Marketplaces\Command
+ */
+#[AsCommand(name: 'ec:reset-tasks')]
 class ResetFailedTasks extends Command
 {
-    /**
-     * @inheritDoc
-     */
-    protected static $defaultName = 'ec:reset-tasks';
-
     /**
      * @inheritDoc
      */
@@ -48,7 +47,7 @@ class ResetFailedTasks extends Command
      * @param OutputInterface $output
      * @param Context|null $context
      */
-    protected function execute(InputInterface $input, OutputInterface $output, ?Context $context = null)
+    protected function execute(InputInterface $input, OutputInterface $output, ?Context $context = null): int
     {
         try {
             $updatePayload = [];

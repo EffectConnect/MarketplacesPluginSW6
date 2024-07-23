@@ -29,6 +29,21 @@ class SalesChannelService
     protected $_salesChannelContextFactory;
 
     /**
+     * These associations are needed when obtaining sales channels for the purpose of the plug-in's logic.
+     */
+    protected const SALES_CHANNEL_ASSOCIATIONS = [
+        'language',
+        'language.locale',
+        'language.parent',
+        'language.parent.locale',
+        'languages',
+        'languages.locale',
+        'languages.parent',
+        'languages.parent.locale',
+        'domains'
+    ];
+
+    /**
      * SalesChannelService constructor.
      *
      * @param EntityRepository $salesChannelRepository
@@ -56,7 +71,11 @@ class SalesChannelService
             $context = $this->getContext($salesChannelId);
         }
 
-        $salesChannels = $this->_salesChannelRepository->search(new Criteria([$salesChannelId]), $context);
+        $criteria = new Criteria([$salesChannelId]);
+
+        $criteria->addAssociations(self::SALES_CHANNEL_ASSOCIATIONS);
+
+        $salesChannels = $this->_salesChannelRepository->search($criteria, $context);
 
         if ($salesChannels->count() <= 0) {
             throw new SalesChannelNotFoundException($salesChannelId);
@@ -83,19 +102,7 @@ class SalesChannelService
 
         $criteria = new Criteria();
 
-        $associations               = [
-            'language',
-            'language.locale',
-            'language.parent',
-            'language.parent.locale',
-            'languages',
-            'languages.locale',
-            'languages.parent',
-            'languages.parent.locale',
-            'domains'
-        ];
-
-        $criteria->addAssociations($associations);
+        $criteria->addAssociations(self::SALES_CHANNEL_ASSOCIATIONS);
 
         $salesChannels      = $this->_salesChannelRepository->search($criteria, $context);
 

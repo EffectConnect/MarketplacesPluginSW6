@@ -17,23 +17,20 @@ use Shopware\Core\System\SalesChannel\SalesChannelEntity;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Throwable;
 
 /**
  * Class ExportShipments
  * @package EffectConnect\Marketplaces\Command
  */
+#[AsCommand(name: 'ec:export-shipments')]
 class ExportShipments extends AbstractInteractionCommand
 {
     /**
      * The logger process for this service.
      */
     protected const LOGGER_PROCESS = LoggerProcess::EXPORT_SHIPMENT_TASK;
-
-    /**
-     * @inheritDoc
-     */
-    protected static $defaultName = 'ec:export-shipments';
 
     /** @var ExportQueueService */
     private $exportQueueService;
@@ -91,7 +88,8 @@ class ExportShipments extends AbstractInteractionCommand
      * @return void
      * @throws \EffectConnect\Marketplaces\Exception\SalesChannelNotFoundException
      */
-    private function executeFor(SettingStruct $settings, OutputInterface $output, ?Context $context = null) {
+    private function executeFor(SettingStruct $settings, OutputInterface $output, ?Context $context = null)
+    {
         $salesChannel = $this->_salesChannelService->getSalesChannel($settings->getSalesChannelId());
         $queueList = $this->exportQueueService->getInQueue($salesChannel->getId(), ExportQueueType::SHIPMENT);
 

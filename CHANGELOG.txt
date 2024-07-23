@@ -1,8 +1,19 @@
+Version 1.7.2 - 2024-07-24
+- PHP 8.3 compatibility improvements.
+- Added Shopware 6.5 compatibility improvements.
+- Improved support for the monolog/monolog package.
+- Fixed a failure obtaining sales channel related information like languages and/or domains.
+- Removed 0 check on stock and price in offer export to prevent stock and price values of 0 not being exported.
+- Fixed an issue which caused an issue while creating the first connection.
+- Fixed several minor bugs.
+- Removed unused code.
+- Added minor improvements.
+
 Version 1.7.1 - 2024-04-11
 - PHP 8.2 compatibility improvements.
 
 Version 1.7.0 - 2024-01-24
-- Added Shopware 6.5 support
+- Added Shopware 6.5 support.
 - Dropped Shopware 6.4, 6.3 and 6.2 support.
 - Added PHP 8 support.
 - Composer2 is now default.
@@ -11,7 +22,7 @@ Version 1.7.0 - 2024-01-24
 Version 1.6.0 - 2023-10-13
 - Fixed several minor bugs.
 - Added support for custom fields.
-- Added space between housenumber and housenumber extension.
+- Added space between house-number and house-number extension.
 - Updated README.
 
 Version 1.5.0 - 2023-03-17
@@ -66,7 +77,7 @@ Version 1.1.7 - 2021-05-10
 - Extra long time-out when obtaining orders.
 
 Version 1.1.6 - 2021-05-06
-- Prevent more then 2 decimals for prices in the catelog and offer export.
+- Prevent more then 2 decimals for prices in the catalog and offer export.
 
 Version 1.1.5 - 2021-05-05
 - Fix missing translation issue.
@@ -114,4 +125,4 @@ Version 1.0.1 - 2020-11-05
 - Fix issue while exporting product categories.
 
 Version 1.0.0 - 2020-11-05
-- Initial version
+- Initial version.

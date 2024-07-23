@@ -8,18 +8,15 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
 
 /**
  * Class ExportCatalog
  * @package EffectConnect\Marketplaces\Command
  */
+#[AsCommand(name: 'ec:clean-log')]
 class CleanLog extends Command
 {
-    /**
-     * @inheritDoc
-     */
-    protected static $defaultName = 'ec:clean-log';
-
     /**
      * @inheritDoc
      */
@@ -37,7 +34,7 @@ class CleanLog extends Command
      * @param OutputInterface $output
      * @param Context|null $context
      */
-    protected function execute(InputInterface $input, OutputInterface $output, ?Context $context = null)
+    protected function execute(InputInterface $input, OutputInterface $output, ?Context $context = null): int
     {
         $expirationDaysString = $input->getArgument('expiration-days') ?? LogCleaner::LOG_EXPIRATION_DAYS;
 

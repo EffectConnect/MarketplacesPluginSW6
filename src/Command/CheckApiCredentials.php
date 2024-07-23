@@ -2,7 +2,6 @@
 
 namespace EffectConnect\Marketplaces\Command;
 
-use EffectConnect\Marketplaces\Exception\SalesChannelNotFoundException;
 use EffectConnect\Marketplaces\Object\SalesChannelCheckApiCredentialResult;
 use EffectConnect\Marketplaces\Service\SalesChannelService;
 use EffectConnect\Marketplaces\Service\Api\CredentialService;
@@ -14,18 +13,15 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
 
 /**
  * Class CheckApiCredentials
  * @package EffectConnect\Marketplaces\Command
  */
+#[AsCommand(name: 'ec:check-api-credentials')]
 class CheckApiCredentials extends Command
 {
-    /**
-     * @inheritDoc
-     */
-    protected static $defaultName = 'ec:check-api-credentials';
-
     /**
      * @var SettingsService
      */
@@ -76,7 +72,7 @@ class CheckApiCredentials extends Command
     /**
      * @inheritDoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output, ?Context $context = null)
+    protected function execute(InputInterface $input, OutputInterface $output, ?Context $context = null): int
     {
         $salesChannelId = $input->getArgument('sales-channel-id');
         $results        = [true => [], false => []];
