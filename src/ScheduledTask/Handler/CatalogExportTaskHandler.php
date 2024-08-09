@@ -65,17 +65,7 @@ class CatalogExportTaskHandler extends AbstractTaskHandler
 
     public function runTask(): void
     {
-        /** @var CatalogExportTask $task */
-        $task = $this->_task;
-
-        $salesChannelId = $task->getSalesChannelId();
-        if ($salesChannelId === null) {
-            $allSettings = $this->_settingsService->getAllSettings();
-        } else {
-            $allSettings = [$this->_settingsService->getSettings($salesChannelId)];
-        }
-
-        foreach ($allSettings as $settings) {
+        foreach ($this->_settingsService->getAllSettings() as $settings) {
             try {
                 $salesChannel = $this->_salesChannelService->getSalesChannel($settings->getSalesChannelId());
             } catch (SalesChannelNotFoundException $e) {
