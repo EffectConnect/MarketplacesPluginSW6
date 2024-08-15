@@ -1,6 +1,6 @@
 Version 1.8.2 - 2024-08-13
 - PHP 8.3 compatibility improvements.
-- Added Shopware 6.5 compatibility improvements.
+- Added Shopware 6.6 compatibility improvements.
 - Improved support for the monolog/monolog package.
 - Fixed a failure obtaining sales channel related information like languages and/or domains.
 - Removed 0 check on stock and price in offer export to prevent stock and price values of 0 not being exported.
