@@ -32,11 +32,6 @@ class ExportShipments extends AbstractInteractionCommand
      */
     protected const LOGGER_PROCESS = LoggerProcess::EXPORT_SHIPMENT_TASK;
 
-    /**
-     * @inheritDoc
-     */
-    protected static $defaultName = 'ec:export-shipments';
-
     /** @var ExportQueueService */
     private $exportQueueService;
 
@@ -93,7 +88,8 @@ class ExportShipments extends AbstractInteractionCommand
      * @return void
      * @throws \EffectConnect\Marketplaces\Exception\SalesChannelNotFoundException
      */
-    private function executeFor(SettingStruct $settings, OutputInterface $output, ?Context $context = null) {
+    private function executeFor(SettingStruct $settings, OutputInterface $output, ?Context $context = null)
+    {
         $salesChannel = $this->_salesChannelService->getSalesChannel($settings->getSalesChannelId());
         $queueList = $this->exportQueueService->getInQueue($salesChannel->getId(), ExportQueueType::SHIPMENT);
 

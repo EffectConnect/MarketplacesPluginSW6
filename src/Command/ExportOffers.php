@@ -9,11 +9,10 @@ use EffectConnect\Marketplaces\Service\SettingsService;
 use Exception;
 use EffectConnect\Marketplaces\Service\SalesChannelService;
 use Shopware\Core\Framework\Context;
-use Shopware\Core\System\SalesChannel\SalesChannelEntity;
-use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
 
 /**
  * Class ExportOffers
@@ -26,11 +25,6 @@ class ExportOffers extends AbstractInteractionCommand
      * The logger process for this service.
      */
     protected const LOGGER_PROCESS = LoggerProcess::EXPORT_OFFERS;
-
-    /**
-     * @inheritDoc
-     */
-    protected static $defaultName = 'ec:export-offers';
 
     /**
      * @var OfferExportService

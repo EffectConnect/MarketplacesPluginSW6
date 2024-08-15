@@ -4,24 +4,18 @@ namespace EffectConnect\Marketplaces\Command;
 
 use EffectConnect\Marketplaces\Service\ShipmentQueueService;
 use Shopware\Core\Framework\Context;
-use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
 
 /**
  * Class RunShipmentQueue
  * @package EffectConnect\Marketplaces\Command
  */
-
 #[AsCommand(name: 'ec:run-shipment-queue')]
 class RunShipmentQueue extends Command
 {
-    /**
-     * @inheritDoc
-     */
-    protected static $defaultName = 'ec:run-shipment-queue';
-
     /**
      * @var ShipmentQueueService
      */

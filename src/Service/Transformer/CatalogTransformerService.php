@@ -546,6 +546,7 @@ class CatalogTransformerService
         switch ($this->_settings->getStockType()) {
             case SettingStruct::STOCK_TYPE_PHYSICAL:
                 $stock                                  = $product->getStock();
+                break;
             case SettingStruct::STOCK_TYPE_SALABLE:
             default:
                 $stock                                  = $product->getAvailableStock() ?? $product->getStock();

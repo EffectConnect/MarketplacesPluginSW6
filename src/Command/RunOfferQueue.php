@@ -17,11 +17,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 class RunOfferQueue extends Command
 {
     /**
-     * @inheritDoc
-     */
-    protected static $defaultName = 'ec:run-offer-queue';
-
-    /**
      * @var OfferQueueService
      */
     private $queueService;

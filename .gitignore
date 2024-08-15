@@ -1,3 +1,5 @@
 /root
 /.idea
 composer.lock
+/data/
+/docker-compose.yaml

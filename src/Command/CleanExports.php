@@ -20,11 +20,6 @@ class CleanExports extends Command
     /**
      * @inheritDoc
      */
-    protected static $defaultName = 'ec:clean-exports';
-
-    /**
-     * @inheritDoc
-     */
     protected function configure(): void
     {
         $this->setDefinition([])

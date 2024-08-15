@@ -30,11 +30,6 @@ class ImportOrders extends AbstractInteractionCommand
     protected const LOGGER_PROCESS = LoggerProcess::IMPORT_ORDERS;
 
     /**
-     * @inheritDoc
-     */
-    protected static $defaultName = 'ec:import-orders';
-
-    /**
      * @var OrderImportService
      */
     protected $_orderImportService;

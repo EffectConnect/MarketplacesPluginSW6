@@ -29,11 +29,6 @@ class ExportCatalog extends AbstractInteractionCommand
     protected const LOGGER_PROCESS = LoggerProcess::EXPORT_CATALOG;
 
     /**
-     * @inheritDoc
-     */
-    protected static $defaultName = 'ec:export-catalog';
-
-    /**
      * @var CatalogExportService
      */
     protected $_catalogExportService;

@@ -20,11 +20,6 @@ class CleanLog extends Command
     /**
      * @inheritDoc
      */
-    protected static $defaultName = 'ec:clean-log';
-
-    /**
-     * @inheritDoc
-     */
     protected function configure(): void
     {
         $this->setDefinition([])

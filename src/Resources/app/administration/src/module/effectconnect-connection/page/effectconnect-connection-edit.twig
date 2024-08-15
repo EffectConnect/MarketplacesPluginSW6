@@ -7,7 +7,7 @@
         </template>
         <template #smart-bar-back>
             <router-link class="smart-bar__back-btn" :to="{ name: 'effectconnect.connection.overview' }">
-                <sw-icon name="default-arrow-head-left" small></sw-icon>
+                <sw-icon name="regular-chevron-left-s" small />
             </router-link>
         </template>
         <template #content>
@@ -44,7 +44,7 @@
                         </template>
                     </sw-inherit-wrapper>
                     <sw-button :disabled="!connection.secretKey || !connection.publicKey" @click="testApiCredentials()" size="small">
-                        <sw-icon name="default-object-rocket" small></sw-icon>
+                        <sw-icon name="regular-check-circle" small />
                         {{ tc('testCredentials') }}
                     </sw-button>
                 </sw-card>
@@ -79,7 +79,7 @@
                                      :helpText="tc('useSystemLanguagesHelpText')">
                     </sw-switch-field>
                     <sw-button :disabled="newItem" @click="triggerCatalogExport()" size="small">
-                        <sw-icon name="default-object-rocket" small></sw-icon>
+                        <sw-icon name="regular-rocket" small />
                         {{ tc('triggerCatalogExport') }}
                     </sw-button>
                 </sw-card>
