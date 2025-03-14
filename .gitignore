@@ -3,3 +3,4 @@
 composer.lock
 /data/
 /docker-compose.yaml
+/sw6/
