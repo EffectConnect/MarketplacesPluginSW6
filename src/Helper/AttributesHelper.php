@@ -73,7 +73,7 @@ class AttributesHelper
         }
 
         foreach ($values as $value) {
-            if (is_null($value) || empty($value)) {
+            if (is_null($value) || empty($value) || (is_string($value) && empty(trim($value)))) {
                 continue;
             }
 
