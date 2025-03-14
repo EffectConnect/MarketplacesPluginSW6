@@ -106,6 +106,11 @@ class OrderShippedSubscriber implements EventSubscriberInterface
         if ($customFields[CustomFieldService::CUSTOM_FIELD_KEY_ORDER_FULFILMENT_TYPE] === FulfilmentType::EXTERNAL) {
             return 'order is externally fulfilled.';
         }
+        if ($delivery->getOrder()->getOrderDateTime()->diff(new \DateTime())->days > 28) {
+            // Prevents order export batches from failing due to outdated orders.
+            // Orders cannot be updated after 30 days.
+            return 'order is too old.';
+        }
         return null;
     }
 
