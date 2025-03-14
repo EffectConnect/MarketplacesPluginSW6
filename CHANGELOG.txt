@@ -1,3 +1,7 @@
+Version 1.7.4 - 2025-03-14
+- Prevent API payload errors caused by attribute values containing only spaces.
+- Prevent shipment batch processing issues caused by outdated orders.
+
 Version 1.7.3 - 2024-08-09
 - Fixed bug with schedule catalog export task
 
