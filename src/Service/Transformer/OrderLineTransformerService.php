@@ -3,7 +3,9 @@
 namespace EffectConnect\Marketplaces\Service\Transformer;
 
 use DateTime;
+use EffectConnect\Marketplaces\Exception\ProductNoCatalogMatchException;
 use EffectConnect\Marketplaces\Exception\ProductNotFoundException;
+use EffectConnect\Marketplaces\Exception\ProductNotValidException;
 use EffectConnect\Marketplaces\Helper\SystemHelper;
 use EffectConnect\Marketplaces\Service\CustomFieldService;
 use EffectConnect\PHPSdk\Core\Model\Response\Line;
@@ -69,11 +71,13 @@ class OrderLineTransformerService
      * @param int $index
      * @param SalesChannelContext $context
      * @return array
+     * @throws ProductNoCatalogMatchException
      * @throws ProductNotFoundException
+     * @throws ProductNotValidException
      */
     public function transformOrderLine(Line $line, int $index, SalesChannelContext $context): array
     {
-        $product            = $this->getProduct($line->getProduct(), $context);
+        $product            = $this->getProduct($line->getProduct(), $line->getProductTitle(), $context);
         $priceDefinition    = $this->getPriceDefinition($line->getLineAmount(), $product, $context);
         $price              = $this->_quantityPriceCalculator->calculate($priceDefinition, $context);
         $label              = !empty($product->getName()) ? $product->getName() : $line->getProductTitle();
@@ -190,12 +194,31 @@ class OrderLineTransformerService
      * Get the product for the order line.
      *
      * @param LineProductIdentifiers $productIdentifiers
+     * @param string $productTitle
      * @param SalesChannelContext $context
      * @return ProductEntity
      * @throws ProductNotFoundException
+     * @throws ProductNotValidException
+     * @throws ProductNoCatalogMatchException
      */
-    protected function getProduct(LineProductIdentifiers $productIdentifiers, SalesChannelContext $context): ProductEntity
+    protected function getProduct(LineProductIdentifiers $productIdentifiers, string $productTitle, SalesChannelContext $context): ProductEntity
     {
+        // Product not matched and therefor not found.
+        if (empty($productIdentifiers->getIdentifier())) {
+            throw new ProductNoCatalogMatchException(
+                $productIdentifiers->getIdentifier(),
+                $productTitle
+            );
+        }
+
+        // Product UUID not valid and therefor not found.
+        if (!Uuid::isValid($productIdentifiers->getIdentifier())) {
+            throw new ProductNotValidException(
+                $productIdentifiers->getIdentifier(),
+                $productTitle
+            );
+        }
+
         $criteria   = new Criteria();
         $filter     = new EqualsFilter('id', $productIdentifiers->getIdentifier());
 

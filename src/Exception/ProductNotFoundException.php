@@ -12,5 +12,5 @@ class ProductNotFoundException extends AbstractException
     /**
      * @inheritDoc
      */
-    protected const MESSAGE_FORMAT    = 'Product with ID "%s" is not found (EAN: %s | SKU: %s).';
+    protected const MESSAGE_FORMAT    = 'The product with ID "%s" was not found (EAN: %s | SKU: %s).';
 }
