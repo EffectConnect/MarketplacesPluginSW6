@@ -15,6 +15,7 @@ use Shopware\Core\Checkout\Cart\Price\QuantityPriceCalculator;
 use Shopware\Core\Checkout\Cart\Price\Struct\CalculatedPrice;
 use Shopware\Core\Checkout\Cart\Price\Struct\QuantityPriceDefinition;
 use Shopware\Core\Checkout\Cart\Tax\Struct\CalculatedTaxCollection;
+use Shopware\Core\Checkout\Cart\Tax\Struct\TaxRule;
 use Shopware\Core\Checkout\Cart\Tax\Struct\TaxRuleCollection;
 use Shopware\Core\Content\Product\ProductEntity;
 use Shopware\Core\Content\Property\Aggregate\PropertyGroupOption\PropertyGroupOptionEntity;
@@ -23,7 +24,9 @@ use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\Uuid\Uuid;
+use Shopware\Core\System\Country\CountryEntity;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
+use Shopware\Core\System\Tax\Aggregate\TaxRule\TaxRuleEntity;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -36,6 +39,11 @@ class OrderLineTransformerService
      * @var EntityRepository
      */
     protected $_productRepository;
+
+    /**
+     * @var EntityRepository
+     */
+    protected $_taxRuleRepository;
 
     /**
      * @var QuantityPriceCalculator
@@ -51,15 +59,18 @@ class OrderLineTransformerService
      * OrderLineTransformerService constructor.
      *
      * @param EntityRepository $productRepository
+     * @param EntityRepository $taxRuleRepository
      * @param QuantityPriceCalculator $quantityPriceCalculator
      * @param ContainerInterface $container
      */
     public function __construct(
         EntityRepository $productRepository,
+        EntityRepository $taxRuleRepository,
         QuantityPriceCalculator $quantityPriceCalculator,
         ContainerInterface $container
     ) {
         $this->_productRepository       = $productRepository;
+        $this->_taxRuleRepository       = $taxRuleRepository;
         $this->_quantityPriceCalculator = $quantityPriceCalculator;
         $this->_container               = $container;
     }
@@ -75,10 +86,10 @@ class OrderLineTransformerService
      * @throws ProductNotFoundException
      * @throws ProductNotValidException
      */
-    public function transformOrderLine(Line $line, int $index, SalesChannelContext $context): array
+    public function transformOrderLine(Line $line, int $index, CountryEntity $country, SalesChannelContext $context): array
     {
         $product            = $this->getProduct($line->getProduct(), $line->getProductTitle(), $context);
-        $priceDefinition    = $this->getPriceDefinition($line->getLineAmount(), $product, $context);
+        $priceDefinition    = $this->getPriceDefinition($line->getLineAmount(), $product, $country, $context);
         $price              = $this->_quantityPriceCalculator->calculate($priceDefinition, $context);
         $label              = !empty($product->getName()) ? $product->getName() : $line->getProductTitle();
         $lineId             = Uuid::randomHex();
@@ -224,6 +235,7 @@ class OrderLineTransformerService
 
         $criteria
             ->addFilter($filter)
+            ->addAssociation('tax')
             ->addAssociation('options')
             ->addAssociation('options.group');
 
@@ -239,6 +251,37 @@ class OrderLineTransformerService
         }
 
         return $products->first();
+    }
+
+    /**
+     * Get the tax rules for the product in the order line based on the shipping country.
+     *
+     * @param ProductEntity $product
+     * @param CountryEntity $country
+     * @param SalesChannelContext $context
+     * @return TaxRuleCollection
+     */
+    protected function getTaxRules(ProductEntity $product, CountryEntity $country, SalesChannelContext $context): TaxRuleCollection
+    {
+        $criteria = new Criteria();
+        $criteria
+            ->addFilter(new EqualsFilter('taxId', $product->getTaxId()))
+            ->addFilter(new EqualsFilter('countryId', $country->getId()));
+
+        $taxRules = $this->_taxRuleRepository->search($criteria, $context->getContext());
+
+        // This is the default sales channel context tax rule, which will be used when the tax rule corresponding to the tax id and country id is not found.
+        $taxRuleCollection = $context->buildTaxRules($product->getTaxId());
+
+        if ($taxRules->first() !== null) {
+            /** @var TaxRuleEntity $taxRule */
+            $taxRule = $taxRules->first();
+            $taxRuleCollection = new TaxRuleCollection([
+                new TaxRule($taxRule->getTaxRate(), 100)
+            ]);
+        }
+
+        return $taxRuleCollection;
     }
 
     /**
@@ -262,10 +305,11 @@ class OrderLineTransformerService
      *
      * @param float $amount
      * @param ProductEntity $product
+     * @param CountryEntity $country
      * @param SalesChannelContext $context
      * @return QuantityPriceDefinition
      */
-    protected function getPriceDefinition(float $amount, ProductEntity $product, SalesChannelContext $context): QuantityPriceDefinition
+    protected function getPriceDefinition(float $amount, ProductEntity $product, CountryEntity $country, SalesChannelContext $context): QuantityPriceDefinition
     {
         // QuantityPriceDefinition constructor changed in Shopware 6.4.
         // The if-statement below is to support backwards compatibility.
@@ -274,7 +318,7 @@ class OrderLineTransformerService
 
             return new QuantityPriceDefinition(
                 $amount,
-                $context->buildTaxRules($product->getTaxId()),
+                $this->getTaxRules($product, $country, $context),
                 2,
                 1,
                 true
@@ -282,7 +326,7 @@ class OrderLineTransformerService
         } else {
             // Shopware 6.4 and higher.
 
-            $definition = new QuantityPriceDefinition($amount, $context->buildTaxRules($product->getTaxId()), 1);
+            $definition = new QuantityPriceDefinition($amount, $this->getTaxRules($product, $country, $context), 1);
 
             $definition->setIsCalculated(true);
 
