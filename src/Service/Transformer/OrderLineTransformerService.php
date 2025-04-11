@@ -75,8 +75,8 @@ class OrderLineTransformerService
      */
     public function transformOrderLine(Line $line, int $index, SalesChannelContext $context): array
     {
-        $product            = $this->getProduct($line->getProduct(), $context);
         $priceDefinition    = $this->getPriceDefinition($line->getLineAmount(), $product, $context);
+        $product            = $this->getProduct($line->getProduct(), $line->getProductTitle(), $context);
         $price              = $this->_quantityPriceCalculator->calculate($priceDefinition, $context);
         $label              = !empty($product->getName()) ? $product->getName() : $line->getProductTitle();
         $lineId             = Uuid::randomHex();
@@ -192,11 +192,12 @@ class OrderLineTransformerService
      * Get the product for the order line.
      *
      * @param LineProductIdentifiers $productIdentifiers
+     * @param string $productTitle
      * @param SalesChannelContext $context
      * @return ProductEntity
      * @throws ProductNotFoundException
      */
-    protected function getProduct(LineProductIdentifiers $productIdentifiers, SalesChannelContext $context): ProductEntity
+    protected function getProduct(LineProductIdentifiers $productIdentifiers, string $productTitle, SalesChannelContext $context): ProductEntity
     {
         // Product not matched and therefor not found.
         if (empty($productIdentifiers->getIdentifier())) {
