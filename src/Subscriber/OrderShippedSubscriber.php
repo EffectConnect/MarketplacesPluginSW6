@@ -15,6 +15,7 @@ use EffectConnect\Marketplaces\Service\ExportQueueService;
 use Monolog\Logger;
 use Shopware\Core\Checkout\Order\Aggregate\OrderDelivery\OrderDeliveryEntity;
 use Shopware\Core\Checkout\Order\Aggregate\OrderDelivery\OrderDeliveryStates;
+use Shopware\Core\Checkout\Order\Event\OrderStateMachineStateChangeEvent;
 use Shopware\Core\Checkout\Order\OrderEvents;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -77,7 +78,7 @@ class OrderShippedSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            OrderEvents::ORDER_DELIVERY_WRITTEN_EVENT => 'onOrderDeliveryWritten'
+            'state_enter.order_delivery.state.shipped' => 'onOrderDeliveryStateShipped',
         ];
     }
 
@@ -88,54 +89,75 @@ class OrderShippedSubscriber implements EventSubscriberInterface
     private function getSkipReason(?OrderDeliveryEntity $delivery): ?string
     {
         if (is_null($delivery)) {
-            return 'delivery does not exist';
+            return 'delivery does not exist.';
         }
+
         if ($delivery->getStateMachineState()->getTechnicalName() !== OrderDeliveryStates::STATE_SHIPPED) {
             return 'delivery is not shipped yet.';
         }
+
         if (is_null($delivery->getOrder())) {
             return 'order does not exist.';
         }
+
         if (empty($delivery->getOrder()->getLineItems())) {
             return 'order has no orderlines.';
         }
+
         $customFields = $delivery->getOrder()->getCustomFields();
+
         if (empty($customFields[CustomFieldService::CUSTOM_FIELD_KEY_ORDER_EFFECTCONNECT_ORDER_NUMBER])) {
             return 'order is not an EffectConnect order.';
         }
-        if ($customFields[CustomFieldService::CUSTOM_FIELD_KEY_ORDER_FULFILMENT_TYPE] === FulfilmentType::EXTERNAL) {
+
+        if (isset($customFields[CustomFieldService::CUSTOM_FIELD_KEY_ORDER_FULFILMENT_TYPE]) && $customFields[CustomFieldService::CUSTOM_FIELD_KEY_ORDER_FULFILMENT_TYPE] === FulfilmentType::EXTERNAL) {
             return 'order is externally fulfilled.';
         }
+
         if ($delivery->getOrder()->getOrderDateTime()->diff(new \DateTime())->days > 28) {
             // Prevents order export batches from failing due to outdated orders.
             // Orders cannot be updated after 30 days.
             return 'order is too old.';
         }
+
         return null;
     }
 
     /**
-     * Is triggered when an order delivery is set.
+     * Is triggered when an order delivery is set to shipped.
      *
-     * @param EntityWrittenEvent $event
+     * @param OrderStateMachineStateChangeEvent $event
      */
-    public function onOrderDeliveryWritten(EntityWrittenEvent $event)
+    public function onOrderDeliveryStateShipped(OrderStateMachineStateChangeEvent $event)
     {
         $this->_logger->info('Export shipment event subscriber for sales channel started.', [
             'process'       => static::LOGGER_PROCESS
         ]);
 
-        foreach ($event->getWriteResults() as $writeResult) {
+        if ($event->getOrder()->getDeliveries() === null) {
+            $this->_logger->notice('Delivery shipment skipped, reason: order has no deliveries.', [
+                'process'   => static::LOGGER_PROCESS,
+                'order'     => $event->getOrder()->getId()
+            ]);
 
-            $deliveryId     = is_array($writeResult->getPrimaryKey()) ? $writeResult->getPrimaryKey()[0] : $writeResult->getPrimaryKey();
+            return;
+        }
+
+
+        /** @var OrderDeliveryEntity $delivery */
+        foreach ($event->getOrder()->getDeliveries() as $delivery) {
+
+            $deliveryId     = $delivery->getId();
             $delivery       = $this->getDeliveryById($deliveryId, $event->getContext());
 
             $skipReason = $this->getSkipReason($delivery);
             if ($skipReason !== null) {
                 $this->_logger->notice('Delivery shipment skipped, reason: ' . $skipReason, [
-                    'process'       => static::LOGGER_PROCESS,
-                    'delivery'      => $deliveryId
+                    'process'   => static::LOGGER_PROCESS,
+                    'order'     => $delivery->getOrderId(),
+                    'delivery'  => $deliveryId
                 ]);
+
                 continue;
             }
             $salesChannel = $delivery->getOrder()->getSalesChannel();
