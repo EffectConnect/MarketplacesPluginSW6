@@ -441,6 +441,27 @@ class OrderTransformerService
         }
 
         foreach ($order->getLines() as $line) {
+            if ($line->getStatus() === 'line_cancelled') {
+                $this->_logger->info('Order line skipped because it is cancelled.', [
+                    'process'       => static::LOGGER_PROCESS,
+                    'sales_channel' => [
+                        'id'    => $this->_salesChannel->getId(),
+                        'name'  => $this->_salesChannel->getName(),
+                    ],
+                    'order'         => [
+                        'effectconnect_order_number'    => $order->getIdentifiers()->getEffectConnectNumber(),
+                        'channel_order_number'          => $order->getIdentifiers()->getChannelNumber(),
+                    ],
+                    'orderline'         => [
+                        'effectconnect_id'              => $line->getIdentifiers()->getEffectConnectId(),
+                        'effectconnect_line_id'         => $line->getIdentifiers()->getEffectConnectLineId(),
+                        'channel_line_id'               => $line->getIdentifiers()->getChannelLineId()
+                    ]
+                ]);
+
+                continue;
+            }
+
             $orderLines[] = $this->_orderLineTransformerService->transformOrderLine($line, $orderLineIndex, $this->_salesChannelContext);
             $orderLineIndex++;
         }
