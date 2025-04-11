@@ -3,7 +3,9 @@
 namespace EffectConnect\Marketplaces\Service\Transformer;
 
 use DateTime;
+use EffectConnect\Marketplaces\Exception\ProductNoCatalogMatchException;
 use EffectConnect\Marketplaces\Exception\ProductNotFoundException;
+use EffectConnect\Marketplaces\Exception\ProductNotValidException;
 use EffectConnect\Marketplaces\Helper\SystemHelper;
 use EffectConnect\Marketplaces\Service\CustomFieldService;
 use EffectConnect\PHPSdk\Core\Model\Response\Line;
@@ -196,6 +198,22 @@ class OrderLineTransformerService
      */
     protected function getProduct(LineProductIdentifiers $productIdentifiers, SalesChannelContext $context): ProductEntity
     {
+        // Product not matched and therefor not found.
+        if (empty($productIdentifiers->getIdentifier())) {
+            throw new ProductNoCatalogMatchException(
+                $productIdentifiers->getIdentifier(),
+                $productTitle
+            );
+        }
+
+        // Product UUID not valid and therefor not found.
+        if (!Uuid::isValid($productIdentifiers->getIdentifier())) {
+            throw new ProductNotValidException(
+                $productIdentifiers->getIdentifier(),
+                $productTitle
+            );
+        }
+
         $criteria   = new Criteria();
         $filter     = new EqualsFilter('id', $productIdentifiers->getIdentifier());
 

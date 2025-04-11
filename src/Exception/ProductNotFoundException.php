@@ -5,12 +5,12 @@ namespace EffectConnect\Marketplaces\Exception;
 /**
  * Class ProductNotFoundException
  * @package EffectConnect\Marketplaces\Exception
- * @method string __construct(string $id, string $ean, string $sku)
+ * @method string __construct(string $id, string $title, string $sku)
  */
 class ProductNotFoundException extends AbstractException
 {
     /**
      * @inheritDoc
      */
-    protected const MESSAGE_FORMAT    = 'Product with ID "%s" is not found (EAN: %s | SKU: %s).';
+    protected const MESSAGE_FORMAT    = 'The product with ID "%s" was not found (EAN: %s | SKU: %s).';
 }
