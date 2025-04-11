@@ -22,6 +22,7 @@ use EffectConnect\Marketplaces\Factory\LoggerFactory;
 use EffectConnect\Marketplaces\Handler\EffectConnectPayment;
 use EffectConnect\Marketplaces\Handler\EffectConnectShipment;
 use EffectConnect\Marketplaces\Helper\StateHelper;
+use EffectConnect\Marketplaces\Helper\SystemHelper;
 use EffectConnect\Marketplaces\Interfaces\LoggerProcess;
 use EffectConnect\Marketplaces\Object\OrderImportResult;
 use EffectConnect\Marketplaces\Service\Api\AbstractOrderService;
@@ -409,6 +410,7 @@ class OrderTransformerService
         $billingAddress             = $this->_customerTransformerService->transformOrderAddress($billingAddressId, $order->getBillingAddress(), $this->_salesChannelContext);
         $shippingAddress            = $this->_customerTransformerService->transformOrderAddress($shippingAddressId, $order->getShippingAddress(), $this->_salesChannelContext);
         $orderCustomer              = $this->_customerTransformerService->transformOrderCustomer($customerSourceAddress, $this->_salesChannelContext);
+        $country                    = $this->_customerTransformerService->getCountry($order->getShippingAddress()->getCountry(), $this->_salesChannelContext);
         $paymentMethod              = $this->getPaymentMethod();
         $shippingMethod             = $this->getShippingMethod();
         $tags                       = [
@@ -764,13 +766,27 @@ class OrderTransformerService
             $taxRuleCollection->add($highestTaxRule);
         }
 
-        return new QuantityPriceDefinition(
-            $amount,
-            $taxRuleCollection,
-            2,
-            1,
-            true
-        );
+        // QuantityPriceDefinition constructor changed in Shopware 6.4.
+        // The if-statement below is to support backwards compatibility.
+        if (SystemHelper::compareVersion('6.4', '<')) {
+            // Shopware 6.3 and lower.
+
+            return new QuantityPriceDefinition(
+                $amount,
+                $taxRuleCollection,
+                2,
+                1,
+                true
+            );
+        } else {
+            // Shopware 6.4 and higher.
+
+            $definition = new QuantityPriceDefinition($amount, $taxRuleCollection, 1);
+
+            $definition->setIsCalculated(true);
+
+            return $definition;
+        }
     }
 
     /**

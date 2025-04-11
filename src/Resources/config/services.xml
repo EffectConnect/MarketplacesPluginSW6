@@ -178,6 +178,7 @@
         <!-- Order Line Transformer Service -->
         <service id="EffectConnect\Marketplaces\Service\Transformer\OrderLineTransformerService" class="EffectConnect\Marketplaces\Service\Transformer\OrderLineTransformerService">
             <argument type="service" id="product.repository" />
+            <argument type="service" id="tax_rule.repository" />
             <argument type="service" id="Shopware\Core\Checkout\Cart\Price\QuantityPriceCalculator"/>
             <argument type="service" id="service_container" />
         </service>

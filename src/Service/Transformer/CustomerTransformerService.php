@@ -291,7 +291,7 @@ class CustomerTransformerService
      * @return CountryEntity
      * @throws CountryNotFoundException
      */
-    protected function getCountry(string $countryCode, SalesChannelContext $context): CountryEntity
+    public function getCountry(string $countryCode, SalesChannelContext $context): CountryEntity
     {
         $criteria   = new Criteria();
         $isoFilter  = new EqualsFilter('iso', strtoupper($countryCode));
