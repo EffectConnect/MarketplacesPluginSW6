@@ -1,3 +1,9 @@
+Version 1.8.4 - 2025-04-11
+- Improved the method for capturing order shipment actions to prevent multiple shipment exports for a single shipment.
+- Implemented functionality to skip cancelled orderlines.
+- Added verification for product matches and validation of product identifiers when importing orders.
+- Enhanced the logic for order import tax calculations.
+
 Version 1.8.3 - 2025-03-14
 - Prevent API payload errors caused by attribute values containing only spaces.
 - Prevent shipment batch processing issues caused by outdated orders.
@@ -22,6 +28,12 @@ Version 1.8.0 - 2024-04-11
 - Dropped Shopware 6.5 support.
 - Added PHP 8.3 support.
 - Updated README.
+
+Version 1.7.5 - 2025-04-11
+- Improved the method for capturing order shipment actions to prevent multiple shipment exports for a single shipment.
+- Implemented functionality to skip cancelled orderlines.
+- Added verification for product matches and validation of product identifiers when importing orders.
+- Enhanced the logic for order import tax calculations.
 
 Version 1.7.4 - 2025-03-14
 - Prevent API payload errors caused by attribute values containing only spaces.
