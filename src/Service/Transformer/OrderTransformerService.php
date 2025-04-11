@@ -458,9 +458,11 @@ class OrderTransformerService
                         'channel_line_id'               => $line->getIdentifiers()->getChannelLineId()
                     ]
                 ]);
+
+                continue;
             }
 
-            $orderLines[] = $this->_orderLineTransformerService->transformOrderLine($line, $orderLineIndex, $this->_salesChannelContext);
+            $orderLines[] = $this->_orderLineTransformerService->transformOrderLine($line, $orderLineIndex, $country, $this->_salesChannelContext);
             $orderLineIndex++;
         }
 
