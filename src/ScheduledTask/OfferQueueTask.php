@@ -16,7 +16,7 @@ class OfferQueueTask extends AbstractTask
     /**
      * @inheritDoc
      */
-    public const DEFAULT_INTERVAL   = 60;
+    public const DEFAULT_INTERVAL   = 300;
 
     /**
      * Get the task name.
