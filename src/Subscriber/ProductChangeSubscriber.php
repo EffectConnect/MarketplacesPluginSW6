@@ -90,6 +90,18 @@ class ProductChangeSubscriber implements EventSubscriberInterface
             if ($writeResult->getOperation() !== 'update') {
                 continue;
             }
+
+            $payload = $writeResult->getPayload();
+            if (!is_array($payload) || (
+                !array_key_exists('stock', $payload) &&
+                !array_key_exists('availableStock', $payload) &&
+                !array_key_exists('price', $payload) &&
+                !array_key_exists('purchasePrices', $payload) &&
+                !array_key_exists('deliveryTimeId', $payload)
+            )) {
+                continue;
+            }
+
             $primaryKeys = is_array($writeResult->getPrimaryKey()) ? $writeResult->getPrimaryKey() : [$writeResult->getPrimaryKey()];
             $criteria = (new Criteria())->addFilter(new EqualsAnyFilter('productId', $primaryKeys));
             $visibilities = $this->productVisibilityRepository->search($criteria, Context::createDefaultContext());
