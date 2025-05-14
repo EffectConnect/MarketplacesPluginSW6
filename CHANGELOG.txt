@@ -1,3 +1,9 @@
+Version 1.8.5 - 2025-05-14
+- Updated the README contents.
+- Prevent duplicate product updates by ensuring they are not queued in the offer export queue if already present.
+- Prevent irrelevant product update events from queuing items for the short-term offer exports.
+- The event based offer export now exports all queued items every 5 minuten instead of every minute.
+
 Version 1.8.4 - 2025-04-11
 - Improved the method for capturing order shipment actions to prevent multiple shipment exports for a single shipment.
 - Implemented functionality to skip cancelled orderlines.
@@ -28,6 +34,12 @@ Version 1.8.0 - 2024-04-11
 - Dropped Shopware 6.5 support.
 - Added PHP 8.3 support.
 - Updated README.
+
+Version 1.7.6 - 2025-05-14
+- Updated the README contents.
+- Prevent duplicate product updates by ensuring they are not queued in the offer export queue if already present.
+- Prevent irrelevant product update events from queuing items for the short-term offer exports.
+- The event based offer export now exports all queued items every 5 minuten instead of every minute.
 
 Version 1.7.5 - 2025-04-11
 - Improved the method for capturing order shipment actions to prevent multiple shipment exports for a single shipment.
