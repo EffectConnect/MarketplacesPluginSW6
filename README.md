@@ -9,8 +9,9 @@
 
 Use this plugin to connect your Shopware 6 webshop with EffectConnect Marketplaces. For more information about EffectConnect, go to the [EffectConnect website](https://www.effectconnect.com "EffectConnect Website").
 
-> Warning: Only Shopware 6.5 is officially supported at this moment<br><br>
-> For Shopware 6.2, 6.3 and 6.4 support, use [releases](https://github.com/EffectConnect/MarketplacesPluginSW6/releases) prior to 1.7.0.
+> Warning: Only Shopware 6.5 is officially supported in this branch<br><br>
+> For Shopware 6.6 or higher support, use [releases](https://github.com/EffectConnect/MarketplacesPluginSW6/releases) after 1.7.<br>
+> Shopware 6.2, 6.3 and 6.4 support is not being maintained anymore.
 
 **Important: before installing this plugin please contact the EffectConnect sales department via +31(0)852088432 and/or sales@effectconnect.com so we can provide you with a new EffectConnect account.**
 
@@ -53,7 +54,7 @@ The automatic import, export, and cleanup can be enabled in two ways:
 0 * * * * php {APPLICATION_PATH}/bin/console ec:clean-exports
 0 * * * * php {APPLICATION_PATH}/bin/console ec:clean-log
 * * * * * php {APPLICATION_PATH}/bin/console ec:run-shipment-queue
-* * * * * php {APPLICATION_PATH}/bin/console ec:run-offer-queue
+*/5 * * * * php {APPLICATION_PATH}/bin/console ec:run-offer-queue
 ```
 
 The cron times above can be adjusted as desired. The times above are explained below:
@@ -64,6 +65,6 @@ The cron times above can be adjusted as desired. The times above are explained b
 - **Clearing old exports (ec:clean-exports)**: Every hour on the hour.
 - **Clearing old logs (ec:clean-log)**: Every hour on the hour.
 - **Exports all queued shipments (ec:run-shipment-queue)**: Every minute.
-- **Exports all queued offer changes (ec:run-offer-queue)**: Every minute.
+- **Exports all queued offer changes (ec:run-offer-queue)**: Every 5 minutes.
 
 *Note: In older versions of Shopware 6 the extensions module is located under Settings -> System -> Plugins.*
