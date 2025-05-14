@@ -26,6 +26,22 @@ class ExportQueueService
     }
 
     /**
+     * @param ExportQueueEntity $queue
+     * @return bool
+     */
+    public function alreadyExist(ExportQueueEntity $queue): bool
+    {
+        $criteria = (new Criteria())
+            ->addFilter(new EqualsFilter('type', $queue->getType()))
+            ->addFilter(new EqualsFilter('identifier', $queue->getIdentifier()))
+            ->addFilter(new EqualsFilter('status', $queue->getStatus()))
+            ->addFilter(new EqualsFilter('salesChannelId', $queue->getSalesChannelId()))
+            ->setLimit(1);
+
+        return $this->repository->search($criteria, Context::createDefaultContext())->count() > 0;
+    }
+
+    /**
      * @param string $salesChannelId
      * @param string|null $type
      * @param int|null $limit
