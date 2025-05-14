@@ -79,7 +79,10 @@ class ProductChangeSubscriber implements EventSubscriberInterface
             ->setType(ExportQueueType::OFFER)
             ->setStatus(ExportQueueStatus::QUEUED)
         ;
-        $this->exportQueueService->create($queue);
+
+        if (!$this->exportQueueService->alreadyExist($queue)) {
+            $this->exportQueueService->create($queue);
+        }
     }
 
     /**
