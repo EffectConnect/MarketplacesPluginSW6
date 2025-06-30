@@ -14,7 +14,7 @@
         "orderImport": "Order import",
         "taskTriggered": "Task successfully triggered.",
         "noSalesChannelsAvailable": "No sales channels available",
-        "scheduleInformationText": "This process is set as: <strong>{current}</strong>.",
+        "scheduleInformationText": "This process is set as: ",
         "triggerCatalogExportHelpText": "Triggers a catalog export.",
         "triggerCatalogExportLabel": "Trigger catalog export",
         "salesChannelHelpText": "Which sales channel to be used",

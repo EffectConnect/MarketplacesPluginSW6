@@ -3,7 +3,7 @@
     "description": "EffectConnect Marketplaces Shopware 6 plugin",
     "type": "shopware-platform-plugin",
     "license": "proprietary",
-    "version": "1.8.5",
+    "version": "1.9.0",
     "authors": [
         {
             "name": "Koek&Peer",
@@ -24,9 +24,9 @@
         "ext-intl": "*",
         "ext-libxml": "*",
         "php": "~8.2||~8.3",
-        "shopware/core": "6.6.*",
-        "shopware/administration": "6.6.*",
-        "shopware/storefront": "6.6.*",
+        "shopware/core": "6.7.*",
+        "shopware/administration": "6.7.*",
+        "shopware/storefront": "6.7.*",
         "monolog/monolog": "^1.1|^2.0|^3.5",
         "effectconnect/php-sdk": "^3.2.6",
         "myclabs/php-enum": "1.7.6"

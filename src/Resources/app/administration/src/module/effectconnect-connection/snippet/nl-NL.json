@@ -75,7 +75,7 @@
                 "shippingMethodPlaceholder": "Kies een verzendmethode ...",
                 "triggerCatalogExportHelpText": "Activeert een export van een catalogus.",
                 "triggerCatalogExportLabel": "Trigger catalogus exporteren",
-                "scheduleInformationText": "Dit proces staat ingesteld op <strong>{current}</strong>.",
+                "scheduleInformationText": "Dit proces staat ingesteld op: ",
                 "taskTriggered": "Taak met succes geactiveerd.",
                 "apiCredentialsOK": "Referenties geldig",
                 "apiCredentialsNOK": "Referenties zijn niet geldig",

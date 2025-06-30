@@ -40,6 +40,7 @@ trait PaymentMethodTrait
         $paymentData            = [
             'handlerIdentifier' => EffectConnectPayment::class,
             'name'              => EffectConnectPayment::PAYMENT_METHOD_NAME,
+            'technicalName'     => EffectConnectPayment::PAYMENT_METHOD_TECHNICAL_NAME,
             'description'       => EffectConnectPayment::PAYMENT_METHOD_DESCRIPTION,
             'pluginId'          => $pluginId,
             'afterOrderEnabled' => false

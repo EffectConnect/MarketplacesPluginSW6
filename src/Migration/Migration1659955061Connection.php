@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS `ec_connection` (
     COLLATE = utf8mb4_unicode_ci;
 SQL;
         // use executeUpdate for shopware 6.3 compatibility.
-        $connection->executeUpdate($sql);
+        $connection->executeQuery($sql);
     }
 
     /**
@@ -66,7 +66,7 @@ SQL;
      */
     public function updateDestructive(Connection $connection): void
     {
-        $connection->executeUpdate("DROP TABLE `ec_connection`");
+        $connection->executeQuery("DROP TABLE `ec_connection`");
         $this->update($connection);
     }
 }

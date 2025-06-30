@@ -75,7 +75,7 @@
                 "shippingMethodPlaceholder": "W\u00e4hlen Sie eine Versandmethode ...",
                 "triggerCatalogExportHelpText": "L\u00f6st einen Katalogexport aus.",
                 "triggerCatalogExportLabel": "Ausl\u00f6ser Katalogexport",
-                "scheduleInformationText": "Dieser Prozess ist festgelegt wie: <strong> {current} </strong>.Um dies anzupassen, f\u00fcgen Sie entweder eine benutzerdefinierte Aufgabe hinzu oder erstellen Sie einen benutzerdefinierten cron.",
+                "scheduleInformationText": "Dieser Prozess ist festgelegt wie: ",
                 "taskTriggered": "Aufgabe erfolgreich ausgel\u00f6st.",
                 "apiCredentialsOK": "Anmeldeinformationen g\u00fcltig",
                 "apiCredentialsNOK": "Anmeldeinformationen sind nicht g\u00fcltig",

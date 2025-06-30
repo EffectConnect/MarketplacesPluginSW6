@@ -1,0 +1,23 @@
+{
+  "base": "/bundles/effectconnectmarketplaces/administration/",
+  "entryPoints": {
+    "effect-connect-marketplaces": {
+      "css": [],
+      "dynamic": [],
+      "js": [
+        "/bundles/effectconnectmarketplaces/administration/assets/effect-connect-marketplaces-Dc0E0DIh.js"
+      ],
+      "legacy": false,
+      "preload": []
+    }
+  },
+  "legacy": false,
+  "metadatas": {},
+  "version": [
+    "7.1.0",
+    7,
+    1,
+    0
+  ],
+  "viteServer": null
+}

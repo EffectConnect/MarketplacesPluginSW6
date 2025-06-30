@@ -3,21 +3,31 @@
 namespace EffectConnect\Marketplaces\Handler;
 
 use Shopware\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionStateHandler;
-use Shopware\Core\Checkout\Payment\Cart\PaymentHandler\SynchronousPaymentHandlerInterface;
-use Shopware\Core\Checkout\Payment\Cart\SyncPaymentTransactionStruct;
+use Shopware\Core\Checkout\Payment\Cart\PaymentHandler\AbstractPaymentHandler;
+use Shopware\Core\Checkout\Payment\Cart\PaymentHandler\PaymentHandlerType;
+use Shopware\Core\Checkout\Payment\Cart\PaymentTransactionStruct;
+use Shopware\Core\Framework\Context;
+use Shopware\Core\Framework\Struct\Struct;
 use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class EffectConnectPayment
  * @package EffectConnect\Marketplaces\Handler
  */
-class EffectConnectPayment implements SynchronousPaymentHandlerInterface
+class EffectConnectPayment extends AbstractPaymentHandler
 {
     /**
      * The name for the EffectConnect Payment.
      */
     public const PAYMENT_METHOD_NAME        = 'EffectConnect Payment';
+
+    /**
+     * The technical name for the EffectConnect Payment.
+     */
+    public const PAYMENT_METHOD_TECHNICAL_NAME        = 'effectconnect_payment';
 
     /**
      * The description for the EffectConnect Payment.
@@ -39,14 +49,14 @@ class EffectConnectPayment implements SynchronousPaymentHandlerInterface
         $this->_transactionStateHandler = $transactionStateHandler;
     }
 
-    /**
-     * @inheritDoc
-     * @param SyncPaymentTransactionStruct $transaction
-     * @param RequestDataBag $dataBag
-     * @param SalesChannelContext $salesChannelContext
-     */
-    public function pay(SyncPaymentTransactionStruct $transaction, RequestDataBag $dataBag, SalesChannelContext $salesChannelContext): void
+    public function supports(PaymentHandlerType $type, string $paymentMethodId, Context $context): bool
     {
-        $this->_transactionStateHandler->process($transaction->getOrderTransaction()->getId(), $salesChannelContext->getContext());
+        return true;
+    }
+
+    public function pay(Request $request, PaymentTransactionStruct $transaction, Context $context, ?Struct $validateStruct): ?RedirectResponse
+    {
+        $this->_transactionStateHandler->process($transaction->getOrderTransactionId(), $context);
+        return null;
     }
 }

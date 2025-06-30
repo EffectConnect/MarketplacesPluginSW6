@@ -14,11 +14,6 @@ class ExportQueueEntity extends Entity
     /**
      * @var string
      */
-    protected $id;
-
-    /**
-     * @var string
-     */
     protected $type;
 
     /**

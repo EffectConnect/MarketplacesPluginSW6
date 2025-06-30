@@ -41,6 +41,8 @@ trait ShippingMethodTrait
 
         $shipmentData           = [
             'name'                  => EffectConnectShipment::SHIPPING_METHOD_NAME,
+            'entityName'            => EffectConnectShipment::SHIPPING_METHOD_NAME,
+            'technicalName'         => EffectConnectShipment::SHIPPING_METHOD_TECHNICAL_NAME,
             'description'           => EffectConnectShipment::SHIPPING_METHOD_DESCRIPTION,
             'availabilityRuleId'    => $availabilityRuleId,
             'deliveryTimeId'        => $deliveryTimeId

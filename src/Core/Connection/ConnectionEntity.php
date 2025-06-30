@@ -10,9 +10,6 @@ class ConnectionEntity extends Entity
     use EntityIdTrait;
 
     /** @var string */
-    protected $id;
-
-    /** @var string */
     protected $salesChannelId;
 
     /** @var string|null */

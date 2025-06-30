@@ -1,3 +1,8 @@
+Version 1.9.0 - 2025-06-30
+- Added Shopware 6.7 support.
+- Dropped Shopware 6.6 support.
+- Updated README.
+
 Version 1.8.5 - 2025-05-14
 - Updated the README contents.
 - Prevent duplicate product updates by ensuring they are not queued in the offer export queue if already present.
