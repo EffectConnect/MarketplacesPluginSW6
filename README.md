@@ -9,7 +9,11 @@
 
 Use this plugin to connect your Shopware 6 webshop with EffectConnect Marketplaces. For more information about EffectConnect, go to the [EffectConnect website](https://www.effectconnect.com "EffectConnect Website").
 
-> Warning: Only Shopware 6.2, 6.3 and 6.4 are officially supported at this moment
+**Warning: Shopware 6.4, and therefore this branch, is no longer actively supported.**
+
+> Warning: Only Shopware 6.4 is officially supported in this branch.<br><br>
+> For Shopware 6.5 or higher support, use [releases](https://github.com/EffectConnect/MarketplacesPluginSW6/releases) with version 1.7 or higher.<br>
+> Shopware 6.2, and 6.3 support is not being maintained anymore.
 
 **Important: before installing this plugin please contact the EffectConnect sales department via +31(0)852088432 and/or sales@effectconnect.com so we can provide you with a new EffectConnect account.**
 
