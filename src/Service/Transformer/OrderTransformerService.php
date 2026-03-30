@@ -493,6 +493,8 @@ class OrderTransformerService
         $customFields[CustomFieldService::CUSTOM_FIELDSET_KEY_EFFECTCONNECT_MARKETPLACES]       = $customFields;
         $customFields[CustomFieldService::CUSTOM_FIELDSET_KEY_EFFECTCONNECT_MARKETPLACES_ORDER] = $customFields;
 
+        $transaction = $this->transformTransaction($cartPrice, $paymentMethod, $externallyFulfilled);
+
         $data               = [
             'id'                => $orderId,
             'currencyId'        => $currency->getId(),
@@ -511,10 +513,10 @@ class OrderTransformerService
             'deliveries'        => [
                 $delivery
             ],
+            'primaryOrderDeliveryId' => $delivery['id'],
             'lineItems'         => $orderLines,
-            'transactions'      => [
-                $this->transformTransaction($cartPrice, $paymentMethod, $externallyFulfilled)
-            ],
+            'transactions'      => [$transaction],
+            'primaryOrderTransactionId' => $transaction['id'],
             'deepLinkCode'      => Random::getBase64UrlString(32),
             'stateId'           => $stateId,
             'customFields'      => $customFields,
@@ -570,6 +572,7 @@ class OrderTransformerService
         $stateId = StateHelper::getIdFromTechnicalName($stateMachine, $paymentStatusTechnicalName, OrderTransactionStates::STATE_PAID);
 
         return [
+            'id'                => Uuid::randomHex(),
             'paymentMethodId'   => $paymentMethod->getId(),
             'amount'            => $this->getCalculatedPriceFromCartPrice($cartPrice),
             'stateId'           => $stateId
@@ -600,6 +603,7 @@ class OrderTransformerService
         $stateId = StateHelper::getIdFromTechnicalName($stateMachine, $technicalName, $externallyFulfilled ? OrderDeliveryStates::STATE_SHIPPED : null);
 
         return [
+            'id'                        => Uuid::randomHex(),
             'shippingOrderAddressId'    => $shippingAddressId,
             'shippingDateEarliest'      => $deliveryDate->getEarliest()->format(Defaults::STORAGE_DATE_TIME_FORMAT),
             'shippingDateLatest'        => $deliveryDate->getLatest()->format(Defaults::STORAGE_DATE_TIME_FORMAT),
