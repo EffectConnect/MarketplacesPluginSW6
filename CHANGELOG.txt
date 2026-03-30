@@ -1,3 +1,6 @@
+Version 1.9.1 - 2026-03-30
+- Set primaryOrderDeliveryId and primaryOrderTransactionId on new orders to show more detail in order overview.
+
 Version 1.9.0 - 2025-06-30
 - Added Shopware 6.7 support.
 - Dropped Shopware 6.6 support.
