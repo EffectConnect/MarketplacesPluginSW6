@@ -2,6 +2,7 @@
 
 namespace EffectConnect\Marketplaces\ScheduledTask\Handler;
 
+use Psr\Log\LoggerInterface;
 use EffectConnect\Marketplaces\Enum\FulfilmentType;
 use EffectConnect\Marketplaces\Factory\LoggerFactory;
 use EffectConnect\Marketplaces\Interfaces\LoggerProcess;
@@ -34,6 +35,7 @@ class OrderImportTaskHandler extends AbstractTaskHandler
      * @param SalesChannelService $salesChannelService
      * @param SettingsService $settingsService
      * @param LoggerFactory $loggerFactory
+     * @param LoggerInterface $logger
      * @param OrderImportService $orderImportService
      */
     public function __construct(
@@ -41,9 +43,10 @@ class OrderImportTaskHandler extends AbstractTaskHandler
         SalesChannelService $salesChannelService,
         SettingsService $settingsService,
         LoggerFactory $loggerFactory,
+        LoggerInterface $logger,
         OrderImportService $orderImportService
     ) {
-        parent::__construct($scheduledTaskRepository, $salesChannelService, $settingsService, $loggerFactory);
+        parent::__construct($scheduledTaskRepository, $salesChannelService, $settingsService, $loggerFactory, $logger);
         $this->_orderImportService  = $orderImportService;
     }
 

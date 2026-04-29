@@ -2,6 +2,7 @@
 
 namespace EffectConnect\Marketplaces\ScheduledTask\Handler;
 
+use Psr\Log\LoggerInterface;
 use EffectConnect\Marketplaces\Factory\LoggerFactory;
 use EffectConnect\Marketplaces\Interfaces\LoggerProcess;
 use EffectConnect\Marketplaces\ScheduledTask\OfferQueueTask;
@@ -24,9 +25,11 @@ class OfferQueueTaskHandler extends AbstractTaskHandler
         OfferQueueService         $offerQueueService,
         SalesChannelService       $salesChannelService,
         SettingsService           $settingsService,
-        LoggerFactory             $loggerFactory)
+        LoggerFactory             $loggerFactory,
+        LoggerInterface           $logger
+    )
     {
-        parent::__construct($scheduledTaskRepository, $salesChannelService, $settingsService, $loggerFactory);
+        parent::__construct($scheduledTaskRepository, $salesChannelService, $settingsService, $loggerFactory, $logger);
         $this->offerQueueService = $offerQueueService;
     }
 

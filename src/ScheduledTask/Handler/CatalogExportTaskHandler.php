@@ -2,6 +2,7 @@
 
 namespace EffectConnect\Marketplaces\ScheduledTask\Handler;
 
+use Psr\Log\LoggerInterface;
 use EffectConnect\Marketplaces\Exception\SalesChannelNotFoundException;
 use EffectConnect\Marketplaces\Factory\LoggerFactory;
 use EffectConnect\Marketplaces\Interfaces\LoggerProcess;
@@ -40,6 +41,7 @@ class CatalogExportTaskHandler extends AbstractTaskHandler
      * @param SalesChannelService $salesChannelService
      * @param SettingsService $settingsService
      * @param LoggerFactory $loggerFactory
+     * @param LoggerInterface $logger ,
      * @param CatalogExportService $catalogExportService
      */
     public function __construct(
@@ -47,9 +49,10 @@ class CatalogExportTaskHandler extends AbstractTaskHandler
         SalesChannelService $salesChannelService,
         SettingsService $settingsService,
         LoggerFactory $loggerFactory,
+        LoggerInterface $logger,
         CatalogExportService $catalogExportService
     ) {
-        parent::__construct($scheduledTaskRepository, $salesChannelService, $settingsService, $loggerFactory);
+        parent::__construct($scheduledTaskRepository, $salesChannelService, $settingsService, $loggerFactory, $logger);
 
         $this->_catalogExportService    = $catalogExportService;
     }

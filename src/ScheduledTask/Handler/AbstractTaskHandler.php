@@ -10,6 +10,7 @@ use EffectConnect\Marketplaces\Service\SettingsService;
 use Monolog\Logger;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskHandler;
+use Psr\Log\LoggerInterface;
 use Throwable;
 
 /**
@@ -57,10 +58,11 @@ abstract class AbstractTaskHandler extends ScheduledTaskHandler
         EntityRepository $scheduledTaskRepository,
         SalesChannelService $salesChannelService,
         SettingsService $settingsService,
-        LoggerFactory $loggerFactory
+        LoggerFactory $loggerFactory,
+        LoggerInterface $logger
     ) {
-        parent::__construct($scheduledTaskRepository);
 
+        parent::__construct($scheduledTaskRepository, $logger);
         $this->_salesChannelService = $salesChannelService;
         $this->_settingsService     = $settingsService;
         $this->_loggerFactory       = $loggerFactory;

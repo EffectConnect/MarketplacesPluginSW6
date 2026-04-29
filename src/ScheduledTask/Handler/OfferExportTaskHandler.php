@@ -2,6 +2,7 @@
 
 namespace EffectConnect\Marketplaces\ScheduledTask\Handler;
 
+use Psr\Log\LoggerInterface;
 use EffectConnect\Marketplaces\Factory\LoggerFactory;
 use EffectConnect\Marketplaces\Interfaces\LoggerProcess;
 use EffectConnect\Marketplaces\ScheduledTask\OfferExportTask;
@@ -32,6 +33,7 @@ class OfferExportTaskHandler extends AbstractTaskHandler
      * @param SalesChannelService $salesChannelService
      * @param SettingsService $settingsService
      * @param LoggerFactory $loggerFactory
+     * @param LoggerInterface $logger
      * @param OfferExportService $offerExportService
      */
     public function __construct(
@@ -39,9 +41,10 @@ class OfferExportTaskHandler extends AbstractTaskHandler
         SalesChannelService $salesChannelService,
         SettingsService $settingsService,
         LoggerFactory $loggerFactory,
+        LoggerInterface $logger,
         OfferExportService $offerExportService
     ) {
-        parent::__construct($scheduledTaskRepository, $salesChannelService, $settingsService, $loggerFactory);
+        parent::__construct($scheduledTaskRepository, $salesChannelService, $settingsService, $loggerFactory, $logger);
 
         $this->_offerExportService  = $offerExportService;
         $this->_logger              = $this->_loggerFactory::createLogger(static::LOGGER_PROCESS);
