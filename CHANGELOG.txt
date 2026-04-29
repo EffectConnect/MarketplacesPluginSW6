@@ -1,3 +1,6 @@
+Version 1.9.2 - 2026-04-29
+- Fixed an issue where running a scheduledTask would not work.
+
 Version 1.9.1 - 2026-03-30
 - Set primaryOrderDeliveryId and primaryOrderTransactionId on new orders to show more detail in order overview.
 

@@ -2,9 +2,11 @@
 
 namespace EffectConnect\Marketplaces\ScheduledTask\Handler;
 
+use Psr\Log\LoggerInterface;
 use EffectConnect\Marketplaces\Helper\ExportsCleaner;
 use EffectConnect\Marketplaces\ScheduledTask\CleanExportsTask;
 use Shopware\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskHandler;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 
 /**
  * Class CleanExportsTaskHandler
@@ -12,6 +14,15 @@ use Shopware\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskHandler;
  */
 class CleanExportsTaskHandler extends ScheduledTaskHandler
 {
+
+    public function __construct(
+        EntityRepository $scheduledTaskRepository,
+        LoggerInterface $logger
+    )
+    {
+        parent::__construct($scheduledTaskRepository, $logger);
+    }
+
     /**
      * @inheritDoc
      * @return iterable
