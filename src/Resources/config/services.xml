@@ -305,7 +305,7 @@
             <argument type="service" id="EffectConnect\Marketplaces\Factory\LoggerFactory" />
             <argument type="service" id="logger"/>
             <argument type="service" id="EffectConnect\Marketplaces\Service\Api\CatalogExportService" />
-            <tag name="messenger.message_handler" />
+            <tag name="messenger.message_handler" handles="EffectConnect\Marketplaces\ScheduledTask\CatalogExportTask" />
         </service>
 
         <!-- Export Offers Scheduled Task Handler -->
@@ -316,7 +316,7 @@
             <argument type="service" id="EffectConnect\Marketplaces\Factory\LoggerFactory" />
             <argument type="service" id="logger"/>
             <argument type="service" id="EffectConnect\Marketplaces\Service\Api\OfferExportService" />
-            <tag name="messenger.message_handler" />
+            <tag name="messenger.message_handler" handles="EffectConnect\Marketplaces\ScheduledTask\OfferExportTask" />
         </service>
 
         <!-- Import Orders Scheduled Task Handler -->
@@ -327,7 +327,7 @@
             <argument type="service" id="EffectConnect\Marketplaces\Factory\LoggerFactory" />
             <argument type="service" id="logger"/>
             <argument type="service" id="EffectConnect\Marketplaces\Service\Api\OrderImportService" />
-            <tag name="messenger.message_handler" />
+            <tag name="messenger.message_handler" handles="EffectConnect\Marketplaces\ScheduledTask\OrderImportTask" />
         </service>
 
         <!-- Offer Queue Scheduled Task -->
@@ -344,14 +344,14 @@
         <service id="EffectConnect\Marketplaces\ScheduledTask\Handler\CleanLogTaskHandler">
             <argument type="service" id="scheduled_task.repository" />
             <argument type="service" id="logger"/>
-            <tag name="messenger.message_handler" />
+            <tag name="messenger.message_handler" handles="EffectConnect\Marketplaces\ScheduledTask\CleanLogTask" />
         </service>
 
         <!-- Clean Exports Scheduled Task Handler -->
         <service id="EffectConnect\Marketplaces\ScheduledTask\Handler\CleanExportsTaskHandler">
             <argument type="service" id="scheduled_task.repository" />
             <argument type="service" id="logger"/>
-            <tag name="messenger.message_handler" />
+            <tag name="messenger.message_handler" handles="EffectConnect\Marketplaces\ScheduledTask\CleanExportsTask" />
         </service>
 
         <!-- EffectConnect Payment Method -->
@@ -368,7 +368,7 @@
             <argument type="service" id="EffectConnect\Marketplaces\Service\SettingsService" />
             <argument type="service" id="EffectConnect\Marketplaces\Factory\LoggerFactory" />
             <argument type="service" id="logger"/>
-            <tag name="messenger.message_handler" />
+            <tag name="messenger.message_handler" handles="EffectConnect\Marketplaces\ScheduledTask\OfferQueueTask" />
         </service>
 
         <!-- Shipment Queue Task Handler -->
@@ -379,7 +379,7 @@
             <argument type="service" id="EffectConnect\Marketplaces\Service\SettingsService" />
             <argument type="service" id="EffectConnect\Marketplaces\Factory\LoggerFactory" />
             <argument type="service" id="logger"/>
-            <tag name="messenger.message_handler" />
+            <tag name="messenger.message_handler" handles="EffectConnect\Marketplaces\ScheduledTask\ShipmentQueueTask" />
         </service>
 
         <service id="EffectConnect\Marketplaces\Core\ExportQueue\ExportQueueDefinition">
