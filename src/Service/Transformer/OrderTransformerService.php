@@ -11,6 +11,7 @@ use EffectConnect\Marketplaces\Exception\CreateCurrencyFailedException;
 use EffectConnect\Marketplaces\Exception\CreateSalutationFailedException;
 use EffectConnect\Marketplaces\Exception\CreatingDeliveryDateFailedException;
 use EffectConnect\Marketplaces\Exception\CreatingOrderFailedException;
+use EffectConnect\Marketplaces\Exception\InsufficientStockException;
 use EffectConnect\Marketplaces\Exception\InvalidAddressTypeException;
 use EffectConnect\Marketplaces\Exception\NoPaymentMethodFoundException;
 use EffectConnect\Marketplaces\Exception\NoShippingMethodFoundException;
@@ -391,6 +392,7 @@ class OrderTransformerService
      * @throws CountryStateNotFoundException
      * @throws CreateCurrencyFailedException
      * @throws CreateSalutationFailedException
+     * @throws InsufficientStockException
      * @throws CreatingDeliveryDateFailedException
      * @throws InvalidAddressTypeException
      * @throws NoPaymentMethodFoundException
