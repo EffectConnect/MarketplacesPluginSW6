@@ -3,6 +3,7 @@
 namespace EffectConnect\Marketplaces\Service\Transformer;
 
 use DateTime;
+use EffectConnect\Marketplaces\Exception\InsufficientStockException;
 use EffectConnect\Marketplaces\Exception\ProductNoCatalogMatchException;
 use EffectConnect\Marketplaces\Exception\ProductNotFoundException;
 use EffectConnect\Marketplaces\Exception\ProductNotValidException;
@@ -82,6 +83,7 @@ class OrderLineTransformerService
      * @param int $index
      * @param SalesChannelContext $context
      * @return array
+     * @throws InsufficientStockException
      * @throws ProductNoCatalogMatchException
      * @throws ProductNotFoundException
      * @throws ProductNotValidException
@@ -89,6 +91,18 @@ class OrderLineTransformerService
     public function transformOrderLine(Line $line, int $index, CountryEntity $country, SalesChannelContext $context): array
     {
         $product            = $this->getProduct($line->getProduct(), $line->getProductTitle(), $context);
+        $orderedQuantity    = 1;
+        $availableStock     = intval($product->getAvailableStock() ?? $product->getStock() ?? 0);
+
+        if ($availableStock < $orderedQuantity) {
+            throw new InsufficientStockException(
+                $product->getId(),
+                (string) $product->getProductNumber(),
+                $availableStock,
+                $orderedQuantity
+            );
+        }
+
         $priceDefinition    = $this->getPriceDefinition($line->getLineAmount(), $product, $country, $context);
         $price              = $this->_quantityPriceCalculator->calculate($priceDefinition, $context);
         $label              = !empty($product->getName()) ? $product->getName() : $line->getProductTitle();
@@ -111,7 +125,7 @@ class OrderLineTransformerService
             'identifier'        => $product->getId(),
             'referencedId'      => $product->getId(),
             'productId'         => $product->getId(),
-            'quantity'          => 1,
+            'quantity'          => $orderedQuantity,
             'unitPrice'         => $line->getLineAmount(),
             'totalPrice'        => $line->getLineAmount(),
             'label'             => !empty($label) ? $label : '-',
