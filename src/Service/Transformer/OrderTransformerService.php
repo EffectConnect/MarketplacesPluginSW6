@@ -34,6 +34,7 @@ use EffectConnect\Marketplaces\Service\SettingsService;
 use EffectConnect\Marketplaces\Setting\SettingStruct;
 use EffectConnect\PHPSdk\Core\Model\Request\OrderFee;
 use EffectConnect\PHPSdk\Core\Model\Response\BillingAddress;
+use EffectConnect\PHPSdk\Core\Model\Response\Line;
 use EffectConnect\PHPSdk\Core\Model\Response\Order;
 use EffectConnect\PHPSdk\Core\Model\Response\ShippingAddress;
 use Exception;
@@ -444,6 +445,8 @@ class OrderTransformerService
             $orderCustomer['customerNumber'] = $customer->getCustomerNumber();
         }
 
+        $groupedLines = [];
+
         foreach ($order->getLines() as $line) {
             if ($line->getStatus() === 'line_cancelled') {
                 $this->_logger->info('Order line skipped because it is cancelled.', [
@@ -466,7 +469,12 @@ class OrderTransformerService
                 continue;
             }
 
-            $orderLines[] = $this->_orderLineTransformerService->transformOrderLine($line, $orderLineIndex, $country, $this->_salesChannelContext);
+            // Merge identical lines (same product, amount and status) into one order line item with a quantity.
+            $groupedLines[$this->getOrderLineMergeKey($line)][] = $line;
+        }
+
+        foreach ($groupedLines as $lines) {
+            $orderLines[] = $this->_orderLineTransformerService->transformOrderLine($lines, $orderLineIndex, $country, $this->_salesChannelContext);
             $orderLineIndex++;
         }
 
@@ -689,6 +697,22 @@ class OrderTransformerService
         $feeCosts += $this->getTotalFeeOrderLines($order, $feeType);
 
         return $feeCosts;
+    }
+
+    /**
+     * Get the key on which order lines are merged: EAN, product id, line amount and status must be equal.
+     *
+     * @param Line $line
+     * @return string
+     */
+    protected function getOrderLineMergeKey(Line $line): string
+    {
+        return strval(json_encode([
+            $line->getProduct()->getEan(),
+            $line->getProductId(),
+            number_format(floatval($line->getLineAmount()), 4, '.', ''),
+            $line->getStatus(),
+        ]));
     }
 
     /**

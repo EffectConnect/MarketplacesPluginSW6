@@ -77,9 +77,9 @@ class OrderLineTransformerService
     }
 
     /**
-     * Transform the order line.
+     * Transform one or more order lines of the same product into a single order line item.
      *
-     * @param Line $line
+     * @param Line[] $lines
      * @param int $index
      * @param SalesChannelContext $context
      * @return array
@@ -88,10 +88,13 @@ class OrderLineTransformerService
      * @throws ProductNotFoundException
      * @throws ProductNotValidException
      */
-    public function transformOrderLine(Line $line, int $index, CountryEntity $country, SalesChannelContext $context): array
+    public function transformOrderLine(array $lines, int $index, CountryEntity $country, SalesChannelContext $context): array
     {
+        $line               = reset($lines);
         $product            = $this->getProduct($line->getProduct(), $line->getProductTitle(), $context);
-        $orderedQuantity    = 1;
+        $orderedQuantity    = count($lines);
+        $totalAmount        = floatval(array_sum(array_map(fn(Line $l): float => floatval($l->getLineAmount()), $lines)));
+        $unitAmount         = $totalAmount / $orderedQuantity;
         $availableStock     = intval($product->getAvailableStock() ?? $product->getStock() ?? 0);
 
         if ($availableStock < $orderedQuantity) {
@@ -103,7 +106,7 @@ class OrderLineTransformerService
             );
         }
 
-        $priceDefinition    = $this->getPriceDefinition($line->getLineAmount(), $product, $country, $context);
+        $priceDefinition    = $this->getPriceDefinition($unitAmount, $orderedQuantity, $product, $country, $context);
         $price              = $this->_quantityPriceCalculator->calculate($priceDefinition, $context);
         $label              = !empty($product->getName()) ? $product->getName() : $line->getProductTitle();
         $lineId             = Uuid::randomHex();
@@ -117,6 +120,12 @@ class OrderLineTransformerService
             CustomFieldService::CUSTOM_FIELD_KEY_ORDER_LINE_ITEM_PRODUCT_ID             => $line->getProductId()
         ];
 
+        // All merged lines are stored so every line can be exported on shipment.
+        $customFields[CustomFieldService::CUSTOM_FIELD_KEY_ORDER_LINE_ITEM_MERGED_LINES] = array_map(fn(Line $l): array => [
+            'effectConnectLineId'   => $l->getIdentifiers()->getEffectConnectLineId(),
+            'effectConnectId'       => intval($l->getIdentifiers()->getEffectConnectId()),
+        ], array_values($lines));
+
         $customFields[CustomFieldService::CUSTOM_FIELDSET_KEY_EFFECTCONNECT_MARKETPLACES]                   = $customFields;
         $customFields[CustomFieldService::CUSTOM_FIELDSET_KEY_EFFECTCONNECT_MARKETPLACES_ORDER_LINE_ITEM]   = $customFields;
 
@@ -126,8 +135,8 @@ class OrderLineTransformerService
             'referencedId'      => $product->getId(),
             'productId'         => $product->getId(),
             'quantity'          => $orderedQuantity,
-            'unitPrice'         => $line->getLineAmount(),
-            'totalPrice'        => $line->getLineAmount(),
+            'unitPrice'         => $unitAmount,
+            'totalPrice'        => $totalAmount,
             'label'             => !empty($label) ? $label : '-',
             'description'       => $line->getProductTitle(),
             'good'              => true,
@@ -318,12 +327,13 @@ class OrderLineTransformerService
      * Get the quantity price definition for the order line.
      *
      * @param float $amount
+     * @param int $quantity
      * @param ProductEntity $product
      * @param CountryEntity $country
      * @param SalesChannelContext $context
      * @return QuantityPriceDefinition
      */
-    protected function getPriceDefinition(float $amount, ProductEntity $product, CountryEntity $country, SalesChannelContext $context): QuantityPriceDefinition
+    protected function getPriceDefinition(float $amount, int $quantity, ProductEntity $product, CountryEntity $country, SalesChannelContext $context): QuantityPriceDefinition
     {
         // QuantityPriceDefinition constructor changed in Shopware 6.4.
         // The if-statement below is to support backwards compatibility.
@@ -334,13 +344,13 @@ class OrderLineTransformerService
                 $amount,
                 $this->getTaxRules($product, $country, $context),
                 2,
-                1,
+                $quantity,
                 true
             );
         } else {
             // Shopware 6.4 and higher.
 
-            $definition = new QuantityPriceDefinition($amount, $this->getTaxRules($product, $country, $context), 1);
+            $definition = new QuantityPriceDefinition($amount, $this->getTaxRules($product, $country, $context), $quantity);
 
             $definition->setIsCalculated(true);
 
