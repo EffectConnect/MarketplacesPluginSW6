@@ -47,6 +47,7 @@ class CustomFieldService
     public const CUSTOM_FIELD_KEY_ORDER_LINE_ITEM_CHANNEL_LINE_ID               = 'channelLineId';
     public const CUSTOM_FIELD_KEY_ORDER_LINE_ITEM_EFFECTCONNECT_ID              = 'effectConnectId';
     public const CUSTOM_FIELD_KEY_ORDER_LINE_ITEM_CONNECTION_LINE_ID            = 'connectionLineId';
+    public const CUSTOM_FIELD_KEY_ORDER_LINE_ITEM_MERGED_LINES                  = 'effectConnectMergedLines';
     public const CUSTOM_FIELD_KEY_ORDER_LINE_ITEM_PRODUCT_ID                    = 'productId';
 
     // Custom fields for order customers.

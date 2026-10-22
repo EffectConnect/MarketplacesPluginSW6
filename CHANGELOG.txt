@@ -1,3 +1,6 @@
+Version 1.9.5 - 2026-10-22
+- Order lines of the same product are now merged into a single order line with a quantity on import. All merged lines are still exported on shipment.
+
 Version 1.9.4 - 2026-09-28
 - Validate product stock before creating orders to prevent post-write stock decrement failures.
 

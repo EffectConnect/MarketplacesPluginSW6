@@ -175,13 +175,25 @@ class OrderShippedSubscriber implements EventSubscriberInterface
             }
 
             foreach ($delivery->getOrder()->getLineItems() as $lineItem) {
-                $lineId = $lineItem->getCustomFields()['effectConnectLineId'] ?? null;
-                if ($lineId) {
-                    $effectConnectId = $lineItem->getCustomFields()['effectConnectId'] ?? null;
-                    if ($effectConnectId) {
-                        $effectConnectId = strval($effectConnectId);
+                $customFields = $lineItem->getCustomFields() ?? [];
+                $mergedLines  = $customFields['effectConnectMergedLines'] ?? null;
+
+                if (empty($mergedLines)) {
+                    $mergedLines = [[
+                        'effectConnectLineId'   => $customFields['effectConnectLineId'] ?? null,
+                        'effectConnectId'       => $customFields['effectConnectId'] ?? null,
+                    ]];
+                }
+
+                foreach ($mergedLines as $mergedLine) {
+                    $lineId = $mergedLine['effectConnectLineId'] ?? null;
+                    if ($lineId) {
+                        $effectConnectId = $mergedLine['effectConnectId'] ?? null;
+                        if ($effectConnectId) {
+                            $effectConnectId = strval($effectConnectId);
+                        }
+                        $lineDeliveries[] = new OrderLineDeliveryData(strval($lineId), $effectConnectId, $trackingCode, $carrier);
                     }
-                    $lineDeliveries[] = new OrderLineDeliveryData(strval($lineId), $effectConnectId, $trackingCode, $carrier);
                 }
             }
 
